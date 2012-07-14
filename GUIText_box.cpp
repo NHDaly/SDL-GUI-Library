@@ -256,9 +256,9 @@ int GUIText_box::index_at_pos(DispPoint pos_){
 }
 
 
-string GUIText_box::get_text() {
+string GUIText_box::get_text() const {
 	string text;
-	for (letters_ctr_t::iterator it = letters.begin(); it != letters.end(); ++it){
+	for (letters_ctr_t::const_iterator it = letters.begin(); it != letters.end(); ++it){
 		text += it->get_ltr();
 	}
 	return text;	

@@ -37,7 +37,7 @@ public:
 	virtual void mouse_click(const SDL_Event& event);
 	virtual void key_down(const SDL_Event& event);
 	
-	std::string get_text();
+	std::string get_text() const;
 	
 protected:
 	typedef std::vector<Letter_Disp_Obj> letters_ctr_t;
@@ -101,11 +101,11 @@ public:
 	void set_pos(DispPoint point)
 		{ position = point; }
 	
-	static int get_line_height(){
+	static int get_line_height() {
 		return line_height;
 	}
 	
-	char get_ltr() { return ltr; }
+	char get_ltr() const { return ltr; }
 private:
 	DispPoint position;
 	GUILetter* letter;

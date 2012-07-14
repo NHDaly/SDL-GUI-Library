@@ -9,8 +9,14 @@
 #include "GUIValBox.h"
 #include "GameDisplay.h"
 
-using std::string;
+#include "SDL/SDL.h"
 
+#include <sstream>
+#include <iostream>
+
+using std::string;
+using std::stringstream;
+using std::cout; using std::endl;
 
 const int MIN_TEXT_BOX_WIDTH = 10;
 const int MIN_TEXT_BOX_HEIGHT = 10;
@@ -29,10 +35,111 @@ text_box(w_ - 5, h_ - 5)
 
 void GUIValue_Text_Box::display() {
     
-	display_image(text_box.screen, screen, DispPoint(5,5), 0);	
+	draw_onto_view(text_box.screen, DispPoint(5,5));	
 }
 
-void GUIValue_Text_Box::get() {
+double GUIValue_Text_Box::get_value() const {
     
-	display_image(text_box.screen, screen, DispPoint(5,5), 0);	
+    stringstream text_to_int;
+    text_to_int << text_box.get_text();
+    
+    int result;
+    text_to_int >> result;
+    
+    return result;
 }
+
+GUIValue_Slider::~GUIValue_Slider() { }
+
+
+double GUIValue_Slider::get_value() const {
+    
+    return value * max - min;
+}
+double GUIValue_Slider::get_percent() const {
+    
+    return value;
+}
+
+void GUIValue_Horiz_Slider::display() {
+    
+    static GUIImage bubble("images/slider_bubble.bmp", true);
+    
+    DispPoint position(get_percent() * get_w(), get_h()/2);
+    
+    draw_onto_view(bubble, DispPoint(position.x - bubble.getw()/2,
+                                     position.y - bubble.geth()/2));
+}
+
+void GUIValue_Horiz_Slider::mouse_click(const SDL_Event& event) {
+    
+    GUIValue_Slider::mouse_click(event);
+    
+    set_value(static_cast<double>(event.button.x) / get_w());
+}
+
+void GUIValue_Horiz_Slider::mouse_motion(const SDL_Event& event) {
+    
+    if (!get_clicked()) return;
+    if (event.motion.x < left_edge && get_percent() == 0) return;
+    if (event.motion.x > right_edge && get_percent() == 1) return;    
+    
+    set_value(get_percent() + static_cast<double>(event.motion.xrel) / get_w());
+    if (get_percent() < 0) {
+        set_value(0);
+        left_edge = event.motion.x;
+    }
+    if (get_percent() > 1) { 
+        set_value(1);
+        right_edge = event.motion.x;
+    }
+}
+
+void GUIValue_Vert_Slider::display() {
+    
+    static GUIImage bubble("images/slider_bubble.bmp", true);
+    
+    DispPoint position(get_w()/2, get_percent() * get_h());
+    
+    draw_onto_view(bubble, DispPoint(position.x - bubble.getw()/2,
+                                     position.y - bubble.geth()/2));
+}
+
+
+void GUIValue_Vert_Slider::mouse_click(const SDL_Event& event) {
+    
+    GUIValue_Slider::mouse_click(event);
+    
+    set_value(static_cast<double>(event.button.y) / get_w());
+}
+
+void GUIValue_Vert_Slider::mouse_motion(const SDL_Event& event) {
+    
+    if (!get_clicked()) return;
+    if (event.motion.y < bottom_edge && get_percent() == 0) return;
+    if (event.motion.y > top_edge && get_percent() == 1) return;    
+    
+    set_value(get_percent() + static_cast<double>(event.motion.yrel) / get_h());
+    if (get_percent() < 0) {
+        set_value(0);
+        bottom_edge = event.motion.y;
+    }
+    if (get_percent() > 1) { 
+        set_value(1);
+        top_edge = event.motion.y;
+    }
+}
+
+
+void GUIValue_Display::display() {
+    if (!value_box) return;
+    
+    stringstream value_to_text;
+    value_to_text << value_box->get_value();
+    
+    draw_onto_view(createText(value_to_text.str()),
+                            DispPoint(2, 2));
+}
+
+
+
