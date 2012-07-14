@@ -13,7 +13,6 @@
 #include "Ptr_config.h"
 #include "GUIUtility.h"
 #include "GUIImage.h"
-#include "GUIView_Ctrl.h"
 
 #include <vector>
 
@@ -43,6 +42,7 @@ public:
 	int get_w() const {return screen.getw(); }
 	
 	virtual void resize(double scale);
+	virtual void resize(double w, double h);
 	virtual void rotate(double degrees); // (negative is counter-clockwise)
 	
 	void set_bg(std::string filename);

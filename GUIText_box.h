@@ -7,6 +7,7 @@
 
 
 #include "GUIView.h"
+#include "GUIView_Ctrl.h"
 #include "GUIUtility.h"
 #include "Ptr_config.h"
 
@@ -16,17 +17,16 @@
 class Letter_Disp_Obj;
 
 class GUILetter;
-class GUIView;
 class SDL_Color;
 
 class GUIText_box : public GUIView, public GUIView_Ctrl {
 public:	
 	
 	GUIText_box(int w_ = 200, int h_ = 200);
-	~GUIText_box();
+	virtual ~GUIText_box();
 	
-	void add_letter(char ltr, int index);
-	void remove_letter(int index);
+	virtual void add_letter(char ltr, int index);
+	virtual void remove_letter(int index);
 	
 	void add_to_view(char ltr);
 	virtual void clear();

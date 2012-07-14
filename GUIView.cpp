@@ -8,6 +8,7 @@
 
 #include "GUIView.h"
 
+#include "GUIView_Ctrl.h"
 #include "Letter.h"
 #include "GameDisplay.h"
 #include "GUIWin_Ctrl.h"
@@ -76,6 +77,10 @@ void GUIView::resize(double scale){
 	//	SDL_Surface* temp = create_SDL_Surface(screen->w * scale, screen->h * scale);
 	
 	
+}
+void GUIView::resize(double w, double h){
+	
+//    screen.
 }
 
 void GUIView::rotate(double degrees){
