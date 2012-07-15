@@ -11,7 +11,6 @@
 
 #include "SDL/SDL.h"
 
-#include <sstream>
 #include <iostream>
 
 using std::string;
@@ -132,13 +131,12 @@ void GUIValue_Vert_Slider::mouse_motion(const SDL_Event& event) {
 
 
 void GUIValue_Display::display() {
-    if (!value_box) return;
     
-    stringstream value_to_text;
-    value_to_text << value_box->get_value();
+    if (value_box) {
+        set_text(value_box->get_value());
+    }
     
-    draw_onto_view(createText(value_to_text.str()),
-                            DispPoint(2, 2));
+    draw_onto_view(createText(text), DispPoint(2, 2));
 }
 
 

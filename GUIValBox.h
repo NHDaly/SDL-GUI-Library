@@ -12,6 +12,8 @@
 #include "GUIText_box.h"
 
 #include <cctype>   // For isalpha().
+#include <sstream>
+#include <string>
 
 
 
@@ -125,6 +127,7 @@ private:
 };
 
 
+// Can either be hooked up to a value_box or can have values entered manually.
 class GUIValue_Display : public GUIView {
 public:
     GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box = 0)
@@ -136,8 +139,19 @@ public:
     void link_value_box(const GUIValue_Box* value_box_)
 	    { value_box = value_box_; }
     
+    const std::string& get_text() { return text; }
+    void set_value(double value_) { set_text(value_); }
+    
 private:
     const GUIValue_Box* value_box;
+    
+    std::string text;
+    
+    void set_text(double value) {
+        std::stringstream value_to_text;
+        value_to_text << value;
+        text = value_to_text.str();
+    }
 };
 
 

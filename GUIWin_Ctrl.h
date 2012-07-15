@@ -33,6 +33,7 @@ public:
 		event_responders.push_back(responder_);
 	}
 	
+    // Perform op after interval seconds. Repeat if repeat == true.
 	template <typename Operation>
 	void repeat_on_timer(Operation op, double interval, bool repeat = true) {
 		
