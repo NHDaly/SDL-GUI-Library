@@ -108,7 +108,16 @@ void GUIWin_Ctrl::run(){
 					}
 						
 					case SDL_KEYUP:{
-						if (event_responders.empty()) {
+                        if (event.key.keysym.sym == SDLK_q){
+                            
+							if (event.key.keysym.mod == KMOD_LMETA
+								|| event.key.keysym.mod == KMOD_RMETA
+								|| event.key.keysym.mod == KMOD_META){
+								running = 0;
+							}
+						}
+						break;
+                        if (event_responders.empty()) {
 							cout << "no responder" << endl;
 							break;
 						}
