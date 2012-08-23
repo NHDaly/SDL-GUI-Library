@@ -64,7 +64,15 @@ GUIImage::GUIImage(const GUIImage& image_){
 	if (!sdl_impl){
 		throw Error("Could not copy GUIImage. Not enough memory.");
 	}
+
+    Uint32 colorkey = image_.get_Alpha();
+    
+    // First fill background with the clear color, then display and re-clear.
+    SDL_FillRect(sdl_impl, 0, colorkey);
+    
 	display_image(image_.sdl_impl, sdl_impl, 0, 0, 1);
+    //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
+	SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, colorkey);
 }
 GUIImage& GUIImage::operator= (const GUIImage& image_){
 	
@@ -83,7 +91,7 @@ GUIImage* GUIImage::get_image(std::string filename, bool alpha, const SDL_Color&
 	return images[filename];
 }
 
-Uint32 GUIImage::get_Alpha(){
+Uint32 GUIImage::get_Alpha() const{
 	return SDL_MapRGBA( sdl_impl->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
 	
 }

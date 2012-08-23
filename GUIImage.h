@@ -19,14 +19,14 @@ public:
 	GUIImage(int w, int h);
 	explicit GUIImage(SDL_Surface*);
 	
-	GUIImage(std::string filename, bool alpha = 0, const SDL_Color& color_key =default_color_key_c);
+	GUIImage(std::string filename, bool alpha = false, const SDL_Color& color_key =default_color_key_c);
 	
 	~GUIImage();
 	
 	GUIImage(const GUIImage&);
 	GUIImage& operator= (const GUIImage&);
 	
-	static GUIImage* get_image(std::string filename, bool alpha = 0, const SDL_Color& color_key =default_color_key_c);
+	static GUIImage* get_image(std::string filename, bool alpha = false, const SDL_Color& color_key =default_color_key_c);
 	
 	static GUIImage create_blank(int w, int h);
 	static GUIImage create_clear(int w, int h);
@@ -41,7 +41,7 @@ public:
 	int getw() const { return sdl_impl->w; }
 	int geth() const { return sdl_impl->h; }
 	
-	Uint32 get_Alpha();
+	Uint32 get_Alpha() const;
 	
 private:
 	SDL_Surface* sdl_impl;

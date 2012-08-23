@@ -20,6 +20,8 @@ using namespace std::placeholders;
 #define initGame initGameWindows
 #define CHDIR _chdir
 
+void initGameWindows();
+
 
 #define SDL_JOY_BUTTON_A  0
 #define SDL_JOY_BUTTON_B  1
@@ -53,11 +55,16 @@ using std::tr1::static_pointer_cast;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
-#define MY_APPLICATION_NAME "Sid_Game_Master.app"
+#include "main.h"
+//#ifndef MY_APPLICATION_NAME
+//# define MY_APPLICATION_NAME "Sid_Game_Master.app"
+//#endif
 #define MY_RESOURCES_FOLDER MY_APPLICATION_NAME "/Contents/Resources"
 
 #define initGame initGameMac
 #define CHDIR chdir
+
+void initGameMac();
 
 
 #define SDL_JOY_STICK_L_X  0
