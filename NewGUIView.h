@@ -13,69 +13,68 @@
 
 #include "GUIUtility.h"
 
-/// @todo TEMP
-#include <iostream>
+class SDL_Surface;
 
 class NewGUIView {
 public:
     
-    NewGUIView(NewGUIView* parent_, DispPoint pos_ = DispPoint()) 
-    :changed(false), parent(0), background(0) 
-    { if (parent_) parent_->attach_subview(this, pos_); }
+    NewGUIView(int w_, int h_);
+    ~NewGUIView();
     
-    // Redraw any children that have changed onto self.
-    void update() {
-        
-        if (!has_changed()) return;
-        
-        std::list<GUISubview*>::iterator child;
-        for(child = children.begin(); child != children.end(); child++) {
-            
-            if (!(*child)->view->has_changed()) continue;
-
-            (*child)->view->update();
-            
-            /// @todo seperate drawing from updating, so don't double update. That's a waste of processing power.
-            draw_onto_self((*child)->view, (*child)->pos);
-        }
-    }
-
+    // Redraw any children that have changed onto self. Return true if changed.
+    void refresh();
+    
+    
     // Renders an image onto this screen. Also marks all ancestors as modified.
+    // Should this be a view or an image, you think?
     void draw_onto_self(NewGUIView* view, DispPoint pos);
 
-    void attach_subview(NewGUIView* view, DispPoint pos) {
-        if (view->parent)
-            throw Error("Candidate vew is already a subview of another view.");
-        
-        children.push_back(new GUISubview(view, pos));
-        view->parent = this;
-    }
     
-    // Will be true if an image has been drawn onto this view or a subview.
-    bool has_changed() const { return changed; }
+    // NOTE: Currently it is okay to attach a view completely out of bounds.
+    void attach_subview(NewGUIView* view, DispPoint pos);
+    // NOTE: Does not delete the view, only remove it from list!
+    void remove_subview(NewGUIView* view);
+
+    void move_subview(NewGUIView* view, DispPoint pos);
+    
+    // Will be true if a subview has been changed.
+    bool need_to_refresh() const { return changed; }
     
     /// === DEBUG ===
-    void print_children() {
-        std::cout << this << std::endl;
-
-        for(std::list<GUISubview*>::iterator child = children.begin(); child != children.end(); child++) {
-            std::cout << (*child)->view << " " << (*child)->pos.x << (*child)->pos.y << std::endl;
-        }
-    }
+    void print_children();
     
+    SDL_Surface* image;
+
 private:
     bool changed;
+    int w,h;
     
+    NewGUIView* background;
+
     struct GUISubview {
         GUISubview(NewGUIView* view_, DispPoint pos_) : view(view_), pos(pos_) {}
+        
         NewGUIView* view;
         DispPoint pos;
+        
+        // Compare only by view pointer.
+        bool operator< (const GUISubview& b) const {
+            return view < b.view;
+        }
+        bool operator== (const GUISubview& b) const {
+            return view == b.view;
+        }
     };
     
     NewGUIView* parent;
-    std::list<GUISubview*> children;
+    typedef std::list<GUISubview> Subview_list_t;
+    Subview_list_t children;
+
     
-    NewGUIView* background;
+    // Displays on image onto self.
+    void display_image_on_self(NewGUIView* view, DispPoint pos);
+    
+    void mark_changed();
 
 };
 

@@ -3,8 +3,7 @@
 #define GUIUTILITY_H
 
 #include <string>
-
-#include "Compatibility.h"
+#include "stdint.h"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 700;
@@ -50,7 +49,7 @@ struct DispPoint {
 };
 
 
-void initSDL(Uint32 flags);
+void initSDL(unsigned int flags);
 // initializes the SDL with the given flags. Returns -1 if fails and prints error. 0 otherwise.
 // also sets SDL to close at exit.
 
