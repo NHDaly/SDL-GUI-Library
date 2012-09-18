@@ -36,12 +36,12 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp, 
 		throw Error("non-positive values in createDisplay not allowed!");
 	}
     
-    /* Fill colors with color information */
-    for(int i = 0; i < numColors; i++){
-        colors[i].r = i;
-        colors[i].g = i;
-        colors[i].b = i;
-    }
+//    /* Fill colors with color information */
+//    for(int i = 0; i < numColors; i++){
+//        colors[i].r = i;
+//        colors[i].g = i;
+//        colors[i].b = i;
+//    }
     
     /* Create display */
     screen=SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE);
@@ -49,8 +49,10 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp, 
         throw Error("Couldn't set video mode: \n" + string(SDL_GetError()));
     }
     
-    /* Set palette */
-    SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, colors, 0, 256);
+//    /* Set palette */
+//    if (!SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, colors, 0, numColors)) {
+//        throw Error("Couldn't set color palette: \n" + string(SDL_GetError()));
+//    }
 	
     return screen;
 }
