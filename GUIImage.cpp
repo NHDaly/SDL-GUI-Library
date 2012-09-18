@@ -41,9 +41,10 @@ GUIImage::GUIImage(string filename, bool alpha, const SDL_Color& color_key){
 	
 	if (alpha){
 		//Map the color key
-		Uint32 colorkey = SDL_MapRGB( sdl_impl->format, color_key.r, color_key.g, color_key.b);
-		//Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
-		SDL_SetColorKey( sdl_impl, SDL_SRCCOLORKEY, colorkey );
+		Uint32 colorkey = SDL_MapRGB(sdl_impl->format,
+                                     color_key.r, color_key.g, color_key.b);
+		//Set all pixels of color R 0xFF, G 0, B 0xFF to be transparent
+		SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, colorkey );
 	}
 }
 

@@ -63,7 +63,7 @@ void GUIView::display() {
 
 
 void GUIView::mouse_click(const SDL_Event& event){
-//	std::cout <<"GUIVIEW mouse_click" << std::endl;
+	std::cout <<"GUIVIEW mouse_click" << std::endl;
 	//	handle_mouse_down(DispPoint(event.button.x, event.button.y));
 }
 void GUIView::key_down(const SDL_Event& event){

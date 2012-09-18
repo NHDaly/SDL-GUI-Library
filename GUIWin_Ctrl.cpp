@@ -125,6 +125,7 @@ void GUIWin_Ctrl::run(){
 						break;
 					}
 						
+					case SDL_MOUSEBUTTONUP: /// @todo Are these exactly the same?
 					case SDL_MOUSEBUTTONDOWN:{
 						
 						
@@ -155,14 +156,14 @@ void GUIWin_Ctrl::run(){
 						
 						break;
 					}
-					case SDL_MOUSEBUTTONUP:
-						if (event_responders.empty()) {
-//							cout << "no responder" << endl;
-							break;
-						}
-						for_each(event_responders.begin(), event_responders.end(), bind(&GUIView_Ctrl::mouse_click_up, _1, event));
-						//					event_responder->mouse_click_up(event);
-						break;
+//					case SDL_MOUSEBUTTONUP:
+//						if (event_responders.empty()) {
+////							cout << "no responder" << endl;
+//							break;
+//						}
+//						for_each(event_responders.begin(), event_responders.end(), bind(&GUIView_Ctrl::mouse_click_up, _1, event));
+//						//					event_responder->mouse_click_up(event);
+//						break;
 					case SDL_MOUSEMOTION:
 						if (event_responders.empty()) {
 							break;

@@ -23,26 +23,6 @@ using namespace std::placeholders;
 void initGameWindows();
 
 
-#define SDL_JOY_BUTTON_A  0
-#define SDL_JOY_BUTTON_B  1
-#define SDL_JOY_BUTTON_X 2
-#define SDL_JOY_BUTTON_Y  3
-#define SDL_JOY_BUMB_L  4
-#define SDL_JOY_BUMB_R  5
-#define SDL_JOY_BACK  6
-#define SDL_JOY_START  7
-#define SDL_JOY_BUTTON_XBOX  8
-#define SDL_JOY_STICK_L_CLICK  9
-#define SDL_JOY_STICK_R_CLICK  10
-#define SDL_JOY_TRIGGER_L  2
-#define SDL_JOY_TRIGGER_R  5
-#define SDL_JOY_DPAD_L  2
-#define SDL_JOY_STICK_L_X  0
-#define SDL_JOY_STICK_L_Y  1
-#define SDL_JOY_STICK_R_X  4
-#define SDL_JOY_STICK_R_Y  5
-
-
 #else
 
 #include "SDL/SDL.h"
@@ -55,7 +35,7 @@ using std::tr1::static_pointer_cast;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
-#include "main.h"
+#define MY_APPLICATION_NAME "Deep.app"
 //#ifndef MY_APPLICATION_NAME
 //# define MY_APPLICATION_NAME "Sid_Game_Master.app"
 //#endif
@@ -65,24 +45,6 @@ using namespace std::tr1::placeholders;
 #define CHDIR chdir
 
 void initGameMac();
-
-
-#define SDL_JOY_STICK_L_X  0
-#define SDL_JOY_STICK_L_Y  1
-#define SDL_JOY_TRIGGER_L  4
-#define SDL_JOY_TRIGGER_R  5
-#define SDL_JOY_BUTTON_XBOX  10
-#define SDL_JOY_BUTTON_A  11
-#define SDL_JOY_BUTTON_B  12
-#define SDL_JOY_BUTTON_X 13
-#define SDL_JOY_BUTTON_Y  14
-#define SDL_JOY_START  4
-#define SDL_JOY_BACK  5
-#define SDL_JOY_STICK_L_CLICK  6
-#define SDL_JOY_STICK_R_CLICK  7
-#define SDL_JOY_BUMB_L  8
-#define SDL_JOY_BUMB_R  9
-#define SDL_JOY_DPAD_L  2
 
 
 #endif
