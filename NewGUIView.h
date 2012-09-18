@@ -45,6 +45,12 @@ public:
     
     SDL_Surface* image;
 
+protected:
+    // Displays on image onto self.
+    void display_image_on_self(SDL_Surface* source, int w, int h, DispPoint pos);
+
+    void mark_changed();
+
 private:
     bool changed;
     int w,h;
@@ -69,12 +75,6 @@ private:
     NewGUIView* parent;
     typedef std::list<GUISubview> Subview_list_t;
     Subview_list_t children;
-
-    
-    // Displays on image onto self.
-    void display_image_on_self(NewGUIView* view, DispPoint pos);
-    
-    void mark_changed();
 
 };
 

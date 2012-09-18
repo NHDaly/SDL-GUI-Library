@@ -52,6 +52,9 @@ NewGUIView::~NewGUIView() {
         delete children.front().view;
         children.pop_front();
     }
+    
+    SDL_FreeSurface(image);
+    if (background) delete background;
 }
 
 void NewGUIView::draw_onto_self(NewGUIView* view, DispPoint pos) {
@@ -59,19 +62,16 @@ void NewGUIView::draw_onto_self(NewGUIView* view, DispPoint pos) {
     if (parent) parent->mark_changed();
     
     // Render the image onto self.
-    display_image_on_self(view, pos);
+    display_image_on_self(view->image, view->w, view->h, pos);
 }
 
 
 // Displays on image onto this.
-void NewGUIView::display_image_on_self(NewGUIView* view, DispPoint pos) {
-    
-    ///@todo..
-    cout << "drawing " << view << " onto " << this << endl;
+void NewGUIView::display_image_on_self(SDL_Surface* source, int w, int h, DispPoint pos) {
     
     // Using SDL, perform a blit from view to self.
-	SDL_Rect dest_rect = {pos.x, pos.y, view->w, view->h};
-	SDL_BlitSurface(view->image, 0, image, &dest_rect);
+	SDL_Rect dest_rect = {pos.x, pos.y, w, h};
+	SDL_BlitSurface(source, 0, image, &dest_rect);
 }
 
 void NewGUIView::mark_changed() {
@@ -87,7 +87,7 @@ void NewGUIView::refresh() {
     if (!need_to_refresh()) return;
     
     // Refresh self. (First display background, then each child.)
-    if (background) display_image_on_self(background, DispPoint(0,0));
+    if (background) display_image_on_self(background->image, background->w, background->h, DispPoint(0,0));
     
     Subview_list_t::iterator child;
     for(child = children.begin(); child != children.end(); child++) {

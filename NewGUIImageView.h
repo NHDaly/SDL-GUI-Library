@@ -6,9 +6,17 @@
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_NewGUIImageView_h
-#define Deep_NewGUIImageView_h
+#ifndef NEWGUIIMAGEVIEW_H
+#define NEWGUIIMAGEVIEW_H
+
+#include "NewGUIView.h"
+
+class GUIImage;
+class NewGUIImageView : public NewGUIView {
+public:
+    
+    NewGUIImageView(const GUIImage &image_src);    
+};
 
 
-
-#endif
+#endif /* NEWGUIIMAGEVIEW_H */
