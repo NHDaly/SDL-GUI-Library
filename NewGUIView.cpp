@@ -49,7 +49,7 @@ NewGUIView::~NewGUIView() {
     
     while (!children.empty()) {
         
-        delete children.front().view;
+        delete children.front();
         children.pop_front();
     }
     
@@ -74,11 +74,21 @@ void NewGUIView::display_image_on_self(SDL_Surface* source, int w, int h, DispPo
 	SDL_BlitSurface(source, 0, image, &dest_rect);
 }
 
+bool x_then_y_view_less_than(const NewGUIView* a, const NewGUIView* b) {
+    if (a->pos.x < b->pos.x) return true;
+    else if (a->pos.x == b->pos.x) return (a->pos.y < b->pos.y);
+    else /*(a->pos.x > b->pos.x)*/ return false;
+}
+
 void NewGUIView::mark_changed() {
     
     changed = true;
     
     if (parent) parent->mark_changed();
+    
+    if (children.size() > 1) {
+        children.sort(x_then_y_view_less_than);
+    }
 }
 
 
@@ -92,8 +102,8 @@ void NewGUIView::refresh() {
     Subview_list_t::iterator child;
     for(child = children.begin(); child != children.end(); child++) {
         
-        child->view->refresh();
-        draw_onto_self(child->view, child->pos);
+        (*child)->refresh();
+        draw_onto_self(*child, (*child)->pos);
     }
     
     changed = false;
@@ -105,32 +115,90 @@ void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
     
     /// @todo Check if out of bounds?
     
-    children.push_back(GUISubview(view, pos));
+    view->pos = pos;
+    children.push_back(view);
     view->parent = this;
     
     mark_changed();
 }
 // NOTE: Does not delete the view, only remove it from list!
 void NewGUIView::remove_subview(NewGUIView* view) {
-    children.remove(GUISubview(view, DispPoint())); // Dummy Subview.
+    children.remove(view); // Dummy Subview.
     
     mark_changed();
 }
 void NewGUIView::move_subview(NewGUIView* view, DispPoint pos) {
-    ( find(children.begin(), children.end(),
-           GUISubview(view, DispPoint())) )->pos = pos;
+    NewGUIView* child = *find(children.begin(), children.end(), view);
+    child->pos = pos;
     
     mark_changed();
 }
 
+#include "NewGUIWindow.h" // For Unhandled Click.
 
-///@todo TEMPORARY
-void NewGUIView::print_children() {
-    std::cout << this << std::endl;
-    
-    for(Subview_list_t::iterator child = children.begin(); child != children.end(); child++) {
-        std::cout << child->view << " " << child->pos.x <<" "<< child->pos.y << std::endl;
+void NewGUIView::mouse_click(DispPoint coord) {
+    if (!handle_mouse_down(coord)) {
+        if (parent) parent->mouse_click(coord);
+        else throw Unhandled_Click(coord);
     }
 }
+
+NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
+    
+    if (!rel_point_is_on_me(coord)) return 0;
+    
+    // At worst, we know the pint is on this view.
+    NewGUIView* result = this;
+    
+    // Check if any children have a deeper subview:
+    Subview_list_t::iterator child;
+    for (child = children.begin(); child != children.end(); ++child) {
+        
+        // Can assume that Views are sorted, so any new best will be above old best.
+        NewGUIView* new_best = (*child)->get_view_from_point(adjust_to_rel(coord));
+        if (new_best) {
+            result = new_best;
+        }
+    }
+    
+    return result;
+}
+
+bool NewGUIView::rel_point_is_on_me(DispPoint coord) {
+    
+    return (coord.x >= pos.x && coord.y >= pos.y
+            && coord.x <= pos.x + w && coord.y <= pos.y + h);
+}
+bool NewGUIView::abs_point_is_on_me(DispPoint coord) {
+    
+    DispPoint abs_pos = get_abs_pos();
+    return (coord.x >= abs_pos.x && coord.y >= abs_pos.y
+            && coord.x <= abs_pos.x + w && coord.y <= abs_pos.y + h);
+}
+
+
+DispPoint NewGUIView::abs_from_rel(DispPoint coord) {
+    
+    DispPoint abs_pos = get_abs_pos();
+        return DispPoint(abs_pos.x + coord.x,
+                         abs_pos.y + coord.y);
+}
+DispPoint NewGUIView::adjust_to_rel(DispPoint coord) {
+    return DispPoint(coord.x - pos.x, coord.y - pos.y);
+}
+
+
+DispPoint NewGUIView::get_abs_pos() {
+    if (parent == 0) return pos;
+    else {
+        DispPoint parent_abs_pos = parent->get_abs_pos();
+        return DispPoint(parent_abs_pos.x + pos.x,
+                         parent_abs_pos.y + pos.y);
+    }
+}
+DispPoint NewGUIView::get_rel_pos() {
+    return pos;
+}
+
 
 

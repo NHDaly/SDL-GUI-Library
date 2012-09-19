@@ -14,6 +14,7 @@
 #include "GUIUtility.h"
 
 class SDL_Surface;
+class NewGUIWindow;
 
 class NewGUIView {
 public:
@@ -40,42 +41,55 @@ public:
     // Will be true if a subview has been changed.
     bool need_to_refresh() const { return changed; }
     
-    /// === DEBUG ===
-    void print_children();
-    
-    SDL_Surface* image;
+    // Template Method
+    void mouse_click(DispPoint coord);
 
+    // Returns the deepest subview (could be this) on which coord lies.
+    NewGUIView* get_view_from_point(DispPoint coord);
+    
+    DispPoint get_abs_pos();
+    DispPoint get_rel_pos();    
+    
+    friend class NewGUIWindow;
+    
 protected:
     // Displays on image onto self.
     void display_image_on_self(SDL_Surface* source, int w, int h, DispPoint pos);
 
     void mark_changed();
+    
+    // Returns true if the mouse_down is finished being handled.
+    // If returns false, handling will continue up the chain.
+    virtual bool handle_mouse_down(DispPoint coord) { return false; }
 
 private:
     bool changed;
     int w,h;
+    DispPoint pos;
     
     NewGUIView* background;
-
-    struct GUISubview {
-        GUISubview(NewGUIView* view_, DispPoint pos_) : view(view_), pos(pos_) {}
-        
-        NewGUIView* view;
-        DispPoint pos;
-        
-        // Compare only by view pointer.
-        bool operator< (const GUISubview& b) const {
-            return view < b.view;
-        }
-        bool operator== (const GUISubview& b) const {
-            return view == b.view;
-        }
-    };
     
     NewGUIView* parent;
-    typedef std::list<GUISubview> Subview_list_t;
+    typedef std::list<NewGUIView*> Subview_list_t;
     Subview_list_t children;
 
+    ///@todo PRIVATE:
+    SDL_Surface* image;
+
+    // returns true if coord is within this view's rectangle.
+    bool rel_point_is_on_me(DispPoint coord);
+    bool abs_point_is_on_me(DispPoint coord);
+    
+    DispPoint abs_from_rel(DispPoint coord);
+    DispPoint adjust_to_rel(DispPoint coord);    
+
+    
+    // returns the deepest view that lies under coord, and its depth.
+    // (0 is THIS, 1 is a child, 2 is grandchild, etc.)
+    typedef std::pair<NewGUIView*, int> View_Depth_t;
+    View_Depth_t deepest_view_from_point(DispPoint coord, int depth);
+    
+    friend bool x_then_y_view_less_than(const NewGUIView* a, const NewGUIView* b);
 };
 
 

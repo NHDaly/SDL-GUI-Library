@@ -12,6 +12,15 @@
 
 #include <string>
 
+#include "GUIUtility.h"
+
+struct Unhandled_Click {
+    
+    Unhandled_Click(DispPoint coord_) : coord(coord_) { }
+    DispPoint coord;
+};
+
+
 class NewGUIView;
 class SDL_Surface;
 
@@ -32,6 +41,7 @@ public:
     void rename(const std::string& name_);
     
     void set_main_view(NewGUIView* main_view_);
+    NewGUIView* get_main_view() { return main_view; }
     
     // If main_view has changed at all, re-display it.
     void refresh();
