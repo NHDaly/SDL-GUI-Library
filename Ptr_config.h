@@ -22,3 +22,7 @@ typedef std::tr1::shared_ptr<GUIWindow> GUIWindow_shptr_t;
 typedef std::tr1::weak_ptr<GUIWindow> GUIWindow_wptr_t;
 
 
+class GUIValue_Display;
+typedef std::tr1::shared_ptr<GUIValue_Display> GUIValue_Disp_shptr_t;
+typedef std::tr1::weak_ptr<GUIValue_Display> GUIValue_Disp_wptr_t;
+

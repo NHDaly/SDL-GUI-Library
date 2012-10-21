@@ -5,8 +5,8 @@
 #include <string>
 #include "stdint.h"
 
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 700;
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
 
 
 // a simple class for error exceptions - msg points to a C-string error message

@@ -5,6 +5,10 @@
 
 #include "Compatibility.h"
 
+const int SCREEN_WIDTH = 700;
+const int SCREEN_HEIGHT = 550;
+
+
 //
 //void initSDL(unsigned int flags){
 //    if ( SDL_Init(flags) < 0 ) {

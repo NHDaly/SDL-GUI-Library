@@ -108,6 +108,17 @@ GUIImage GUIImage::create_blank(int w, int h){
 	return result;
 }
 
+GUIImage GUIImage::create_filled(int w, int h, SDL_Color color){
+	
+	GUIImage blank (w , h);
+	
+	Uint32 colorkey = SDL_MapRGBA( blank->format, color.r, color.g, color.b, color.unused);
+	SDL_FillRect(blank, 0, colorkey);
+	
+	return blank;
+}
+
+
 GUIImage GUIImage::create_clear(int w, int h){
 	
 	GUIImage hollow (w , h);

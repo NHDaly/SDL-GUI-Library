@@ -29,7 +29,8 @@ public:
 	static GUIImage* get_image(std::string filename, bool alpha = false, const SDL_Color& color_key =default_color_key_c);
 	
 	static GUIImage create_blank(int w, int h);
-	static GUIImage create_clear(int w, int h);
+	static GUIImage create_filled(int w, int h, SDL_Color color);
+    static GUIImage create_clear(int w, int h);
 	static GUIImage create_outline(int w, int h, int width, SDL_Color color);
 	
 	operator SDL_Surface*() const {return sdl_impl;}
