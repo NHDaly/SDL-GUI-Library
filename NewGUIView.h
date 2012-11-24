@@ -50,6 +50,16 @@ public:
     DispPoint get_abs_pos();
     DispPoint get_rel_pos();    
     
+    // The following two functions will call got_focus() and lost_focus(). Derived behavior may be specified by overriding those two functions.
+    
+    // This function may be optionally called to tell Window to send keyboard
+    // input to this view.
+    void capture_focus();
+    // If focus was captured, this function will be called when the user 
+    // clicks off of this view.
+    void lose_focus();
+
+    
     friend class NewGUIWindow;
     
 protected:
@@ -60,8 +70,14 @@ protected:
     
     // Returns true if the mouse_down is finished being handled.
     // If returns false, handling will continue up the chain.
+    // May optionally call capture_focus() to become the target for keypresses.
     virtual bool handle_mouse_down(DispPoint coord) { return false; }
 
+    // These functions will be called by capture/lose focus, and may be
+    // overridden to provide behavior on focus gain/loss.
+    virtual void got_focus() { }
+    virtual void lost_focus() { }
+    
 private:
     bool changed;
     int w,h;
