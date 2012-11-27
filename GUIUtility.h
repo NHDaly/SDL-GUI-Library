@@ -43,7 +43,12 @@ struct DispPoint {
 	
 	DispPoint() : x(0), y(0) { }
 	DispPoint(int x_, int y_) : x(x_), y(y_) { }
+
 	
+    DispPoint operator+ (DispPoint b) {
+        return DispPoint (x + b.x, y + b.y); 
+    }
+
 	DispPoint(const Coord& coord);
 	int x,y;
 };

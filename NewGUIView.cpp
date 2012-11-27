@@ -67,7 +67,7 @@ NewGUIView::~NewGUIView() {
     }
     
     SDL_FreeSurface(image);
-    SDL_FreeSurface(image);
+    SDL_FreeSurface(display);
     if (background) delete background;
 }
 
@@ -103,6 +103,10 @@ void NewGUIView::mark_changed() {
     if (parent) parent->mark_changed();
     
     if (children.size() > 1) {
+        
+        /// @todo Perhaps the sorting method should be optional?
+        ///  Either by x,y or by order attached?
+        
         children.sort(x_then_y_view_less_than);
     }
 }
@@ -168,10 +172,28 @@ void NewGUIView::move_subview(NewGUIView* view, DispPoint pos) {
     mark_changed();
 }
 
-void NewGUIView::mouse_click(DispPoint coord) {
+void NewGUIView::mouse_down(DispPoint coord) {
+    cout << "mouse down!: " << coord.x <<", "<< coord.y << endl;
+    
     if (!handle_mouse_down(coord)) {
-        if (parent) parent->mouse_click(coord);
+        if (parent) parent->mouse_down(coord + pos);
         else throw Unhandled_Click(coord);
+    }
+}
+void NewGUIView::mouse_up(DispPoint coord) {
+    cout << "mouse up!: " << coord.x <<", "<< coord.y << endl;
+    
+    if (!handle_mouse_up(coord)) {
+        if (parent) parent->mouse_up(coord + pos);
+        else throw Unhandled_Click(coord);
+    }
+}
+void NewGUIView::mouse_motion(DispPoint rel_motion) {
+    cout << "mouse motion!: " << rel_motion.x <<", "<< rel_motion.y << endl;
+    
+    if (!handle_mouse_motion(rel_motion)) {
+        if (parent) parent->mouse_motion(rel_motion);
+        else throw Unhandled_Click(rel_motion);
     }
 }
 

@@ -51,12 +51,11 @@ GUIWin_Ctrl::~GUIWin_Ctrl(){
 }
 
 
-void GUIWin_Ctrl::run(){
+void GUIWin_Ctrl::run(int fps_cap){
 	
 	SDL_Event event;
 	
 	bool cap_frame_rate = 1;
-	int fps_cap = 40;
 	
 	bool running = true;
 	while (running) {

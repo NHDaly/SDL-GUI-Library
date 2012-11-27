@@ -32,6 +32,8 @@ public:
     void draw_onto_self(const GUIImage &image, DispPoint pos);
 
     
+    // NOTE: once attached, a subview "belongs" to this view. If this view is
+    //   deleted, all subviews are deleted as well.
     // NOTE: Currently it is okay to attach a view completely out of bounds.
     void attach_subview(NewGUIView* view, DispPoint pos);
     // NOTE: Does not delete the view, only remove it from list!
@@ -42,16 +44,24 @@ public:
     // Will be true if a subview has been changed.
     bool need_to_refresh() const { return changed; }
     
-    // Template Method
-    // Either handle click or pass up to parent.
+    // Mouse Events: Template Methods
+    // Either handle event or pass up to parent.
     // Override handle_mouse_down() to change behavior.
-    void mouse_click(DispPoint coord);
+    void mouse_down(DispPoint coord);
+    // Override handle_mouse_up() to change behavior.
+    void mouse_up(DispPoint coord);
+    // Override handle_mouse_motion() to change behavior.
+    void mouse_motion(DispPoint rel_motion);
 
     // Returns the deepest subview (could be this) on which coord lies.
     NewGUIView* get_view_from_point(DispPoint coord);
     
-    DispPoint get_abs_pos();
-    DispPoint get_rel_pos();    
+    DispPoint get_abs_pos(); // Pos on screen
+    DispPoint get_rel_pos(); // Pos on parent
+    
+    
+    
+    ///@todo VVVV NOT YET IMPLEMENTED! VVVVVV
     
     // The following two functions will call got_focus() and lost_focus(). Derived behavior may be specified by overriding those two functions.
     
@@ -61,7 +71,8 @@ public:
     // If focus was captured, this function will be called when the user 
     // clicks off of this view.
     void lose_focus();
-
+    
+    ///@todo ^^^^^^ NOT YET IMPLEMENTED! ^^^^^^
     
     friend class NewGUIWindow;
     
@@ -71,10 +82,13 @@ protected:
 
     void mark_changed();
     
-    // Returns true if the mouse_down is finished being handled.
-    // If returns false, handling will continue up the chain.
-    // May optionally call capture_focus() to become the target for keypresses.
+    // Mouse Events. Following three functions all work the same:
+    //  Returns true if the mouse-event is finished being handled.
+    //  If returns false, handling will continue up the chain.
+    //  May optionally call capture_focus() to become the target for keypresses.
     virtual bool handle_mouse_down(DispPoint coord) { return false; }
+    virtual bool handle_mouse_up(DispPoint coord) { return false; }
+    virtual bool handle_mouse_motion(DispPoint rel_motion) { return false; }
 
     // These functions will be called by capture/lose focus, and may be
     // overridden to provide behavior on focus gain/loss.

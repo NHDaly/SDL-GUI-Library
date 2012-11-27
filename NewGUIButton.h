@@ -9,7 +9,7 @@
 #ifndef Deep_NewGUIButton_h
 #define Deep_NewGUIButton_h
 
-#include "NewGUIView.h"
+#include "NewGUIImageView.h"
 
 class QuitAction {
 public:
@@ -18,13 +18,16 @@ public:
     }
 };
 
-class NewGUIButton : public NewGUIView { 
+class NewGUIButton : public NewGUIImageView { 
 public:
+    NewGUIButton()
+    : NewGUIImageView(GUIImage("images/button.bmp")) 
+    {}
     
 protected:
     // Returns true if the mouse_down is finished being handled.
     // If returns false, handling will continue up the chain.
-    virtual bool handle_mouse_down(DispPoint coord) { throw QuitAction; }
+    virtual bool handle_mouse_down(DispPoint coord) { throw QuitAction(); }
                                    
 private:
 };
