@@ -31,7 +31,8 @@ void ShowBMP(std::string file, SDL_Surface *screen, SDL_Rect rect, bool update);
 void updateScreen(SDL_Surface *screen);
 // updates the entire screen, meaning that anything changed since the last update will now be displayed.
 
-SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp, SDL_Color colors[], const int numColors);
+SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
+                           SDL_Color colors[], const int numColors, const Uint32 flags = SDL_SWSURFACE);
 // create a Display with the following properties.
 
 

@@ -13,13 +13,13 @@
 #include <string>
 
 #include "GUIUtility.h"
+#include "SDL/SDL_video.h"
 
 struct Unhandled_Click {
     
     Unhandled_Click(DispPoint coord_) : coord(coord_) { }
     DispPoint coord;
 };
-
 
 class NewGUIView;
 class SDL_Surface;
@@ -29,30 +29,34 @@ class SDL_Surface;
 // the window.
 class NewGUIWindow {
 public:
-    
-    NewGUIWindow(NewGUIView *main_view_, const std::string& name_ = "NewGUIWindow",
-                 int numColors = 256);
-    NewGUIWindow(int w, int h, const std::string& name_ = "NewGUIWindow",
-                 int numColors = 256);
+
+    NewGUIWindow(int w, int h, const std::string& name_ = "",
+                 int numColors = 256, const Uint32 flags = SDL_SWSURFACE);
     
     void crop(int w, int h);
     void stretch(int w, int h);
     
     void rename(const std::string& name_);
     
-    void set_main_view(NewGUIView* main_view_);
     NewGUIView* get_main_view() { return main_view; }
+
+    // Handle subviews to main_view:
+    void attach_subview(NewGUIView* view, DispPoint pos);
+    void remove_subview(NewGUIView* view);
+    void move_subview(NewGUIView* view, DispPoint pos);
+
     
     // If main_view has changed at all, re-display it.
     void refresh();
     
 private:
-    NewGUIView* main_view;
     SDL_Surface* window;
+    NewGUIView* main_view;
     std::string name;
     
-    void initialize(int w, int h, const std::string& name_ = "",
-                    int numColors = 256, NewGUIView* main_view_ = 0);
+    int num_colors;
+    Uint32 flags;
+    
 };
 
 #endif /* NEWGUIWINDOW_H */
