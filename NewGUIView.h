@@ -15,6 +15,7 @@
 
 class SDL_Surface;
 class NewGUIWindow;
+class GUIImage;
 
 class NewGUIView {
 public:
@@ -28,7 +29,7 @@ public:
     
     // Renders an image onto this screen. Also marks all ancestors as modified.
     // Should this be a view or an image, you think?
-    void draw_onto_self(NewGUIView* view, DispPoint pos);
+    void draw_onto_self(const GUIImage &image, DispPoint pos);
 
     
     // NOTE: Currently it is okay to attach a view completely out of bounds.
@@ -42,6 +43,8 @@ public:
     bool need_to_refresh() const { return changed; }
     
     // Template Method
+    // Either handle click or pass up to parent.
+    // Override handle_mouse_down() to change behavior.
     void mouse_click(DispPoint coord);
 
     // Returns the deepest subview (could be this) on which coord lies.
@@ -63,8 +66,8 @@ public:
     friend class NewGUIWindow;
     
 protected:
-    // Displays on image onto self.
-    void display_image_on_self(SDL_Surface* source, int w, int h, DispPoint pos);
+    // Draws image onto display.
+    void render_image(SDL_Surface* source, int w, int h, DispPoint pos);
 
     void mark_changed();
     
@@ -82,16 +85,19 @@ private:
     bool changed;
     int w,h;
     DispPoint pos;
-    
+        
     NewGUIView* background;
-    
+    SDL_Surface* image;
+    SDL_Surface* display;   // includes children drawn on.
+
+    // Hierarchy
     NewGUIView* parent;
     typedef std::list<NewGUIView*> Subview_list_t;
     Subview_list_t children;
-
-    ///@todo PRIVATE:
-    SDL_Surface* image;
-
+    
+    
+    bool is_subview(NewGUIView* view);
+    
     // returns true if coord is within this view's rectangle.
     bool rel_point_is_on_me(DispPoint coord);
     bool abs_point_is_on_me(DispPoint coord);
