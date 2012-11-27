@@ -35,13 +35,12 @@ public:
 	GUIView(w,h), oper(oper) {
 		set_bg(image);
 	}
-	
-	virtual ~GUIButton() {}
-	
+		
 	virtual void mouse_click(const SDL_Event& event){
 
         if (event.button.type == SDL_MOUSEBUTTONDOWN) {
             is_pressed = true;
+            set_bg(GUIImage("images/button2.bmp"));
         }
         // Only perform event on mouse release.
         else if (is_pressed) {

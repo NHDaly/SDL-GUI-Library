@@ -51,7 +51,7 @@ public:
     // Override handle_mouse_up() to change behavior.
     void mouse_up(DispPoint coord);
     // Override handle_mouse_motion() to change behavior.
-    void mouse_motion(DispPoint rel_motion);
+    void mouse_motion(DispPoint coord, DispPoint rel_motion);
 
     // Returns the deepest subview (could be this) on which coord lies.
     NewGUIView* get_view_from_point(DispPoint coord);
@@ -68,13 +68,13 @@ public:
     // This function may be optionally called to tell Window to send keyboard
     // input to this view.
     void capture_focus();
-    // If focus was captured, this function will be called when the user 
-    // clicks off of this view.
+    // If focus was captured, this function will be called release focus.
     void lose_focus();
     
     ///@todo ^^^^^^ NOT YET IMPLEMENTED! ^^^^^^
     
     friend class NewGUIWindow;
+    friend void NewGUI_run(NewGUIWindow* window);
     
 protected:
     // Draws image onto display.
@@ -88,13 +88,17 @@ protected:
     //  May optionally call capture_focus() to become the target for keypresses.
     virtual bool handle_mouse_down(DispPoint coord) { return false; }
     virtual bool handle_mouse_up(DispPoint coord) { return false; }
-    virtual bool handle_mouse_motion(DispPoint rel_motion) { return false; }
+    virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion) { return false; }
 
     // These functions will be called by capture/lose focus, and may be
     // overridden to provide behavior on focus gain/loss.
     virtual void got_focus() { }
     virtual void lost_focus() { }
     
+    // returns true if coord is within this view's rectangle.
+    bool rel_point_is_on_me(DispPoint coord);
+    bool abs_point_is_on_me(DispPoint coord);
+
 private:
     bool changed;
     int w,h;
@@ -111,11 +115,7 @@ private:
     
     
     bool is_subview(NewGUIView* view);
-    
-    // returns true if coord is within this view's rectangle.
-    bool rel_point_is_on_me(DispPoint coord);
-    bool abs_point_is_on_me(DispPoint coord);
-    
+        
     DispPoint abs_from_rel(DispPoint coord);
     DispPoint adjust_to_rel(DispPoint coord);    
 

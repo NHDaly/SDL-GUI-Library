@@ -11,6 +11,8 @@
 
 #include "NewGUIWindow.h"
 
+extern NewGUIView *captured;
+
 void NewGUI_run(NewGUIWindow* window);
 
 

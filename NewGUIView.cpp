@@ -12,6 +12,7 @@
 #include "SDL/SDL_video.h"
 
 #include "NewGUIWindow.h" // For Unhandled Click.
+#include "NewGUIApp.h"  // For capture focus
 
 
 #include <iostream>
@@ -188,12 +189,12 @@ void NewGUIView::mouse_up(DispPoint coord) {
         else throw Unhandled_Click(coord);
     }
 }
-void NewGUIView::mouse_motion(DispPoint rel_motion) {
+void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
     cout << "mouse motion!: " << rel_motion.x <<", "<< rel_motion.y << endl;
     
-    if (!handle_mouse_motion(rel_motion)) {
-        if (parent) parent->mouse_motion(rel_motion);
-        else throw Unhandled_Click(rel_motion);
+    if (!handle_mouse_motion(coord, rel_motion)) {
+        if (parent) parent->mouse_motion(coord + pos, rel_motion);
+        else throw Unhandled_Click(coord);
     }
 }
 
@@ -252,6 +253,13 @@ DispPoint NewGUIView::get_abs_pos() {
 }
 DispPoint NewGUIView::get_rel_pos() {
     return pos;
+}
+
+void NewGUIView::capture_focus() {
+    captured = this;
+}
+void NewGUIView::lose_focus() {
+    captured = 0;
 }
 
 

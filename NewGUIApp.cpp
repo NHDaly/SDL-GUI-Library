@@ -17,16 +17,21 @@
 #include <iostream>
 using std::cout; using std::endl;
 
+NewGUIView *captured = 0;
+
+
 void NewGUI_run(NewGUIWindow* window) {
     
     window->refresh();
-
+    
     bool running = true;
     while(running) {
         SDL_Event event;
         
         try {
+            
             while (SDL_PollEvent(&event) && running){
+                
                 switch (event.type) {
                     case SDL_MOUSEBUTTONDOWN: 
                     case SDL_MOUSEBUTTONUP: {
@@ -39,27 +44,53 @@ void NewGUI_run(NewGUIWindow* window) {
                         NewGUIView* clicked_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
-                        if (clicked_view) {
-                            
-                            click_pos.x -= clicked_view->get_abs_pos().x; 
-                            click_pos.y -= clicked_view->get_abs_pos().y; 
-                            
-                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                        if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                            if (captured) {
+                                bool handled = captured->handle_mouse_down(click_pos);
+                                if (handled) {
+                                    break;
+                                }
+                            }
+                            else if (clicked_view) {
+                                
+                                click_pos.x -= clicked_view->get_abs_pos().x; 
+                                click_pos.y -= clicked_view->get_abs_pos().y; 
+                                
                                 clicked_view->mouse_down(click_pos);
                             }
-                            else {
+
+                        }
+                        else {
+                            if (captured) {
+                                bool handled = captured->handle_mouse_up(click_pos);
+                                if (handled) {
+                                    break;
+                                }
+                            }
+                            else if (clicked_view) {
+                                
+                                click_pos.x -= clicked_view->get_abs_pos().x; 
+                                click_pos.y -= clicked_view->get_abs_pos().y; 
+                                
                                 clicked_view->mouse_up(click_pos);
                             }
                         }
                         
-                        window->refresh();
-                        
                         break;
                     }
-                    case SDL_MOUSEMOTION:
+                    case SDL_MOUSEMOTION: {
+                        
+                        // Send mouse click to clicked view.
+                        SDL_MouseMotionEvent motion_event = event.motion;
+                        
+                        DispPoint pos(motion_event.x, motion_event.y);
+                        DispPoint rel(motion_event.xrel, motion_event.yrel);
+                        
+                        if (captured) captured->mouse_motion(pos, rel);
+                        
 						break;
-
-                    case SDL_KEYUP:{
+                    }
+                    case SDL_KEYUP: {
                         // Quit Key
                         if (event.key.keysym.sym == SDLK_q){
                             
@@ -70,14 +101,13 @@ void NewGUI_run(NewGUIWindow* window) {
 							}
 						}
                         break;
-                        
+                    }
                     case SDL_QUIT:
 						running = 0;
 						break;
 					default:
 						break;
                         
-                    }
                 }
             }
         }
@@ -87,8 +117,8 @@ void NewGUI_run(NewGUIWindow* window) {
         catch(const Unhandled_Click& e) {
             cout << "unhandled click" << endl;
         }
-    
+        
         window->refresh();
-
+        
     }
 }
