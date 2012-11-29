@@ -34,61 +34,57 @@ void NewGUI_run(NewGUIWindow* window) {
                 
                 switch (event.type) {
                     case SDL_MOUSEBUTTONDOWN: 
-                    case SDL_MOUSEBUTTONUP: {
+                    case SDL_MOUSEBUTTONUP:
+                    case SDL_MOUSEMOTION: {
                         
-                        // Send mouse click to clicked view.
-                        SDL_MouseButtonEvent click_event = event.button;
+                        // Send mouse event to correct view.
+
+                        DispPoint click_pos(event.button.x, event.button.y);
+                        DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
                         
-                        DispPoint click_pos(click_event.x, click_event.y);
-                        
+                        if (captured) {
+                            DispPoint new_pos(click_pos);
+
+                            new_pos.x -= captured->get_abs_pos().x; 
+                            new_pos.y -= captured->get_abs_pos().y; 
+                            
+                            bool handled;
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                handled = captured->handle_mouse_down(new_pos);
+                            }
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                handled = captured->handle_mouse_up(new_pos);
+                            }
+                            else if (event.button.type == SDL_MOUSEMOTION) {
+                                handled = captured->handle_mouse_motion(new_pos, rel_pos);
+                            }
+                            if (handled) {
+                                break;
+                            }
+                        }
                         NewGUIView* clicked_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
-                        if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                            if (captured) {
-                                bool handled = captured->handle_mouse_down(click_pos);
-                                if (handled) {
-                                    break;
-                                }
+
+                        if (clicked_view) {
+                            DispPoint new_pos(click_pos);
+
+                            new_pos.x -= clicked_view->get_abs_pos().x; 
+                            new_pos.y -= clicked_view->get_abs_pos().y; 
+                            
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                clicked_view->mouse_down(new_pos);
                             }
-                            else if (clicked_view) {
-                                
-                                click_pos.x -= clicked_view->get_abs_pos().x; 
-                                click_pos.y -= clicked_view->get_abs_pos().y; 
-                                
-                                clicked_view->mouse_down(click_pos);
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                clicked_view->mouse_up(new_pos);
+                            }  
+                            else if (event.button.type == SDL_MOUSEMOTION) {
+                                clicked_view->mouse_motion(new_pos, rel_pos);
                             }
 
-                        }
-                        else {
-                            if (captured) {
-                                bool handled = captured->handle_mouse_up(click_pos);
-                                if (handled) {
-                                    break;
-                                }
-                            }
-                            else if (clicked_view) {
-                                
-                                click_pos.x -= clicked_view->get_abs_pos().x; 
-                                click_pos.y -= clicked_view->get_abs_pos().y; 
-                                
-                                clicked_view->mouse_up(click_pos);
-                            }
-                        }
+                        } 
                         
                         break;
-                    }
-                    case SDL_MOUSEMOTION: {
-                        
-                        // Send mouse click to clicked view.
-                        SDL_MouseMotionEvent motion_event = event.motion;
-                        
-                        DispPoint pos(motion_event.x, motion_event.y);
-                        DispPoint rel(motion_event.xrel, motion_event.yrel);
-                        
-                        if (captured) captured->mouse_motion(pos, rel);
-                        
-						break;
                     }
                     case SDL_KEYUP: {
                         // Quit Key

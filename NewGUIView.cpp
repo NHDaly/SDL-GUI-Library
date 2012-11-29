@@ -200,7 +200,10 @@ void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
 
 NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
     
+    coord = adjust_to_rel(coord);
     if (!rel_point_is_on_me(coord)) return 0;
+    
+    cout << "GOOD" << endl;
     
     // At worst, we know the pint is on this view.
     NewGUIView* result = this;
@@ -210,7 +213,7 @@ NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
     for (child = children.begin(); child != children.end(); ++child) {
         
         // Can assume that Views are sorted, so any new best will be above old best.
-        NewGUIView* new_best = (*child)->get_view_from_point(adjust_to_rel(coord));
+        NewGUIView* new_best = (*child)->get_view_from_point(coord);
         if (new_best) {
             result = new_best;
         }
@@ -221,9 +224,14 @@ NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
 
 bool NewGUIView::rel_point_is_on_me(DispPoint coord) {
     
-    return (coord.x >= pos.x && coord.y >= pos.y
-            && coord.x < pos.x + w && coord.y < pos.y + h);
+    return (coord.x >= 0 && coord.y >= 0
+            && coord.x < w && coord.y < h);
 }
+//bool NewGUIView::rel_point_is_on_me(DispPoint coord) {
+//    
+//    return (coord.x >= pos.x && coord.y >= pos.y
+//            && coord.x < pos.x + w && coord.y < pos.y + h);
+//}
 bool NewGUIView::abs_point_is_on_me(DispPoint coord) {
     
     DispPoint abs_pos = get_abs_pos();

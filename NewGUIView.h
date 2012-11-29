@@ -16,6 +16,8 @@
 class SDL_Surface;
 class NewGUIWindow;
 class GUIImage;
+/// @todo Hack
+#include "GUIImage.h"
 
 class NewGUIView {
 public:
@@ -86,7 +88,7 @@ protected:
     //  Returns true if the mouse-event is finished being handled.
     //  If returns false, handling will continue up the chain.
     //  May optionally call capture_focus() to become the target for keypresses.
-    virtual bool handle_mouse_down(DispPoint coord) { return false; }
+    virtual bool handle_mouse_down(DispPoint coord) { draw_onto_self(GUIImage("images/slider_bubble.bmp"), coord); return true; }
     virtual bool handle_mouse_up(DispPoint coord) { return false; }
     virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion) { return false; }
 
