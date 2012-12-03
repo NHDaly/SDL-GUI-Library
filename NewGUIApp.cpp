@@ -33,6 +33,7 @@ void NewGUI_run(NewGUIWindow* window) {
             while (SDL_PollEvent(&event) && running){
                 
                 switch (event.type) {
+                        
                     case SDL_MOUSEBUTTONDOWN: 
                     case SDL_MOUSEBUTTONUP:
                     case SDL_MOUSEMOTION: {
@@ -86,21 +87,50 @@ void NewGUI_run(NewGUIWindow* window) {
                         
                         break;
                     }
+                    case SDL_KEYDOWN: {
+                        cout << "KEYDOWN" << endl;
+                        
+                        
+                        if (captured) {
+                            
+                            bool handled = captured->handle_key_down(event.key.keysym);
+                            
+                        }
+
+                        break;
+                    }
                     case SDL_KEYUP: {
+                        
                         // Quit Key
                         if (event.key.keysym.sym == SDLK_q){
                             
+#ifdef _MSC_VER  // Windows
+                            if (event.key.keysym.mod == KMOD_LCTRL
+								|| event.key.keysym.mod == KMOD_RCTRL
+								|| event.key.keysym.mod == KMOD_CTRL){
+								running = 0;
+							}
+#else           // Mac
 							if (event.key.keysym.mod == KMOD_LMETA
 								|| event.key.keysym.mod == KMOD_RMETA
 								|| event.key.keysym.mod == KMOD_META){
 								running = 0;
 							}
+#endif
 						}
                         break;
                     }
+                    
+                    if (captured) {
+                        
+                        bool handled = captured->handle_key_up(event.key.keysym);
+                        
+                    }
+                        
                     case SDL_QUIT:
 						running = 0;
 						break;
+                        
 					default:
 						break;
                         

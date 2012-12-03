@@ -77,11 +77,14 @@ void NewGUIWindow::refresh() {
 void NewGUIWindow::attach_subview(NewGUIView* view, DispPoint pos) {
     main_view->attach_subview(view, pos);
 }
+void NewGUIWindow::move_subview(NewGUIView* view, DispPoint pos) {
+    main_view->move_subview(view, pos);
+}
 void NewGUIWindow::remove_subview(NewGUIView* view) {
     main_view->remove_subview(view); 
 }
-void NewGUIWindow::move_subview(NewGUIView* view, DispPoint pos) {
-    main_view->move_subview(view, pos);
+void NewGUIWindow::remove_last_subview() {
+    main_view->remove_last_subview();
 }
 
 

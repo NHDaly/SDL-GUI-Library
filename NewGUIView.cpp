@@ -152,8 +152,19 @@ void NewGUIView::remove_subview(NewGUIView* view) {
     
     if (!is_subview(view))
         throw Error("view is not a subview of this!");
-
+    
     children.remove(view);
+    view->parent = 0;
+    
+    mark_changed();
+}
+void NewGUIView::remove_last_subview() {
+    
+    if (children.empty())
+        throw Error("view has not subviews!");
+    
+    NewGUIView *view = children.back();
+    children.pop_back();
     view->parent = 0;
     
     mark_changed();
@@ -197,6 +208,22 @@ void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
         else throw Unhandled_Click(coord);
     }
 }
+
+void NewGUIView::key_down(SDL_keysym key) {
+    cout << "key down!: " << key.sym << endl;
+    
+    if (!handle_key_down(key)) {
+        throw Unhandled_Key(key);
+    }
+}
+void NewGUIView::key_up(SDL_keysym key) {
+    cout << "key up!: " << key.sym << endl;
+    
+    if (!handle_key_up(key)) {
+        throw Unhandled_Key(key);
+    }
+}
+
 
 NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
     

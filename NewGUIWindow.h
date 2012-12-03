@@ -14,11 +14,17 @@
 
 #include "GUIUtility.h"
 #include "SDL/SDL_video.h"
+#include "SDL/SDL_keyboard.h"
 
 struct Unhandled_Click {
     
     Unhandled_Click(DispPoint coord_) : coord(coord_) { }
     DispPoint coord;
+};
+struct Unhandled_Key {
+    
+    Unhandled_Key(SDL_keysym key_) : key(key_) { }
+    SDL_keysym key;
 };
 
 class NewGUIView;
@@ -42,8 +48,9 @@ public:
 
     // Handle subviews to main_view:
     void attach_subview(NewGUIView* view, DispPoint pos);
-    void remove_subview(NewGUIView* view);
     void move_subview(NewGUIView* view, DispPoint pos);
+    void remove_subview(NewGUIView* view);
+    void remove_last_subview(); // Remove subview last added
 
     
     // If main_view has changed at all, re-display it.

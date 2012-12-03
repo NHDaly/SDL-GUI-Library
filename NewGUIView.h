@@ -18,6 +18,7 @@ class NewGUIWindow;
 class GUIImage;
 /// @todo Hack
 #include "GUIImage.h"
+#include <iostream>
 
 class NewGUIView {
 public:
@@ -40,6 +41,7 @@ public:
     void attach_subview(NewGUIView* view, DispPoint pos);
     // NOTE: Does not delete the view, only remove it from list!
     void remove_subview(NewGUIView* view);
+    void remove_last_subview(); // Remove subview last added
 
     void move_subview(NewGUIView* view, DispPoint pos);
     
@@ -54,6 +56,14 @@ public:
     void mouse_up(DispPoint coord);
     // Override handle_mouse_motion() to change behavior.
     void mouse_motion(DispPoint coord, DispPoint rel_motion);
+
+    // Keyboard Events: Template Methods
+    // Either handle event or pass up to parent.
+    // Override handle_key_down() to change behavior.
+    void key_down(SDL_keysym key);
+    // Override handle_key_up() to change behavior.
+    void key_up(SDL_keysym key);
+
 
     // Returns the deepest subview (could be this) on which coord lies.
     NewGUIView* get_view_from_point(DispPoint coord);
@@ -91,6 +101,14 @@ protected:
     virtual bool handle_mouse_down(DispPoint coord) { draw_onto_self(GUIImage("images/slider_bubble.bmp"), coord); return true; }
     virtual bool handle_mouse_up(DispPoint coord) { return false; }
     virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion) { return false; }
+
+
+    // Key Events. Following two functions all work the same:
+    //  Returns true if the key-event is finished being handled.
+    //  If returns false, handling will continue up the chain.
+    virtual bool handle_key_down(SDL_keysym key) { std::cout << "handling key down " << key.sym << std::endl; return false; }
+    virtual bool handle_key_up(SDL_keysym key) { return false; }
+
 
     // These functions will be called by capture/lose focus, and may be
     // overridden to provide behavior on focus gain/loss.
