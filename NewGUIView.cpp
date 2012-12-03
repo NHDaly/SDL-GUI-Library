@@ -108,7 +108,7 @@ void NewGUIView::mark_changed() {
         /// @todo Perhaps the sorting method should be optional?
         ///  Either by x,y or by order attached?
         
-        children.sort(x_then_y_view_less_than);
+//        children.sort(x_then_y_view_less_than);
     }
 }
 
