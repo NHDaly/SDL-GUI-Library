@@ -24,7 +24,9 @@ class NewGUIView {
 public:
     
     NewGUIView(int w_, int h_);
-    ~NewGUIView();
+    virtual ~NewGUIView();
+    
+//    void set_bg(NewGUIView* background_) { background = background_; }
     
     // Redraw any children that have changed onto self. Return true if changed.
     void refresh();
@@ -72,6 +74,8 @@ public:
     DispPoint get_rel_pos(); // Pos on parent
     
     
+    int get_w() { return w; }
+    int get_h() { return h; }
     
     ///@todo VVVV NOT YET IMPLEMENTED! VVVVVV
     
@@ -89,6 +93,9 @@ public:
     friend void NewGUI_run(NewGUIWindow* window);
     
 protected:
+    
+    NewGUIView* get_bg() { return background; }
+    
     // Draws image onto display.
     void render_image(SDL_Surface* source, int w, int h, DispPoint pos);
 

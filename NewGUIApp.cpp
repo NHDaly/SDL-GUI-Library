@@ -101,6 +101,8 @@ void NewGUI_run(NewGUIWindow* window) {
                     }
                     case SDL_KEYUP: {
                         
+                        cout << "KEYUP" << endl;
+
                         // Quit Key
                         if (event.key.keysym.sym == SDLK_q){
                             
@@ -118,15 +120,15 @@ void NewGUI_run(NewGUIWindow* window) {
 							}
 #endif
 						}
+                        
+                        if (captured) {
+                        
+                            bool handled = captured->handle_key_up(event.key.keysym);
+                        
+                        }
                         break;
                     }
-                    
-                    if (captured) {
-                        
-                        bool handled = captured->handle_key_up(event.key.keysym);
-                        
-                    }
-                        
+   
                     case SDL_QUIT:
 						running = 0;
 						break;
@@ -136,6 +138,9 @@ void NewGUI_run(NewGUIWindow* window) {
                         
                 }
             }
+
+            for_each(timer_commands.begin(), timer_commands.end(), bind(&GUITimer_command::execute_command, _1));
+            
         }
         catch(const Error& e) {
             cout << e.msg << endl;
@@ -148,3 +153,12 @@ void NewGUI_run(NewGUIWindow* window) {
         
     }
 }
+
+
+
+
+std::vector<GUITimer_command*> timer_commands;
+
+
+
+

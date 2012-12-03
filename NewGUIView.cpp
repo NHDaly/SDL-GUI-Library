@@ -21,11 +21,17 @@ using namespace std;
 
 SDL_Surface* prepare_SDL_surface(int w, int h);
 
+const SDL_Color clear_color = {255,0,255,0};
+
 
 NewGUIView::NewGUIView(int w_, int h_) 
 :changed(false), w(w_), h(h_), background(0), parent(0),
 image(prepare_SDL_surface(w_, h_)), display(prepare_SDL_surface(w_, h_))
 { 
+    
+//	Uint32 colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
+//	SDL_FillRect(image, 0, colorkey);
+//	SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey);
 }
 
 SDL_Surface* prepare_SDL_surface(int w, int h) {
@@ -291,10 +297,20 @@ DispPoint NewGUIView::get_rel_pos() {
 }
 
 void NewGUIView::capture_focus() {
+    
+    if (captured == this) return;
+    
+    if (captured) captured->lose_focus();
+    
     captured = this;
+ 
+    got_focus();
 }
 void NewGUIView::lose_focus() {
+    if (captured != this) return; //throw Error("Can't lose_focus if didn't already have it.");
     captured = 0;
+ 
+    lost_focus();
 }
 
 
