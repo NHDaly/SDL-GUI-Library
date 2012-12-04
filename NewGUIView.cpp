@@ -98,11 +98,12 @@ void NewGUIView::set_clear_color(SDL_Color clear_color) {
     
     is_alpha = true;
     colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
-    SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey); // reset alpha
+    SDL_SetColorKey(display, SDL_SRCCOLORKEY, colorkey); // reset alpha
 }
 void NewGUIView::clear_alpha() {
     
     is_alpha = false;
+    SDL_SetColorKey(display, 0, colorkey); // reset alpha
 }
 
 
@@ -140,21 +141,8 @@ void NewGUIView::refresh() {
     for(child = children.begin(); child != children.end(); child++) {
         
         (*child)->refresh();
-        
-        if ((*child)->is_alpha) {
-            // Temporarily set colorkey to child's clear_color
-            SDL_SetColorKey(image, SDL_SRCCOLORKEY, (*child)->colorkey);
-        }
-        
+                
         render_image((*child)->display, (*child)->w, (*child)->h, (*child)->pos);
-        
-        // Reset own alpha.
-        if (is_alpha) {
-            SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey); // reset alpha
-        }
-        else {
-            SDL_SetColorKey(image, 0, colorkey);    // clear alpha
-        }
     }
     
     changed = false;
