@@ -25,9 +25,7 @@ public:
     
     NewGUIView(int w_, int h_);
     virtual ~NewGUIView();
-    
-//    void set_bg(NewGUIView* background_) { background = background_; }
-    
+        
     // Redraw any children that have changed onto self. Return true if changed.
     void refresh();
     
@@ -88,17 +86,18 @@ public:
     void lose_focus();
     
     ///@todo ^^^^^^ NOT YET IMPLEMENTED! ^^^^^^
-    
+        
     friend class NewGUIWindow;
     friend void NewGUI_run(NewGUIWindow* window);
     
 protected:
     
-    NewGUIView* get_bg() { return background; }
-    
     // Draws image onto display.
     void render_image(SDL_Surface* source, int w, int h, DispPoint pos);
 
+    void set_clear_color(SDL_Color clear_color);
+    void clear_alpha();
+    
     void mark_changed();
     
     // Mouse Events. Following three functions all work the same:
@@ -130,11 +129,13 @@ private:
     bool changed;
     int w,h;
     DispPoint pos;
-        
-    NewGUIView* background;
+            
     SDL_Surface* image;
     SDL_Surface* display;   // includes children drawn on.
-
+    
+    bool is_alpha;     
+    Uint32 colorkey;    // only valid if is_alpha == true
+    
     // Hierarchy
     NewGUIView* parent;
     typedef std::list<NewGUIView*> Subview_list_t;

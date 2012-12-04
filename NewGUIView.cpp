@@ -21,17 +21,15 @@ using namespace std;
 
 SDL_Surface* prepare_SDL_surface(int w, int h);
 
-const SDL_Color clear_color = {255,0,255,0};
+const SDL_Color default_clear_color = {255,0,255,0};
 
 
 NewGUIView::NewGUIView(int w_, int h_) 
-:changed(false), w(w_), h(h_), background(0), parent(0),
-image(prepare_SDL_surface(w_, h_)), display(prepare_SDL_surface(w_, h_))
+:changed(false), w(w_), h(h_), parent(0),
+image(prepare_SDL_surface(w_, h_)), display(prepare_SDL_surface(w_, h_)),
+is_alpha(false)
 { 
     
-//	Uint32 colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
-//	SDL_FillRect(image, 0, colorkey);
-//	SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey);
 }
 
 SDL_Surface* prepare_SDL_surface(int w, int h) {
@@ -75,7 +73,6 @@ NewGUIView::~NewGUIView() {
     
     SDL_FreeSurface(image);
     SDL_FreeSurface(display);
-    if (background) delete background;
 }
 
 void NewGUIView::draw_onto_self(const GUIImage &image_, DispPoint pos) {
@@ -96,6 +93,18 @@ void NewGUIView::render_image(SDL_Surface* source, int w, int h, DispPoint pos) 
 	SDL_Rect dest_rect = {pos.x, pos.y, w, h};
 	SDL_BlitSurface(source, 0, display, &dest_rect);
 }
+
+void NewGUIView::set_clear_color(SDL_Color clear_color) {
+    
+    is_alpha = true;
+    colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
+    SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey); // reset alpha
+}
+void NewGUIView::clear_alpha() {
+    
+    is_alpha = false;
+}
+
 
 bool x_then_y_view_less_than(const NewGUIView* a, const NewGUIView* b) {
     if (a->pos.x < b->pos.x) return true;
@@ -123,8 +132,7 @@ void NewGUIView::refresh() {
     
     if (!need_to_refresh()) return;
     
-    // Refresh self. (First display background, then each child.)
-    if (background) render_image(background->display, background->w, background->h, DispPoint(0,0));
+    // Refresh self. (First display image, then each child.)
     
     render_image(image, w, h, DispPoint(0,0));
     
@@ -132,7 +140,21 @@ void NewGUIView::refresh() {
     for(child = children.begin(); child != children.end(); child++) {
         
         (*child)->refresh();
+        
+        if ((*child)->is_alpha) {
+            // Temporarily set colorkey to child's clear_color
+            SDL_SetColorKey(image, SDL_SRCCOLORKEY, (*child)->colorkey);
+        }
+        
         render_image((*child)->display, (*child)->w, (*child)->h, (*child)->pos);
+        
+        // Reset own alpha.
+        if (is_alpha) {
+            SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey); // reset alpha
+        }
+        else {
+            SDL_SetColorKey(image, 0, colorkey);    // clear alpha
+        }
     }
     
     changed = false;
@@ -235,10 +257,8 @@ NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
     
     coord = adjust_to_rel(coord);
     if (!rel_point_is_on_me(coord)) return 0;
-    
-    cout << "GOOD" << endl;
-    
-    // At worst, we know the pint is on this view.
+        
+    // At worst, we know the point is on this view.
     NewGUIView* result = this;
     
     // Check if any children have a deeper subview:
