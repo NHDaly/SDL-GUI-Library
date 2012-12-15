@@ -16,11 +16,45 @@
 
 #include <iostream>
 using std::cout; using std::endl;
+using std::list;
 
-NewGUIView *captured = 0;
+
+// SINGLETON MEMBERS
+
+NewGUIApp* NewGUIApp::singleton_ptr = 0;
+NewGUIApp::NewGUIApp_destroyer NewGUIApp::the_NewGUIApp_destroyer;
+
+NewGUIApp* NewGUIApp::get(){
+	
+	if (!singleton_ptr)
+		singleton_ptr = new NewGUIApp;
+	return singleton_ptr;
+}
+
+NewGUIApp::NewGUIApp_destroyer::~NewGUIApp_destroyer(){
+	delete NewGUIApp::singleton_ptr;
+}
+
+// Forward Declarations
+void print_msg(const Error &e);
+void unhandled_click(const Unhandled_Click &e);
 
 
-void NewGUI_run(NewGUIWindow* window) {
+// NewGUIApp Implementation:
+
+void print_msg(const Error &e) {
+    cout << e.msg << endl;
+}
+void unhandled_click(const Unhandled_Click &e) {
+    cout << "unhandled click" << endl;
+}
+
+
+void NewGUIApp::run(NewGUIWindow* window) {
+    
+    register_error_handler<Error>(&print_msg);
+    register_error_handler<Unhandled_Click>(&unhandled_click);
+
     
     window->refresh();
     
@@ -43,7 +77,13 @@ void NewGUI_run(NewGUIWindow* window) {
                         DispPoint click_pos(event.button.x, event.button.y);
                         DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
                         
-                        if (captured) {
+                        list<NewGUIView*> focus_copy(captured_focus.begin(), captured_focus.end());
+                        
+                        for (list<NewGUIView*>::iterator it = focus_copy.begin();
+                                            it != focus_copy.end(); ++it) {
+                            
+                            NewGUIView *captured = *it;
+                            
                             DispPoint new_pos(click_pos);
 
                             new_pos.x -= captured->get_abs_pos().x; 
@@ -59,10 +99,11 @@ void NewGUI_run(NewGUIWindow* window) {
                             else if (event.button.type == SDL_MOUSEMOTION) {
                                 handled = captured->handle_mouse_motion(new_pos, rel_pos);
                             }
-                            if (handled) {
-                                break;
-                            }
+//                            if (handled) {
+//                                break;
+//                            }
                         }
+                        
                         NewGUIView* clicked_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
@@ -91,7 +132,10 @@ void NewGUI_run(NewGUIWindow* window) {
                         cout << "KEYDOWN" << endl;
                         
                         
-                        if (captured) {
+                        for (view_list_t::iterator it = captured_focus.begin();
+                             it != captured_focus.end(); ++it) {
+                            
+                            NewGUIView *captured = *it;
                             
                             bool handled = captured->handle_key_down(event.key.keysym);
                             
@@ -121,7 +165,10 @@ void NewGUI_run(NewGUIWindow* window) {
 #endif
 						}
                         
-                        if (captured) {
+                        for (view_list_t::iterator it = captured_focus.begin();
+                             it != captured_focus.end(); ++it) {
+                            
+                            NewGUIView *captured = *it;
                         
                             bool handled = captured->handle_key_up(event.key.keysym);
                         
@@ -142,22 +189,18 @@ void NewGUI_run(NewGUIWindow* window) {
             for_each(timer_commands.begin(), timer_commands.end(), bind(&GUITimer_command::execute_command, _1));
             
         }
-        catch(const Error& e) {
-            cout << e.msg << endl;
+
+        catch(...) {
+            
+            call_error_handlers(handler_list.begin(), handler_list.end());
+            
         }
-        catch(const Unhandled_Click& e) {
-            cout << "unhandled click" << endl;
-        }
-        
+       
         window->refresh();
         
     }
 }
 
-
-
-
-std::vector<GUITimer_command*> timer_commands;
 
 
 

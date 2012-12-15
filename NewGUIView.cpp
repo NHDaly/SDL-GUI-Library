@@ -7,6 +7,7 @@
 //
 
 #include "NewGUIView.h"
+#include "NewGUIApp.h"
 #include "GUIImage.h"
 
 #include "SDL/SDL_video.h"
@@ -306,18 +307,19 @@ DispPoint NewGUIView::get_rel_pos() {
 
 void NewGUIView::capture_focus() {
     
-    if (captured == this) return;
+    if (NewGUIApp::get()->has_focus(this)) return;
     
-    if (captured) captured->lose_focus();
+//    if (captured) captured->lose_focus();
     
-    captured = this;
+    NewGUIApp::get()->give_focus(this);
  
     got_focus();
 }
 void NewGUIView::lose_focus() {
-    if (captured != this) return; //throw Error("Can't lose_focus if didn't already have it.");
-    captured = 0;
- 
+    if (!NewGUIApp::get()->has_focus(this)) return; //throw Error("Can't lose_focus if didn't already have it.");
+
+    NewGUIApp::get()->release_focus(this);
+
     lost_focus();
 }
 

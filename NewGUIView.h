@@ -88,7 +88,7 @@ public:
     ///@todo ^^^^^^ NOT YET IMPLEMENTED! ^^^^^^
         
     friend class NewGUIWindow;
-    friend void NewGUI_run(NewGUIWindow* window);
+    friend class NewGUIApp;
     
 protected:
     
