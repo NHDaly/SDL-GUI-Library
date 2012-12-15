@@ -30,7 +30,6 @@ public:
 	virtual void add_letter(char ltr, int index);
 	virtual void remove_letter(int index);
 	
-	void add_to_view(char ltr);
 	virtual void clear();
     
 	virtual void update();
@@ -41,13 +40,11 @@ protected:
 	typedef std::vector<NewLetter_Disp_Obj> letters_ctr_t;
 	
 	const letters_ctr_t& get_letters() const
-	{return letters; }
+	{ return letters; }
 	
 	int index_at_pos(DispPoint pos_);
 	DispPoint pos_at_index(size_t i);
     
-    // These functions will be called by capture/lose focus, and may be
-    // overridden to provide behavior on focus gain/loss.
 //    virtual void got_focus();
     virtual void lost_focus();
 	
@@ -55,11 +52,9 @@ private:
 	
 	letters_ctr_t letters;
 	
+	virtual bool handle_mouse_down(DispPoint pos_);
     virtual bool handle_key_down(SDL_keysym key);
     virtual bool handle_key_up(SDL_keysym key);
-	bool handle_alpha_num(char ltr);
-	char handle_special_char(char ltr);
-	bool handle_mouse_down(DispPoint pos_);
 	
     bool key_is_held;
     SDLKey key_held;
@@ -68,6 +63,8 @@ private:
     void handle_key_held();
     void handle_key();
     
+    void handle_alpha_num(char ltr);
+
 	int text_size;
 	SDL_Color color;
 	

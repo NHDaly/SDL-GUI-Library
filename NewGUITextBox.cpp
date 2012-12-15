@@ -35,20 +35,17 @@ NewGUITextBox::NewGUITextBox(int w_, int h_)
 text_size(30), color(default_color_c),
 key_is_held(false)
 {
-    GUIImage bg = GUIImage::create_blank(w_, h_);
-    SDL_FillRect(bg, 0, SDL_MapRGB(bg->format, bg_color_c.r, bg_color_c.g, bg_color_c.b));
-    
-//    set_bg(new NewGUIImageView(bg));
-    draw_onto_self(bg, DispPoint());
-    
+    set_clear_color(bg_color_c);
+        
     attach_subview(&cursor, DispPoint());
     
-    NewGUI_repeat_on_timer(bind(&NewGUITextBox::handle_key_held, this), 0.05);
+    NewGUIApp::get()->repeat_on_timer(bind(&NewGUITextBox::handle_key_held, this), 0.05);
+    
+    update();
 
 }
 NewGUITextBox::~NewGUITextBox() {
 	
-	delete get_bg();
 }
 
 void NewGUITextBox::add_letter(char ltr, int index){
@@ -147,10 +144,6 @@ void NewGUITextBox::handle_key() {
 			cursor.move_left();
 			break;
 			
-			//		case SDLK_SPACE:
-			//			handle_special_char(key);
-			//			break;
-			
 		default:
 			handle_alpha_num(SDL_to_a(key));
 			break;
@@ -159,23 +152,22 @@ void NewGUITextBox::handle_key() {
 
 
 
-bool NewGUITextBox::handle_alpha_num(char ltr){
-	
-	//	if (!isalnum(ltr)) {
-	//		return;
-	//	}
-	//	if (!ltr) return;
-	
+void NewGUITextBox::handle_alpha_num(char ltr){
+		
 	int index = cursor.get_index();
 	add_letter(ltr, index);
 	
 	cursor.move_right();
-	
-    return true;
 }
 
 bool NewGUITextBox::handle_mouse_down(DispPoint pos_){
 	
+    if (!rel_point_is_on_me(pos_)) {
+        lose_focus();
+       
+        return false;
+    }
+    
 	cursor.move_to(index_at_pos(pos_));
 
     capture_focus();
