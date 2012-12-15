@@ -30,47 +30,18 @@ static char SDL_to_a(SDLKey key);
 const SDL_Color bg_color_c = {255,255,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
 
-NewGUITextBox::NewGUITextBox(int w_, int h_)
-:NewGUIView(w_,h_), cursor(this),
-text_size(30), color(default_color_c),
-key_is_held(false)
+
+NewGUITextView::NewGUITextView(int w_, int h_)
+:NewGUIView(w_,h_),
+text_size(30), color(default_color_c)
 {
     set_clear_color(bg_color_c);
-        
-    attach_subview(&cursor, DispPoint());
-    
-    NewGUIApp::get()->repeat_on_timer(bind(&NewGUITextBox::handle_key_held, this), 0.05);
-    
+            
     update();
-
-}
-NewGUITextBox::~NewGUITextBox() {
-	
+    
 }
 
-void NewGUITextBox::add_letter(char ltr, int index){
-
-    cout << "ADDING LETTER: '" << ltr << "'" << endl;
-	
-	try{
-		letters.insert(letters.begin()+index, NewLetter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
-        cout << "letter: '" << letters[index].get_ltr() << "'\n";
-        cout << "width: " << letters[index].get_width() << "\n";
-	}
-	catch(const Error& e){
-		cout << e.msg << endl;
-	}
-	update();
-}
-void NewGUITextBox::remove_letter(int index){
-	if (index < 0) return;
-	if (index > letters.size()) return;
-	
-	letters.erase(letters.begin()+index);
-	update();
-}
-
-void NewGUITextBox::update(){
+void NewGUITextView::update(){
 	
     GUIImage bg = GUIImage::create_blank(get_w(), get_h());
     SDL_FillRect(bg, 0, SDL_MapRGB(bg->format, bg_color_c.r, bg_color_c.g, bg_color_c.b));
@@ -83,11 +54,113 @@ void NewGUITextBox::update(){
     for (int i = 0; i < letters.size(); i++){
         letters[i].drawself(this);
 	}
-
+    
 	mark_changed();
 }
-void NewGUITextBox::clear(){
+void NewGUITextView::clear(){
 	letters.clear();
+}
+
+
+
+void NewGUITextView::set_text(const string& text) {
+    clear();
+    
+    for (int i = 0; i < text.length(); ++i) {
+        add_letter(text[i], i);
+    };
+}
+string NewGUITextView::get_text() const {
+	string text;
+	for (letters_ctr_t::const_iterator it = letters.begin(); it != letters.end(); ++it){
+		text += it->get_ltr();
+	}
+	return text;	
+}
+
+
+void NewGUITextView::add_letter(char ltr, int index){
+    
+    cout << "ADDING LETTER: '" << ltr << "'" << endl;
+	
+	try{
+		letters.insert(letters.begin()+index, NewLetter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
+        cout << "letter: '" << letters[index].get_ltr() << "'\n";
+        cout << "width: " << letters[index].get_width() << "\n";
+	}
+	catch(const Error& e){
+		cout << e.msg << endl;
+	}
+	update();
+}
+void NewGUITextView::remove_letter(int index){
+	if (index < 0) return;
+	if (index > letters.size()) return;
+	
+	letters.erase(letters.begin()+index);
+	update();
+}
+
+
+
+DispPoint NewGUITextView::pos_at_index(size_t i){
+	
+	DispPoint position;
+	if (i == 0){
+		position = DispPoint(0,0);
+	}
+	else {
+		const NewLetter_Disp_Obj& letter = letters[i-1];
+		int width = letter.get_width();
+		position = DispPoint(letter.get_pos().x + width + 1, 
+							 letter.get_pos().y);
+		if (position.x + width >= get_w()){
+			position.x = 0;
+            //			position.y += NewLetter_Disp_Obj::get_line_height();
+			position.y += text_size;
+		}
+		
+	}
+	return position;
+}
+int NewGUITextView::index_at_pos(DispPoint pos_){
+	if (letters.empty()){
+		return 0;
+	}
+	if (pos_.x < letters[0].get_pos().x || pos_.y < letters[0].get_pos().y){
+		return 0;
+	}
+	int i;
+	for (i = 0; i < letters.size(); i++) {
+		if ((pos_.x >= letters[i].get_pos().x 
+			 && pos_.x < letters[i].get_pos().x + letters[i].get_width()/2) 
+			&& (pos_.y >= letters[i].get_pos().y 
+				&& pos_.y < letters[i].get_pos().y + NewLetter_Disp_Obj::get_line_height())) {
+				
+				break;
+			}		
+		
+		else if (i > 0 && ((pos_.x >= letters[i-1].get_pos().x + letters[i-1].get_width()/2
+							&& pos_.x < letters[i-1].get_pos().x + letters[i-1].get_width()) 
+                           && (pos_.y >= letters[i-1].get_pos().y 
+                               && pos_.y < letters[i-1].get_pos().y + NewLetter_Disp_Obj::get_line_height()))) 
+		{
+            
+			break;
+		}		
+	}
+	return i;
+}
+
+
+
+NewGUITextBox::NewGUITextBox(int w_, int h_)
+:NewGUITextView(w_,h_), cursor(this),
+key_is_held(false)
+{        
+    attach_subview(&cursor, DispPoint());
+    
+    NewGUIApp::get()->repeat_on_timer(bind(&NewGUITextBox::handle_key_held, this), 0.05);
 }
 
 #include "NewGUIApp.h"
@@ -242,65 +315,6 @@ void NewGUITextBox::Cursor::display(int text_size) {
 }
 
 
-DispPoint NewGUITextBox::pos_at_index(size_t i){
-	
-	DispPoint position;
-	if (i == 0){
-		position = DispPoint(0,0);
-	}
-	else {
-		const NewLetter_Disp_Obj& letter = letters[i-1];
-		int width = letter.get_width();
-		position = DispPoint(letter.get_pos().x + width + 1, 
-							 letter.get_pos().y);
-		if (position.x + width >= get_w()){
-			position.x = 0;
-//			position.y += NewLetter_Disp_Obj::get_line_height();
-			position.y += text_size;
-		}
-		
-	}
-	return position;
-}
-
-
-int NewGUITextBox::index_at_pos(DispPoint pos_){
-	if (letters.empty()){
-		return 0;
-	}
-	if (pos_.x < letters[0].get_pos().x || pos_.y < letters[0].get_pos().y){
-		return 0;
-	}
-	int i;
-	for (i = 0; i < letters.size(); i++) {
-		if ((pos_.x >= letters[i].get_pos().x 
-			 && pos_.x < letters[i].get_pos().x + letters[i].get_width()/2) 
-			&& (pos_.y >= letters[i].get_pos().y 
-				&& pos_.y < letters[i].get_pos().y + NewLetter_Disp_Obj::get_line_height())) {
-				
-				break;
-			}		
-		
-		else if (i > 0 && ((pos_.x >= letters[i-1].get_pos().x + letters[i-1].get_width()/2
-							&& pos_.x < letters[i-1].get_pos().x + letters[i-1].get_width()) 
-                           && (pos_.y >= letters[i-1].get_pos().y 
-                               && pos_.y < letters[i-1].get_pos().y + NewLetter_Disp_Obj::get_line_height()))) 
-		{
-            
-			break;
-		}		
-	}
-	return i;
-}
-
-
-string NewGUITextBox::get_text() const {
-	string text;
-	for (letters_ctr_t::const_iterator it = letters.begin(); it != letters.end(); ++it){
-		text += it->get_ltr();
-	}
-	return text;	
-}
 
 
 

@@ -108,12 +108,23 @@ private:
     GUIImage image, hovered_image, clicked_image;
 };
 
-class NewGUIQuitButton : public NewGUIButton {
+#include "NewGUITextBox.h"
+
+class NewGUITextButton : public NewGUIButton { 
 public:
-    virtual void operation() {
-        throw QuitAction();
+    NewGUITextButton(const std::string &button_text_)
+    {
+        button_text = new NewGUITextView(get_w(), get_h());
+        attach_subview(button_text, DispPoint());
+        button_text->set_text(button_text_);
     }
+    
+    NewGUITextView* get_text_view() { return button_text; }
+        
+public:
+    NewGUITextView *button_text;
 };
+
 
 class NoAction {
 public:

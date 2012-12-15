@@ -53,7 +53,7 @@ GUIValue_Slider::~GUIValue_Slider() { }
 
 double GUIValue_Slider::get_value() const {
     
-    return value * max - min;
+    return value * (max - min);
 }
 double GUIValue_Slider::get_percent() const {
     

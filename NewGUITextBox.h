@@ -21,36 +21,51 @@ class NewLetter_Disp_Obj;
 class GUILetter;
 class SDL_Color;
 
-class NewGUITextBox : public NewGUIView {
+class NewGUITextView : public NewGUIView {
 public:	
+
+	NewGUITextView(int w_ = 200, int h_ = 200);
 	
-	NewGUITextBox(int w_ = 200, int h_ = 200);
-	virtual ~NewGUITextBox();
-	
-	virtual void add_letter(char ltr, int index);
-	virtual void remove_letter(int index);
-	
-	virtual void clear();
     
 	virtual void update();
-
+	virtual void clear();
+    
+    void set_text(const std::string& text);
 	std::string get_text() const;
-	
-protected:
-	typedef std::vector<NewLetter_Disp_Obj> letters_ctr_t;
+
+protected:    
+    typedef std::vector<NewLetter_Disp_Obj> letters_ctr_t;
 	
 	const letters_ctr_t& get_letters() const
 	{ return letters; }
-	
+    
+    virtual void add_letter(char ltr, int index);
+	virtual void remove_letter(int index);
+    
+    DispPoint pos_at_index(size_t i);
 	int index_at_pos(DispPoint pos_);
-	DispPoint pos_at_index(size_t i);
+
+private:
+	
+	letters_ctr_t letters;
+	int text_size;
+	SDL_Color color;
+
+};
+
+
+class NewGUITextBox : public NewGUITextView {
+public:	
+	
+	NewGUITextBox(int w_ = 200, int h_ = 200);
+	
+	
+protected:
     
 //    virtual void got_focus();
     virtual void lost_focus();
 	
 private:
-	
-	letters_ctr_t letters;
 	
 	virtual bool handle_mouse_down(DispPoint pos_);
     virtual bool handle_key_down(SDL_keysym key);
@@ -65,9 +80,6 @@ private:
     
     void handle_alpha_num(char ltr);
 
-	int text_size;
-	SDL_Color color;
-	
 	class Cursor : public NewGUIImageView {
 	public:
 		Cursor(NewGUITextBox* tb_ptr) : NewGUIImageView(GUIImage("images/cursor1.bmp")), position(0,0), index(0), text_box_ptr(tb_ptr), flicker(true) { }
@@ -94,8 +106,6 @@ private:
 		bool flicker;
 	} cursor;
 	
-	
-	SDL_Surface *background;
 };
 
 
