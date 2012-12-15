@@ -28,7 +28,10 @@ public:
     is_pressed(false), is_hovered(false),
     image(GUIImage("images/button.bmp")), hovered_image(GUIImage("images/button2.bmp")), 
     clicked_image(GUIImage("images/button3.bmp"))
-    {}
+    {
+        SDL_Color clear = {0,0xff,0};
+        set_clear_color(clear);
+    }
     
 protected:
     
@@ -59,16 +62,20 @@ protected:
     }
     virtual bool handle_mouse_up(DispPoint coord) { 
         // Only perform event on mouse release.
+        lose_focus();
+
         if (is_pressed) {
+            is_pressed = false;
+            draw_onto_self(image, DispPoint());
             if (is_hovered) {
                 operation(); // Do what you were born to do!
             }
-            is_pressed = false;
-            draw_onto_self(image, DispPoint());
         }
-        lose_focus();
         
-        if (is_hovered) return true;
+        if (is_hovered) {
+            is_hovered = false;
+            return true;
+        }
         else return false;
 
     }
@@ -107,5 +114,31 @@ public:
         throw QuitAction();
     }
 };
+
+class NoAction {
+public:
+    void operator()() { }
+};
+template <typename Oper = NoAction>
+class NewGUIActionButton : public NewGUIButton {
+public:
+
+    NewGUIActionButton(Oper oper = Oper())
+	:oper(oper) { }
+
+    virtual void operation() {
+        oper();
+    }
+    
+private:
+	Oper oper;	
+
+};
+
+template <typename Oper>
+NewGUIButton* NewGUI_create_button(Oper oper) {
+    
+    return new NewGUIActionButton<Oper>(oper);
+}
 
 #endif
