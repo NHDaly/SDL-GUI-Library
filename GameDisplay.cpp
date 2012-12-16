@@ -1,9 +1,5 @@
 
 #include "GameDisplay.h"
-#include "NewGUIApp.h"
-#include "NewGUIWindow.h"
-#include "GUIWin_Ctrl.h"
-#include "GUIWindow.h"
 #include "GUIUtility.h"
 #include "Compatibility.h"
 #include <cctype>
@@ -148,7 +144,7 @@ void displayTextToScreen (const string &a, int x, int y, int size, bool update){
 	
 	SDL_Surface* message = TTF_RenderText_Solid(font, a.c_str(), textColor);
 
-	display_image(message, GUIWin_Ctrl::get()->get_window()->screen, x, y, update);
+	display_image(message, SDL_GetVideoSurface(), x, y, update);
 
 	SDL_FreeSurface(message);
 }
