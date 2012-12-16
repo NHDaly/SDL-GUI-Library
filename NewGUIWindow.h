@@ -64,6 +64,7 @@ private:
     int num_colors;
     Uint32 flags;
     
+    static bool WINDOW_ALREADY_CREATED;
 };
 
 #endif /* NEWGUIWINDOW_H */

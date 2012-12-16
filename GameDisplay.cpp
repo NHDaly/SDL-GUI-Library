@@ -133,7 +133,7 @@ void display_image (SDL_Surface *src, SDL_Surface *dest, int x, int y, bool upda
 
 void displayToScreen (SDL_Surface *src, int x, int y, bool update, SDL_Rect rect) {
 	
-	display_image(src, GUIWin_Ctrl::get()->get_window()->screen, x, y, update, rect);
+	display_image(src, SDL_GetVideoSurface(), x, y, update, rect);
 }
 
 void displayTextToScreen (const string &a, int x, int y, int size, bool update){

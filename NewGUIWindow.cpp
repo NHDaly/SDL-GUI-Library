@@ -16,12 +16,17 @@
 #include <algorithm>
 using namespace std;
 
+bool NewGUIWindow::WINDOW_ALREADY_CREATED = false;
+
 SDL_Color bg_color = {208, 208, 208};
 
 NewGUIWindow::NewGUIWindow(int w, int h, const string& name_, 
                            int numColors, const Uint32 flags)
 :main_view(0), name(name_), num_colors(numColors), flags(flags)
 {    
+    /// @TODO HACK!
+    if (WINDOW_ALREADY_CREATED) throw Error("Sorry, already created a window!");
+
     SDL_Color colors[numColors];
 	// Create a display surface with a 16 bit palette 
 	window = createDisplay(window, w, h, 16, colors, numColors, flags);
@@ -41,6 +46,9 @@ NewGUIWindow::NewGUIWindow(int w, int h, const string& name_,
     SDL_FillRect(main_view->image, 0, color);
     
     refresh();
+    
+    WINDOW_ALREADY_CREATED = true;
+    
 }
 
 
