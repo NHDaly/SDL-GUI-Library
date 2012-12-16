@@ -17,8 +17,8 @@ public:
     
     NewGUIImageView(const GUIImage &image_src);    
     
-private:
-    void attach_subview(NewGUIView* view, DispPoint pos);
+//private:
+//    void attach_subview(NewGUIView* view, DispPoint pos);
 };
 
 
