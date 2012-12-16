@@ -44,7 +44,7 @@ public:
     void remove_last_subview(); // Remove subview last added
 
     void move_subview(NewGUIView* view, DispPoint pos);
-    
+        
     // Will be true if a subview has been changed.
     bool need_to_refresh() const { return changed; }
     
@@ -68,6 +68,10 @@ public:
     // Returns the deepest subview (could be this) on which coord lies.
     NewGUIView* get_view_from_point(DispPoint coord);
     
+    // Hierarchy
+//    NewGUIView* get_parent() { return parent; }
+//    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
+
     DispPoint get_abs_pos(); // Pos on screen
     DispPoint get_rel_pos(); // Pos on parent
     
@@ -75,26 +79,24 @@ public:
     int get_w() { return w; }
     int get_h() { return h; }
     
-    ///@todo VVVV NOT YET IMPLEMENTED! VVVVVV
     
-    // The following two functions will call got_focus() and lost_focus(). Derived behavior may be specified by overriding those two functions.
+    void resize(int w, int h);
+        
     
+    // *** The following two functions will call got_focus() and lost_focus(). 
+    // *** Derived behavior may be specified by overriding those two functions.
     // This function may be optionally called to tell Window to send keyboard
     // input to this view.
     void capture_focus();
     // If focus was captured, this function will be called release focus.
     void lose_focus();
     
-    ///@todo ^^^^^^ NOT YET IMPLEMENTED! ^^^^^^
-        
+    
     friend class NewGUIWindow;
     friend class NewGUIApp;
     
 protected:
     
-    // Draws image onto display.
-    void render_image(SDL_Surface* source, int w, int h, DispPoint pos);
-
     void set_clear_color(SDL_Color clear_color);
     void clear_alpha();
     
@@ -120,7 +122,10 @@ protected:
     // overridden to provide behavior on focus gain/loss.
     virtual void got_focus() { }
     virtual void lost_focus() { }
-    
+
+    DispPoint abs_from_rel(DispPoint coord);
+    DispPoint adjust_to_rel(DispPoint coord);    
+
     // returns true if coord is within this view's rectangle.
     bool rel_point_is_on_me(DispPoint coord);
     bool abs_point_is_on_me(DispPoint coord);
@@ -134,19 +139,19 @@ private:
     SDL_Surface* display;   // includes children drawn on.
     
     bool is_alpha;     
-    Uint32 colorkey;    // only valid if is_alpha == true
+    SDL_Color clear_color; // only valid if is_alpha == true
     
+    // Draws image onto display.
+    void render_image(SDL_Surface* source, int w, int h, DispPoint pos);
+    
+
     // Hierarchy
     NewGUIView* parent;
     typedef std::list<NewGUIView*> Subview_list_t;
     Subview_list_t children;
-    
-    
+        
     bool is_subview(NewGUIView* view);
         
-    DispPoint abs_from_rel(DispPoint coord);
-    DispPoint adjust_to_rel(DispPoint coord);    
-
     
     // returns the deepest view that lies under coord, and its depth.
     // (0 is THIS, 1 is a child, 2 is grandchild, etc.)
@@ -155,7 +160,6 @@ private:
     
     friend bool x_then_y_view_less_than(const NewGUIView* a, const NewGUIView* b);
 };
-
 
 
 #endif

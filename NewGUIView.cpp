@@ -95,16 +95,17 @@ void NewGUIView::render_image(SDL_Surface* source, int w, int h, DispPoint pos) 
 	SDL_BlitSurface(source, 0, display, &dest_rect);
 }
 
-void NewGUIView::set_clear_color(SDL_Color clear_color) {
+void NewGUIView::set_clear_color(SDL_Color clear_color_) {
     
     is_alpha = true;
-    colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
+    clear_color = clear_color_;
+    Uint32 colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
     SDL_SetColorKey(display, SDL_SRCCOLORKEY, colorkey); // reset alpha
 }
 void NewGUIView::clear_alpha() {
     
     is_alpha = false;
-    SDL_SetColorKey(display, 0, colorkey); // reset alpha
+    SDL_SetColorKey(display, 0, 0); // reset alpha
 }
 
 
@@ -304,6 +305,27 @@ DispPoint NewGUIView::get_abs_pos() {
 DispPoint NewGUIView::get_rel_pos() {
     return pos;
 }
+
+
+void NewGUIView::resize(int w_, int h_) {
+    
+    w = w_; h = h_;
+    NewGUIView temp(w,h);
+
+    std::swap(image, temp.image);
+    std::swap(display, temp.display);
+    
+    if (is_alpha) {
+        set_clear_color(clear_color);
+    }
+    
+    SDL_Rect dest_rect = {0, 0, w, h};
+	SDL_BlitSurface(temp.image, 0, image, &dest_rect);
+
+    mark_changed();
+}
+
+
 
 void NewGUIView::capture_focus() {
     
