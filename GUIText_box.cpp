@@ -52,7 +52,7 @@ void GUIText_box::add_letter(char ltr, int index){
 }
 void GUIText_box::remove_letter(int index){
 	if (index < 0) return;
-	if (index > letters.size()) return;
+	if (index >= letters.size()) return;
 	
 	letters.erase(letters.begin()+index);
 	update();

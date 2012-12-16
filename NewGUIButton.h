@@ -114,9 +114,10 @@ class NewGUITextButton : public NewGUIButton {
 public:
     NewGUITextButton(const std::string &button_text_)
     {
-        button_text = new NewGUITextView(get_w(), get_h());
-        attach_subview(button_text, DispPoint());
+        button_text = new NewGUITextView(get_w()-30, get_h());
         button_text->set_text(button_text_);
+        button_text->set_text_size(16);
+        attach_subview(button_text, DispPoint(get_w()-button_text->get_w(), 0));
     }
     
     NewGUITextView* get_text_view() { return button_text; }

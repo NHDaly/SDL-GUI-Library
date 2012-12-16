@@ -14,6 +14,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include <cctype>
 #include <algorithm>
 #include <tr1/functional>
 using std::cout; using std::endl;
@@ -26,6 +27,7 @@ using namespace std::tr1::placeholders;
 
 
 static char SDL_to_a(SDLKey key);
+static char symbol_to_upper(char ltr);
 
 const SDL_Color bg_color_c = {255,255,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
@@ -78,6 +80,16 @@ string NewGUITextView::get_text() const {
 	return text;	
 }
 
+void NewGUITextView::set_text_size(int size) {
+    text_size = size;
+    set_text(get_text());
+}
+void NewGUITextView::set_text_color(SDL_Color color_) {
+    color = color_;
+    set_text(get_text());
+}
+
+
 
 void NewGUITextView::add_letter(char ltr, int index){
     
@@ -94,8 +106,11 @@ void NewGUITextView::add_letter(char ltr, int index){
 	update();
 }
 void NewGUITextView::remove_letter(int index){
+    cout << "REMOVVVVEEEEE LETTTERRRRR: " << letters.size() << endl;
+    cout << "index: " << index << " SIZE: " << letters.size() << endl;
+
 	if (index < 0) return;
-	if (index > letters.size()) return;
+	if (index >= letters.size()) return;
 	
 	letters.erase(letters.begin()+index);
 	update();
@@ -110,6 +125,8 @@ DispPoint NewGUITextView::pos_at_index(size_t i){
 		position = DispPoint(0,0);
 	}
 	else {
+//        if (i >= letters.size()) throw Error("NewGUITextView: Couldn't get position -- index out of range");
+        
 		const NewLetter_Disp_Obj& letter = letters[i-1];
 		int width = letter.get_width();
 		position = DispPoint(letter.get_pos().x + width + 1, 
@@ -156,7 +173,7 @@ int NewGUITextView::index_at_pos(DispPoint pos_){
 
 NewGUITextBox::NewGUITextBox(int w_, int h_)
 :NewGUITextView(w_,h_), cursor(this),
-key_is_held(false)
+key_is_held(false), modifiers_held(KMOD_NONE)
 {        
     attach_subview(&cursor, DispPoint());
     
@@ -166,12 +183,13 @@ key_is_held(false)
 #include "NewGUIApp.h"
 bool NewGUITextBox::handle_key_down(SDL_keysym key_in) {
     
-    cout << "text box key down" << endl;
-        
+    cout << "text box key down: '" << key_in.sym << "'" << endl;
+    
     key_is_held = true;
     key_held = key_in.sym;
     time_key_held.reset();
 
+    handle_modifier(key_in.mod);
     handle_key();
 
     return true;
@@ -183,7 +201,8 @@ bool NewGUITextBox::handle_key_up(SDL_keysym key_in) {
 
     key_is_held = false;
     time_key_held.stop();
-
+    modifiers_held = KMOD_NONE;
+    
     return false;
 }
 void NewGUITextBox::handle_key_held() {
@@ -212,11 +231,14 @@ void NewGUITextBox::handle_key() {
 			cursor.move_down();
 			break;
 			
-		case SDLK_BACKSPACE:
+        case SDLK_BACKSPACE:
 			remove_letter(cursor.get_index()-1);
 			cursor.move_left();
 			break;
-			
+        case SDLK_DELETE:
+            remove_letter(cursor.get_index());
+			break;
+
 		default:
 			handle_alpha_num(SDL_to_a(key));
 			break;
@@ -226,12 +248,27 @@ void NewGUITextBox::handle_key() {
 
 
 void NewGUITextBox::handle_alpha_num(char ltr){
-		
+    
+    if (!isprint(ltr)) return;
+
 	int index = cursor.get_index();
-	add_letter(ltr, index);
+	
+    if (modifiers_held & KMOD_SHIFT) {
+        if (isalpha(ltr)) ltr = toupper(ltr);
+        else ltr = symbol_to_upper(ltr);
+    }
+    
+    add_letter(ltr, index);
 	
 	cursor.move_right();
 }
+
+void NewGUITextBox::handle_modifier(SDLMod mod){
+    
+    modifiers_held = mod;
+
+}
+
 
 bool NewGUITextBox::handle_mouse_down(DispPoint pos_){
 	
@@ -255,7 +292,7 @@ static char SDL_to_a(SDLKey key){
 	if (key >= 0xFF) {
 		return 0;
 	}
-	return toupper(static_cast<char>(key));
+	return static_cast<char>(key);
 }
 
 void NewGUITextBox::lost_focus() {
@@ -341,4 +378,57 @@ int NewLetter_Disp_Obj::get_width() const{
 void NewLetter_Disp_Obj::drawself(NewGUIView *dest) const{
 	
 	letter->drawself(dest, position.x, position.y + height-letter->get_height());
+}
+
+
+
+static char symbol_to_upper(char ltr) {
+    switch (ltr) {
+        case '`':
+            return '~';
+        case '1':
+            return '!';
+        case '2':
+            return '@';
+        case '3':
+            return '#';
+        case '4':
+            return '$';
+        case '5':
+            return '%';
+        case '6':
+            return '^';
+        case '7':
+            return '&';
+        case '8':
+            return '*';
+        case '9':
+            return '(';
+        case '0':
+            return ')';
+        case '-':
+            return '_';
+        case '=':
+            return '+';
+        case '[':
+            return '{';
+        case ']':
+            return '}';
+        case '\\':
+            return '|';
+        case ';':
+            return ':';
+        case '\'':
+            return '"';
+        case ',':
+            return '<';
+        case '.':
+            return '>';
+        case '/':
+            return '?';
+          
+        default:
+            throw "NewGUITextBox: Symbol To Upper: invalid symbol";
+            break;
+    }
 }
