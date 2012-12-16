@@ -8,6 +8,7 @@
 #include "GUIAudio.h"
 
 #include <algorithm>
+#include <cstdarg>
 using std::cout; using std::endl;
 using std::for_each;
 using std::tr1::dynamic_pointer_cast;
@@ -34,6 +35,8 @@ GUIWin_Ctrl_destroyer::~GUIWin_Ctrl_destroyer(){
 
 
 
+template <typename T>
+void try_catch(const T&, void(*handler)(const ErrorType&));
 
 
 
@@ -200,8 +203,31 @@ void GUIWin_Ctrl::run(){
 		catch(const Error& e){
 			cout << e.msg << endl;
 		}
+//		catch(...){
+//            
+//            for (ErrorsList_t::iterator it = errors_to_handlers.begin(); 
+//                    it != errors_to_handlers.end(); ++it) {
+//                
+//                try_catch(*it->error, it->handler);
+//            }
+//            
+//		}
 	}
 }
+
+template <typename T>
+void try_catch(const T&, void(*handler)(const ErrorType&)) {
+    
+    try {
+        throw;
+    }
+    catch (const T& e) {
+        ((void(*)(const T&))handler)(e);
+        
+    }
+    
+}
+
 
 DispPoint GUIWin_Ctrl::get_mouse_offsets(GUIView_shptr_t view){
 	return window->get_view_box(view)->pos;
@@ -219,4 +245,5 @@ void GUIWin_Ctrl::detach(GUIVC_shptr_t view_ctrl){
 	
 	
 }
+
 

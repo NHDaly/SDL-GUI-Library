@@ -19,15 +19,17 @@
 using std::for_each;
 
 const SDL_Color bg_color_c = {120,120,210,0};
+const SDL_Color clear_color = {0xFF, 0, 0xFF, 0xFF};
 
 
 GUIView::GUIView(int w_, int h_, std::string bg_image)
-:background(w_, h_), screen(w_,h_)
+:background(w_, h_, true), screen(w_,h_)
 { 
 	SDL_PixelFormat *fmt = background->format;
-	Uint32 background_color = SDL_MapRGB(fmt, bg_color_c.r, bg_color_c.g, bg_color_c.b);
+//	Uint32 background_color = SDL_MapRGB(fmt, bg_color_c.r, bg_color_c.g, bg_color_c.b);
+	Uint32 background_color = SDL_MapRGB(fmt, clear_color.r, clear_color.g, clear_color.b);
 	SDL_FillRect(background, 0, background_color);
-	//	SDL_SetColorKey( background, SDL_SRCCOLORKEY, background_color );
+//		SDL_SetColorKey( background, SDL_SRCCOLORKEY, background_color );
 	
 }
 GUIView::~GUIView()
@@ -80,6 +82,17 @@ void GUIView::resize(double scale){
 }
 void GUIView::resize(double w, double h){
 	
+    GUIView new_view(w,h);
+    std::swap(screen, new_view.screen);
+    std::swap(background, new_view.background);
+
+//    background = GUIImage(w,h);
+//    SDL_PixelFormat *fmt = background->format;
+//    //	Uint32 background_color = SDL_MapRGB(fmt, bg_color_c.r, bg_color_c.g, bg_color_c.b);
+//	Uint32 background_color = SDL_MapRGB(fmt, clear_color.r, clear_color.g, clear_color.b);
+//	SDL_FillRect(background, 0, background_color);
+
+    
 //    screen.
 }
 

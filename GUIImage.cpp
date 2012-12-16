@@ -13,7 +13,8 @@ using std::string;
 const SDL_Color clear_color = {0xFF, 0, 0xFF, 0xFF};
 
 
-GUIImage::GUIImage(int w, int h){
+GUIImage::GUIImage(int w, int h, bool alpha, const SDL_Color& color_key)
+{
 	
 	SDL_Surface* temp = create_SDL_Surface(w, h);
 	if (!temp){
@@ -24,6 +25,15 @@ GUIImage::GUIImage(int w, int h){
 	if (!sdl_impl){
 		throw Error("Could not create GUIImage. Not enough memory.");
 	}
+    
+    if (alpha){
+		//Map the color key
+		Uint32 colorkey = SDL_MapRGB(sdl_impl->format,
+                                     color_key.r, color_key.g, color_key.b);
+		//Set all pixels of color R 0xFF, G 0, B 0xFF to be transparent
+		SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, colorkey );
+	}
+
 }
 
 GUIImage::GUIImage(SDL_Surface* surface){
@@ -66,7 +76,7 @@ GUIImage::GUIImage(const GUIImage& image_){
 		throw Error("Could not copy GUIImage. Not enough memory.");
 	}
 
-    Uint32 colorkey = image_.get_Alpha();
+    Uint32 colorkey = image_.sdl_impl->format->colorkey;
     
     // First fill background with the clear color, then display and re-clear.
     SDL_FillRect(sdl_impl, 0, colorkey);
@@ -93,6 +103,7 @@ GUIImage* GUIImage::get_image(std::string filename, bool alpha, const SDL_Color&
 }
 
 Uint32 GUIImage::get_Alpha() const{
+    
 	return SDL_MapRGBA( sdl_impl->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
 	
 }

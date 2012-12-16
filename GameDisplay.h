@@ -9,6 +9,7 @@
 
 
 extern const SDL_Color default_color_key_c;
+const SDL_Color def_text_c = {255, 255, 255, 0};
 
 const SDL_Rect def_rect_c = {0,0,0,0};
 
@@ -40,6 +41,9 @@ void displayToScreen (SDL_Surface *src, int x, int y, bool update, SDL_Rect rect
 
 void displayTextToScreen (const std::string &a, int x, int y, int size, bool update);
 // Displays text onto the screen.
+
+SDL_Surface* createText2 (const std::string &a, int size, SDL_Color textColor = def_text_c);
+// create text using sdl font.
 
 SDL_Surface* createText (const std::string &a);
 

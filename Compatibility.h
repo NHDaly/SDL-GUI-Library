@@ -35,10 +35,7 @@ using std::tr1::static_pointer_cast;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
-#define MY_APPLICATION_NAME "Deep.app"
-//#ifndef MY_APPLICATION_NAME
-//# define MY_APPLICATION_NAME "Sid_Game_Master.app"
-//#endif
+#define MY_APPLICATION_NAME "Coin Checkers 2.app"
 #define MY_RESOURCES_FOLDER MY_APPLICATION_NAME "/Contents/Resources"
 
 #define initGame initGameMac

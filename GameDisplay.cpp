@@ -150,6 +150,20 @@ void displayTextToScreen (const string &a, int x, int y, int size, bool update){
 	SDL_FreeSurface(message);
 }
 
+SDL_Surface* createText2 (const string &a, int size, SDL_Color textColor){
+
+	TTF_Font* font = TTF_OpenFont("fonts/arial.ttf", size);
+	
+	if (!font) throw Error("Couldn't load font: arial.ttf");
+		
+	SDL_Surface* message = TTF_RenderText_Solid(font, a.c_str(), textColor);
+
+    TTF_CloseFont(font);
+    
+    return message;
+    
+}
+
 SDL_Surface* createText (const string &a){
 	
 	string alphaImage = "fonts/";

@@ -16,7 +16,7 @@ extern const SDL_Color default_color_key_c;
 class GUIImage {
 public:
 	GUIImage() : sdl_impl(0) {}
-	GUIImage(int w, int h);
+	GUIImage(int w, int h, bool alpha = false, const SDL_Color& color_key =default_color_key_c);
 	explicit GUIImage(SDL_Surface*);
 	
 	GUIImage(std::string filename, bool alpha = false, const SDL_Color& color_key =default_color_key_c);
@@ -47,6 +47,8 @@ public:
 private:
 	SDL_Surface* sdl_impl;
 	
+    bool is_alpha;
+    SDL_Color alpha_color;
 	
 	typedef std::map<std::string, GUIImage*> image_map_t;
 };

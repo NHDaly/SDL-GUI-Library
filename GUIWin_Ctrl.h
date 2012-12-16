@@ -9,11 +9,24 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 
 class GUIWindow;
 class GUIView;
 class GUIText_box;
 class GUIImage;
+
+class ErrorType {
+public:
+    virtual ~ErrorType() { }
+    
+    
+};
+
+template <typename Parent>
+class ErrorTypeDerived : public Parent, public ErrorType {
+    typedef Parent error_type;
+};
 
 class GUIWin_Ctrl {
 public:
@@ -24,10 +37,10 @@ public:
 	void display_on_screen(const GUIImage& image, DispPoint pos);
 	
 	
-	//	void set_responder(GUIVC_shptr_t responder_)
-	//	{ 
-	//		event_responder = responder_;
-	//	}
+//	void set_responder(GUIVC_shptr_t responder_)
+//	{ 
+//		event_responder = responder_;
+//	}
 	void add_responder(GUIVC_shptr_t responder_)
 	{ 
 		event_responders.push_back(responder_);
@@ -55,6 +68,9 @@ public:
 		timer_commands.clear();
 	}
 
+
+    template <typename T>
+    void register_handler(const T& error_type, void(*handler)(const T&));
 	
 private:
 	
@@ -102,6 +118,16 @@ private:
 	
 	std::vector<GUITimer_command*> timer_commands;
 	
+    
+    struct ErrorToHandler {
+        const ErrorType* error;
+        void(*handler)(const ErrorType&);
+    };
+    
+    typedef std::list<ErrorToHandler> ErrorsList_t;
+    ErrorsList_t errors_to_handlers;
+    
+    
 	//SINGLETON MEMBERS:
 	static GUIWin_Ctrl * singleton_ptr; // Only one, class-wide
 	
@@ -118,6 +144,20 @@ private:
 	
 	
 };
+
+
+
+template <typename T>
+void GUIWin_Ctrl::register_handler(const T& error_type, void(*handler)(const T&)) {
+    
+    ErrorToHandler eth;
+    eth.error = new ErrorTypeDerived<T>;
+    eth.handler = (void(*)(const ErrorType&))handler;
+    
+    errors_to_handlers.push_back(eth);
+}
+
+
 
 
 class GUIWin_Ctrl_destroyer {
