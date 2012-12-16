@@ -7,8 +7,7 @@
 //
 
 #include "GUIMsg.h"
-#include "GUIWin_Ctrl.h"
-#include "GUIWindow.h"
+#include "GUITimer.h"
 #include "GameDisplay.h"
 
 #include <iostream>
@@ -47,7 +46,7 @@ void GUIMsg::pop_up(int timeout)
                             get_w(), get_h()};
     SDL_Rect dest_rect = {0, 0, get_w(), get_h()};
     
-	SDL_BlitSurface(GUIWin_Ctrl::get()->get_window()->screen, &screen_rect,
+	SDL_BlitSurface(SDL_GetVideoSurface(), &screen_rect,
                     temp_screen, &dest_rect);
     
     // Scroll in
@@ -85,7 +84,7 @@ void GUIMsg::pop_up(int timeout)
         speed = (get_h() - (-1.0 * get_h() - i))/30.;
         displayToScreen(temp_screen, SCREEN_WIDTH/2 - get_w()/2, 0, 0);
         displayToScreen(screen, SCREEN_WIDTH/2 - get_w()/2, i, 0);
-        SDL_UpdateRects(GUIWin_Ctrl::get()->get_window()->screen, 1, &screen_rect);
+        SDL_UpdateRects(SDL_GetVideoSurface(), 1, &screen_rect);
     }
     displayToScreen(temp_screen, SCREEN_WIDTH/2 - get_w()/2, 0, 1);
 
