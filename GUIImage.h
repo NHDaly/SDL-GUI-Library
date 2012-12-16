@@ -32,7 +32,9 @@ public:
 	static GUIImage create_filled(int w, int h, SDL_Color color);
     static GUIImage create_clear(int w, int h);
 	static GUIImage create_outline(int w, int h, int width, SDL_Color color);
-	
+    static GUIImage create_copy(const SDL_Surface*); // copy constructor
+
+    
 	operator SDL_Surface*() const {return sdl_impl;}
 	SDL_Surface* operator->() const {return sdl_impl;}
 	

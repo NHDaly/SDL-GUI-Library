@@ -1,5 +1,7 @@
 
 #include "GameDisplay.h"
+#include "NewGUIApp.h"
+#include "NewGUIWindow.h"
 #include "GUIWin_Ctrl.h"
 #include "GUIWindow.h"
 #include "GUIUtility.h"

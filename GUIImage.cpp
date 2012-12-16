@@ -157,6 +157,15 @@ GUIImage GUIImage::create_outline(int w, int h, int width, SDL_Color color){
 	
 	return dispBox;
 }
+GUIImage GUIImage::create_copy(const SDL_Surface* surface){
+    
+    GUIImage temp1(const_cast<SDL_Surface*>(surface));
+    GUIImage temp2(temp1); // make a copy
+
+    
+    temp1.sdl_impl = 0; // get the surface out of a GUIImage so it isn't destructed.
+    return temp2;
+}
 
 
 

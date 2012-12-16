@@ -130,6 +130,8 @@ protected:
     bool rel_point_is_on_me(DispPoint coord);
     bool abs_point_is_on_me(DispPoint coord);
 
+    const SDL_Surface* get_image_ptr() { return image; }
+    
 private:
     bool changed;
     int w,h;
