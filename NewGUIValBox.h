@@ -57,10 +57,14 @@ private:
 class NewGUIValue_Slider : public NewGUIValue_Box {
 public:
   
-    NewGUIValue_Slider(int w_, int h_, int max_ = 1, int min_ = 0)
+    NewGUIValue_Slider(int w_, int h_, int max_ = 1, int min_ = 0, int initial = -1)
     : NewGUIValue_Box(w_,h_), value(0), clicked(false),
     min(min_), max(max_)
-    { }
+    {
+        set_clear_color(default_color_key_c);
+        if (initial == -1) set_value((max-min)/2);
+        else set_value(initial);
+    }
     
     virtual ~NewGUIValue_Slider() = 0;
 
