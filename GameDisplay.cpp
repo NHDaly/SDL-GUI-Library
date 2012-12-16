@@ -29,7 +29,8 @@ void updateScreen(SDL_Surface *screen){
 	}
 }
 
-SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp, SDL_Color colors[], const int numColors){
+SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
+                           SDL_Color colors[], const int numColors, const Uint32 flags){
     /* Create a display surface with a grayscale palette */
     
 	if (width <= 0 || height <= 0 || bpp <= 0){
@@ -44,7 +45,7 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp, 
 //    }
     
     /* Create display */
-    screen=SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE);
+    screen=SDL_SetVideoMode(width, height, bpp, flags);
     if(!screen){
         throw Error("Couldn't set video mode: \n" + string(SDL_GetError()));
     }

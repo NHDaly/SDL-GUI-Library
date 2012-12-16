@@ -33,7 +33,7 @@ public:
 	static GUIWin_Ctrl* get();
 	
 	
-	virtual void run();
+	virtual void run(int fps_cap = 40);
 	void display_on_screen(const GUIImage& image, DispPoint pos);
 	
 	

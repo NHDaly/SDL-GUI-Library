@@ -45,6 +45,8 @@ private:
 
 
 	typedef std::map<std::string, GUIImage_Cache*> image_map_t;
+    static image_map_t images;
+
 };
 
 

@@ -19,7 +19,7 @@ using std::clock;
 using std::vector;
 using std::for_each;
 
-char SDL_to_a(SDLKey key);
+static char SDL_to_a(SDLKey key);
 
 const SDL_Color bg_color_c = {255,255,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
@@ -52,7 +52,7 @@ void GUIText_box::add_letter(char ltr, int index){
 }
 void GUIText_box::remove_letter(int index){
 	if (index < 0) return;
-	if (index > letters.size()) return;
+	if (index >= letters.size()) return;
 	
 	letters.erase(letters.begin()+index);
 	update();
@@ -146,7 +146,7 @@ void GUIText_box::handle_mouse_down(DispPoint pos_){
 }
 
 
-char SDL_to_a(SDLKey key){
+static char SDL_to_a(SDLKey key){
 	
 	if (key >= 0xFF) {
 		return 0;

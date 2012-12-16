@@ -13,7 +13,6 @@
 NewGUIImageView::NewGUIImageView(const GUIImage &image_src)
 : NewGUIView(image_src.getw(), image_src.geth()) 
 { 
-    display_image_on_self(image_src, image_src.getw(),
-                          image_src.geth(), DispPoint(0,0));
+    draw_onto_self(image_src, DispPoint(0,0));
 }
 

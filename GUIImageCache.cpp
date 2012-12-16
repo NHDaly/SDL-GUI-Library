@@ -42,7 +42,9 @@ GUIImage* GUIImage_Cache::get_image(std::string image_, bool alpha, const SDL_Co
 	
 	GUIImage_Cache* image(images[image_]);
 	if (!image){
-		image = new GUIImage_Cache;
+		image = new GUIImage_Cache; 
+        // While this "leaks", the cache is designed to last the entire execution.
+        //  So this is okay! :)
 		images[image_] = image;
 	}
 	return &image->image;

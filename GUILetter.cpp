@@ -22,15 +22,23 @@ const char* const letters_file_path = "fonts/black/";
 
 #include "GUIWin_Ctrl.h"
 #include "GUIWindow.h"
+#include "NewGUIView.h"
+#include "GUIImage.h"
 
 void GUILetter::drawself(SDL_Surface *dest, int x, int y) const{
 	
 	display_image(image, dest, x, y, 0);
 }
+void GUILetter::drawself(NewGUIView *dest, int x, int y) const{
+	
+    dest->draw_onto_self((GUIImage&)image, DispPoint(x,y));
+}
 int GUILetter::get_height() const {
 	return image->h;
 }
 int GUILetter::get_width() const {
+    // SUPER HACKY
+    if (image->w == 0) { return 5; } // for space ' '
 	return image->w;
 }
 
