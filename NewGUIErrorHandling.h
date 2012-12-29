@@ -21,10 +21,10 @@ protected:
 
 
 template <typename Error_t, typename Handler_t>
-class ErrorCatcher_Impl : public ErrorCatcher {
+class ErrorCatcher_Impl_Arg : public ErrorCatcher {
 public:
     
-    ErrorCatcher_Impl(const Handler_t &handler_) 
+    ErrorCatcher_Impl_Arg(const Handler_t &handler_) 
     : handler(handler_)
     { }
     
@@ -41,14 +41,41 @@ public:
         }
     }
     
-    
 private:
     Handler_t handler;
 };
+template <typename Error_t>
+class ErrorCatcher_Impl_No_Arg : public ErrorCatcher {
+public:
+    
+    ErrorCatcher_Impl_No_Arg(void(*handler_)()) 
+    : handler(handler_)
+    { }
+    
+    virtual void operator()() {
+        was_handled = false;
+        
+        try {
+            throw;
+        }
+        catch(const Error_t &e) {
+            handler();
+            was_handled = true;
+            throw;
+        }
+    }
+    
+private:
+    void(*handler)();
+};
 
+template <typename Error_t>
+ErrorCatcher* create_error_handler(void(*handler)()) {
+    return new ErrorCatcher_Impl_No_Arg<Error_t>(handler);
+}
 template <typename Error_t, typename Handler_t>
 ErrorCatcher* create_error_handler(const Handler_t &handler) {
-    return new ErrorCatcher_Impl<Error_t, Handler_t>(handler);
+    return new ErrorCatcher_Impl_Arg<Error_t, Handler_t>(handler);
 }
 
 // REQUIRES: This function MUST be called from within a catch(...){} block!
