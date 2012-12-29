@@ -18,6 +18,11 @@
 #include <set>
 
 
+// Throw an instance of GUIQuit to safely tell the application to exit.
+// (This is the same as calling NewGUIApp::quit())
+class GUIQuit {};
+
+
 class NewGUIApp {
 public:
   	static NewGUIApp* get();
@@ -28,14 +33,23 @@ public:
     template <typename Operation>
     void repeat_on_timer(Operation op, double interval, bool repeat = true);
 
+    // When any code executed within the run() loop throws an instance of Error_t,
+    // any Handler_t's registered for that Error_t will be called.
     template <typename Error_t, typename Handler_t>
     void register_error_handler(const Handler_t &handler);
 
+    // Provides a view with the ability to receive mouse/keyboard input
+    // even if not hovered over.
     void give_focus(NewGUIView* view) { captured_focus.insert(view); }
     bool has_focus(NewGUIView* view) { return captured_focus.count(view) != 0; }
     void release_focus(NewGUIView* view) { captured_focus.erase(view); }
     
+    
+    // Equivalent to a user clicking the "x" or pressing cmd-q.
+    void quit() { throw GUIQuit(); }
+    
 private:
+    
     typedef std::set<NewGUIView*> view_list_t;
     view_list_t captured_focus;
 

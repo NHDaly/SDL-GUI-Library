@@ -15,8 +15,10 @@
 #include "SDL/SDL.h"
 
 #include <iostream>
+#include <tr1/functional>
 using std::cout; using std::endl;
 using std::list;
+using std::tr1::bind;
 
 
 // SINGLETON MEMBERS
@@ -49,16 +51,23 @@ void unhandled_click(const Unhandled_Click &e) {
     cout << "unhandled click" << endl;
 }
 
+struct NewGUIApp_Quitter {
+    NewGUIApp_Quitter(bool &running_) : running(running_) {}
+    void operator()(GUIQuit) { running = false; }
+    bool &running;
+};
 
 void NewGUIApp::run(NewGUIWindow* window) {
     
     register_error_handler<Error>(&print_msg);
     register_error_handler<Unhandled_Click>(&unhandled_click);
 
+    bool running = true;
+
+    register_error_handler<GUIQuit>(NewGUIApp_Quitter(running));
     
     window->refresh();
     
-    bool running = true;
     while(running) {
         SDL_Event event;
         
@@ -154,13 +163,13 @@ void NewGUIApp::run(NewGUIWindow* window) {
                             if (event.key.keysym.mod == KMOD_LCTRL
 								|| event.key.keysym.mod == KMOD_RCTRL
 								|| event.key.keysym.mod == KMOD_CTRL){
-								running = 0;
+                                throw GUIQuit();
 							}
 #else           // Mac
 							if (event.key.keysym.mod == KMOD_LMETA
 								|| event.key.keysym.mod == KMOD_RMETA
 								|| event.key.keysym.mod == KMOD_META){
-								running = 0;
+                                throw GUIQuit();
 							}
 #endif
 						}
@@ -177,7 +186,7 @@ void NewGUIApp::run(NewGUIWindow* window) {
                     }
    
                     case SDL_QUIT:
-						running = 0;
+						throw GUIQuit();
 						break;
                         
 					default:
