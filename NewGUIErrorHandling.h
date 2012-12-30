@@ -35,12 +35,12 @@ public:
             throw;
         }
         catch(const Error_t &e) {
+            
             handler(e);
             was_handled = true;
             throw;
         }
     }
-    
     
 private:
     Handler_t handler;

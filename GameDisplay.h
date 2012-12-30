@@ -21,8 +21,8 @@ SDL_Surface * loadBMP(std::string file);
 SDL_Surface * loadBMPAlpha(std::string file, SDL_Color color_key = default_color_key_c);
 // with alpha support
 
-void display_image (SDL_Surface *src, SDL_Surface *dest, DispPoint pos, bool update, SDL_Rect rect = def_rect_c);
-void display_image (SDL_Surface *src, SDL_Surface *dest, int x, int y, bool update, SDL_Rect rect = def_rect_c);
+void display_image (const SDL_Surface *src, SDL_Surface *dest, DispPoint pos, bool update, SDL_Rect rect = def_rect_c);
+void display_image (const SDL_Surface *src, SDL_Surface *dest, int x, int y, bool update, SDL_Rect rect = def_rect_c);
 
 void ShowBMP(std::string file, SDL_Surface *screen, int x, int y, bool update);
 // adds a bmp to the screen at x,y). will update that portion of screen iff (update == 1).

@@ -113,11 +113,11 @@ void ShowBMP(string file, SDL_Surface *screen, SDL_Rect rect, bool update)
 
 
 
-void display_image (SDL_Surface *src, SDL_Surface *dest, DispPoint pos, bool update, SDL_Rect rect){
+void display_image (const SDL_Surface *src, SDL_Surface *dest, DispPoint pos, bool update, SDL_Rect rect){
 	
 	display_image (src, dest, pos.x, pos.y, update, rect);
 }
-void display_image (SDL_Surface *src, SDL_Surface *dest, int x, int y, bool update, SDL_Rect rect){
+void display_image (const SDL_Surface *src, SDL_Surface *dest, int x, int y, bool update, SDL_Rect rect){
 	
 	SDL_Rect dest_rect = {x, y, rect.w, rect.h};
 
@@ -125,7 +125,7 @@ void display_image (SDL_Surface *src, SDL_Surface *dest, int x, int y, bool upda
 //		SDL_BlitSurface(src, &rect, dest, &dest_rect);		
 //	}
 
-	SDL_BlitSurface(src, 0, dest, &dest_rect);
+	SDL_BlitSurface((SDL_Surface *)src, 0, dest, &dest_rect);
 	if (update) SDL_UpdateRects(dest, 1, &dest_rect);
 }
 
