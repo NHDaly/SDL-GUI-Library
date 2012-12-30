@@ -20,6 +20,8 @@ using std::cout; using std::endl;
 using std::list;
 using std::tr1::bind;
 
+#define FPS_CAP_DEFAULT 40
+
 
 // SINGLETON MEMBERS
 
@@ -57,6 +59,12 @@ struct NewGUIApp_Quitter {
     bool &running;
 };
 
+
+NewGUIApp::NewGUIApp()
+:fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
+{ }
+
+
 void NewGUIApp::run(NewGUIWindow* window) {
     
     register_error_handler<Error>(&print_msg);
@@ -72,9 +80,14 @@ void NewGUIApp::run(NewGUIWindow* window) {
         SDL_Event event;
         
         try {
+            FrameRateCapper capper(fps_cap);
+            
+            if (cap_frame_rate)
+            capper.cap_frame_rate();
+
             
             while (SDL_PollEvent(&event) && running){
-                
+
                 switch (event.type) {
                         
                     case SDL_MOUSEBUTTONDOWN: 

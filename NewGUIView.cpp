@@ -207,7 +207,7 @@ void NewGUIView::mouse_down(DispPoint coord) {
     
     if (!handle_mouse_down(coord)) {
         if (parent) parent->mouse_down(coord + pos);
-        else throw Unhandled_Click(coord);
+//        else throw Unhandled_Click(coord);
     }
 }
 void NewGUIView::mouse_up(DispPoint coord) {
@@ -215,7 +215,7 @@ void NewGUIView::mouse_up(DispPoint coord) {
     
     if (!handle_mouse_up(coord)) {
         if (parent) parent->mouse_up(coord + pos);
-        else throw Unhandled_Click(coord);
+//        else throw Unhandled_Click(coord);
     }
 }
 void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
@@ -223,7 +223,7 @@ void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
     
     if (!handle_mouse_motion(coord, rel_motion)) {
         if (parent) parent->mouse_motion(coord + pos, rel_motion);
-        else throw Unhandled_Click(coord);
+//        else throw Unhandled_Click(coord);
     }
 }
 
@@ -231,14 +231,14 @@ void NewGUIView::key_down(SDL_keysym key) {
     cout << "key down!: " << key.sym << endl;
     
     if (!handle_key_down(key)) {
-        throw Unhandled_Key(key);
+//        throw Unhandled_Key(key);
     }
 }
 void NewGUIView::key_up(SDL_keysym key) {
     cout << "key up!: " << key.sym << endl;
     
     if (!handle_key_up(key)) {
-        throw Unhandled_Key(key);
+//        throw Unhandled_Key(key);
     }
 }
 

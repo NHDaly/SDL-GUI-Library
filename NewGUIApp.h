@@ -26,7 +26,10 @@ class GUIQuit {};
 class NewGUIApp {
 public:
   	static NewGUIApp* get();
-  
+    
+    void set_framerate_cap(int fps_cap_) { fps_cap = fps_cap_; cap_frame_rate = true;}
+    void disable_framerate_cap() { cap_frame_rate = false; }
+    
     void run(NewGUIWindow* window);
     
     // Perform op after interval seconds. Repeat if repeat == true.
@@ -49,6 +52,9 @@ public:
     void quit() { throw GUIQuit(); }
     
 private:
+    
+    int fps_cap;
+    bool cap_frame_rate;
     
     typedef std::set<NewGUIView*> view_list_t;
     view_list_t captured_focus;
@@ -104,8 +110,7 @@ private:
 	friend class NewGUIApp_destroyer;
 	
 	// no public creation/deletion
-	NewGUIApp() {}
-	~NewGUIApp() {}
+	NewGUIApp();
 	
 	// no copy or assignment allowed
 	NewGUIApp(const NewGUIApp&);
