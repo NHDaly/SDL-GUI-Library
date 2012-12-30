@@ -50,7 +50,7 @@ private:
 	SDL_Surface* sdl_impl;
 	
     bool is_alpha;
-    SDL_Color alpha_color;
+    Uint32 alpha_color;
 	
 	typedef std::map<std::string, GUIImage*> image_map_t;
 };

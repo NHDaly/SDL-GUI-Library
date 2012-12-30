@@ -48,6 +48,9 @@ struct DispPoint {
     DispPoint operator+ (DispPoint b) {
         return DispPoint (x + b.x, y + b.y); 
     }
+    DispPoint operator- (DispPoint b) {
+        return DispPoint (x - b.x, y - b.y); 
+    }
 
 	DispPoint(const Coord& coord);
 	int x,y;
