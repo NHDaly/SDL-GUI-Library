@@ -14,6 +14,7 @@ using std::vector;
 #include <algorithm> 
 #include <iostream> 
 using std::swap; using std::for_each;
+using namespace std::tr1::placeholders;
 
 
 bool GUIView_Box_ptr_less (const GUIWindow::GUIView_Box_shptr_t a, const GUIWindow::GUIView_Box_shptr_t b);

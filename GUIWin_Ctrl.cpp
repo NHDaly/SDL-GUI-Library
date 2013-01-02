@@ -13,7 +13,7 @@ using std::cout; using std::endl;
 using std::for_each;
 using std::tr1::dynamic_pointer_cast;
 using std::tr1::static_pointer_cast;
-
+using namespace std::tr1::placeholders;
 
 
 

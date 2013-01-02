@@ -19,6 +19,7 @@
 using std::cout; using std::endl;
 using std::list;
 using std::tr1::bind;
+using namespace std::tr1::placeholders;
 
 #define FPS_CAP_DEFAULT 40
 
