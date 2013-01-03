@@ -22,6 +22,8 @@
 // (This is the same as calling NewGUIApp::quit())
 class GUIQuit {};
 
+class NewGUIController;
+
 struct GUITimer_command {
     GUITimer_command(double interval_) : interval(interval_) {
         timer.start();
@@ -55,22 +57,23 @@ public:
     template <typename Error_t, typename Handler_t>
     void register_error_handler(const Handler_t &handler);
 
-    // Provides a view with the ability to receive mouse/keyboard input
-    // even if not hovered over.
-    void give_focus(NewGUIView* view) { captured_focus.insert(view); }
-    bool has_focus(NewGUIView* view) { return captured_focus.count(view) != 0; }
-    void release_focus(NewGUIView* view) { captured_focus.erase(view); }
+    // Provides a Controller with the ability to receive mouse/keyboard input.
+    //  (Views receive mouse input by defualt when hovered over.)
+    void give_focus(NewGUIController* view) { captured_focus.insert(view); }
+    bool has_focus(NewGUIController* view) { return captured_focus.count(view) != 0; }
+    void release_focus(NewGUIController* view) { captured_focus.erase(view); }
     
     
     // Equivalent to a user clicking the "x" or pressing cmd-q.
     void quit() { throw GUIQuit(); }
     
+
 private:
     
     int fps_cap;
     bool cap_frame_rate;
     
-    typedef std::set<NewGUIView*> view_list_t;
+    typedef std::set<NewGUIController*> view_list_t;
     view_list_t captured_focus;
 
     

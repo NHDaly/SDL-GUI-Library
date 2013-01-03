@@ -110,53 +110,97 @@ void NewGUIApp::run(NewGUIWindow* window) {
                         DispPoint click_pos(event.button.x, event.button.y);
                         DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
                         
-                        list<NewGUIView*> focus_copy(captured_focus.begin(), captured_focus.end());
+                        list<NewGUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
                         
-                        for (list<NewGUIView*>::iterator it = focus_copy.begin();
+                        for (list<NewGUIController*>::iterator it = focus_copy.begin();
                                             it != focus_copy.end(); ++it) {
                             
-                            NewGUIView *captured = *it;
+                            NewGUIController *captured = *it;
                             
                             DispPoint new_pos(click_pos);
 
-                            new_pos.x -= captured->get_abs_pos().x; 
-                            new_pos.y -= captured->get_abs_pos().y; 
+                            // If the Controller is a view, adjust pos for view.
+                            if (NewGUIView *view = dynamic_cast<NewGUIView*>(captured)) {
+                                new_pos.x -= view->get_abs_pos().x; 
+                                new_pos.y -= view->get_abs_pos().y; 
+                            }
                             
                             bool handled;
-                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                handled = captured->handle_mouse_down(new_pos);
+                            
+                            cout << "event.button.button -- " << (int)event.button.button << endl;
+                            if (event.button.button == SDL_BUTTON_X1) {
+                                cout << "SIDEWAYS SCROLL!" << endl;
                             }
-                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                handled = captured->handle_mouse_up(new_pos);
+                            if (event.button.button == SDL_BUTTON_WHEELUP) {
+                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                    handled = captured->handle_mouse_scroll_start(true);
+                                }
+                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                    handled = captured->handle_mouse_scroll_stop(true);
+                                }
                             }
-                            else if (event.button.type == SDL_MOUSEMOTION) {
-                                handled = captured->handle_mouse_motion(new_pos, rel_pos);
+                            else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
+                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                    handled = captured->handle_mouse_scroll_start(false);
+                                }
+                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                    handled = captured->handle_mouse_scroll_stop(false);
+                                }
                             }
-//                            if (handled) {
-//                                break;
+                            else {
+                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                    handled = captured->handle_mouse_down(new_pos);
+                                }
+                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                    handled = captured->handle_mouse_up(new_pos);
+                                }
+                                else if (event.button.type == SDL_MOUSEMOTION) {
+                                    handled = captured->handle_mouse_motion(new_pos, rel_pos);
+                                }
+                            }
+//                            if (!handled) {
+//                                //...
 //                            }
                         }
                         
-                        NewGUIView* clicked_view =
+                        NewGUIView* hovered_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
 
-                        if (clicked_view) {
+                        if (hovered_view) {
                             DispPoint new_pos(click_pos);
 
-                            new_pos.x -= clicked_view->get_abs_pos().x; 
-                            new_pos.y -= clicked_view->get_abs_pos().y; 
-                            
-                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                clicked_view->mouse_down(new_pos);
+                            new_pos.x -= hovered_view->get_abs_pos().x; 
+                            new_pos.y -= hovered_view->get_abs_pos().y; 
+                          
+                            if (event.button.button == SDL_BUTTON_WHEELUP) {
+                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                    hovered_view->mouse_scroll_start(true);
+                                }
+                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                    hovered_view->mouse_scroll_stop(true);
+                                }
                             }
-                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                clicked_view->mouse_up(new_pos);
-                            }  
-                            else if (event.button.type == SDL_MOUSEMOTION) {
-                                clicked_view->mouse_motion(new_pos, rel_pos);
+                            else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
+                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                    hovered_view->mouse_scroll_start(false);
+                                }
+                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                    hovered_view->mouse_scroll_stop(false);
+                                }
                             }
-
+                            else {
+                                
+                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                    hovered_view->mouse_down(new_pos);
+                                }
+                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                    hovered_view->mouse_up(new_pos);
+                                }  
+                                else if (event.button.type == SDL_MOUSEMOTION) {
+                                    hovered_view->mouse_motion(new_pos, rel_pos);
+                                }
+                            }
                         } 
                         
                         break;
@@ -168,7 +212,7 @@ void NewGUIApp::run(NewGUIWindow* window) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            NewGUIView *captured = *it;
+                            NewGUIController *captured = *it;
                             
                             bool handled = captured->handle_key_down(event.key.keysym);
                             
@@ -201,7 +245,7 @@ void NewGUIApp::run(NewGUIWindow* window) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            NewGUIView *captured = *it;
+                            NewGUIController *captured = *it;
                         
                             bool handled = captured->handle_key_up(event.key.keysym);
                         

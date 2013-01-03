@@ -12,6 +12,7 @@
 #include <list>
 
 #include "GUIUtility.h"
+#include "NewGUIController.h"
 
 class SDL_Surface;
 class NewGUIWindow;
@@ -20,7 +21,7 @@ class GUIImage;
 #include "GUIImage.h"
 #include <iostream>
 
-class NewGUIView {
+class NewGUIView : public NewGUIController {
 public:
     
     NewGUIView(int w_, int h_);
@@ -43,6 +44,8 @@ public:
     void remove_subview(NewGUIView* view);
     void remove_last_subview(); // Remove subview last added
 
+    bool is_subview(NewGUIView* view);
+
     void move_subview(NewGUIView* view, DispPoint pos);
         
     // Will be true if a subview has been changed.
@@ -56,9 +59,13 @@ public:
     void mouse_up(DispPoint coord);
     // Override handle_mouse_motion() to change behavior.
     void mouse_motion(DispPoint coord, DispPoint rel_motion);
+    // Override handle_mouse_scroll_start() to change behavior.
+    void mouse_scroll_start(bool up_down); // up == true, down == false
+    // Override handle_mouse_scroll_stop() to change behavior.
+    void mouse_scroll_stop(bool up_down); // up == true, down == false
 
     // Keyboard Events: Template Methods
-    // Either handle event or pass up to parent.
+    // These don't pass up to parent.
     // Override handle_key_down() to change behavior.
     void key_down(SDL_keysym key);
     // Override handle_key_up() to change behavior.
@@ -68,9 +75,6 @@ public:
     // Returns the deepest subview (could be this) on which coord lies.
     NewGUIView* get_view_from_point(DispPoint coord);
     
-    // Hierarchy
-//    NewGUIView* get_parent() { return parent; }
-//    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
 
     DispPoint get_abs_pos(); // Pos on screen
     DispPoint get_rel_pos(); // Pos on parent
@@ -83,13 +87,13 @@ public:
     void resize(int w, int h);
         
     
-    // *** The following two functions will call got_focus() and lost_focus(). 
-    // *** Derived behavior may be specified by overriding those two functions.
-    // This function may be optionally called to tell Window to send keyboard
-    // input to this view.
-    void capture_focus();
-    // If focus was captured, this function will be called release focus.
-    void lose_focus();
+//    // *** The following two functions will call got_focus() and lost_focus(). 
+//    // *** Derived behavior may be specified by overriding those two functions.
+//    // This function may be optionally called to tell Window to send keyboard
+//    // input to this view.
+//    void capture_focus();
+//    // If focus was captured, this function may be called to release focus.
+//    void lose_focus();
     
     
     friend class NewGUIWindow;
@@ -102,6 +106,9 @@ protected:
     
     void mark_changed();
     
+    // Called if resize() was called on this view.
+    virtual void did_resize(int w_, int h_) { }
+    
     // Mouse Events. Following three functions all work the same:
     //  Returns true if the mouse-event is finished being handled.
     //  If returns false, handling will continue up the chain.
@@ -110,20 +117,27 @@ protected:
     virtual bool handle_mouse_up(DispPoint coord) { return false; }
     virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion) { return false; }
 
+    virtual bool handle_mouse_scroll(bool up_down) { return false; }
+
 
     // Key Events. Following two functions all work the same:
     //  Returns true if the key-event is finished being handled.
     //  If returns false, handling will continue up the chain.
-    virtual bool handle_key_down(SDL_keysym key) { std::cout << "handling key down " << key.sym << std::endl; return false; }
+    virtual bool handle_key_down(SDL_keysym key) { return false; }
     virtual bool handle_key_up(SDL_keysym key) { return false; }
 
 
-    // These functions will be called by capture/lose focus, and may be
-    // overridden to provide behavior on focus gain/loss.
-    virtual void got_focus() { }
-    virtual void lost_focus() { }
+//    // These functions will be called by capture/lose focus, and may be
+//    // overridden to provide behavior on focus gain/loss.
+//    virtual void got_focus() { }
+//    virtual void lost_focus() { }
+
+    // Hierarchy
+    NewGUIView* get_parent() { return parent; }
+//    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
 
     DispPoint abs_from_rel(DispPoint coord);
+    DispPoint adjust_to_parent(DispPoint coord);    
     DispPoint adjust_to_rel(DispPoint coord);    
 
     // returns true if coord is within this view's rectangle.
@@ -151,9 +165,7 @@ private:
     NewGUIView* parent;
     typedef std::list<NewGUIView*> Subview_list_t;
     Subview_list_t children;
-        
-    bool is_subview(NewGUIView* view);
-        
+                
     
     // returns the deepest view that lies under coord, and its depth.
     // (0 is THIS, 1 is a child, 2 is grandchild, etc.)

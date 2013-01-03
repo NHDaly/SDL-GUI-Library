@@ -157,7 +157,7 @@ void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
     if (view == this) 
         throw Error("Cannot attach a view to itself!");
 
-    /// @todo Check if out of bounds?
+    /// @todo Check if out of bounds? Or maybe not..?
     
     view->pos = pos;
     children.push_back(view);
@@ -165,7 +165,7 @@ void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
     
     mark_changed();
 }
-// NOTE: Does not delete the view, only remove it from list!
+// NOTE: Does not delete the view, only removes it from list!
 void NewGUIView::remove_subview(NewGUIView* view) {
     
     if (!is_subview(view))
@@ -189,13 +189,15 @@ void NewGUIView::remove_last_subview() {
 }
 bool NewGUIView::is_subview(NewGUIView* view) {
     
-    return find(children.begin(), children.end(), view) != children.end();
+    return (find(children.begin(), children.end(), view) != children.end());
 }
 
 void NewGUIView::move_subview(NewGUIView* view, DispPoint pos) {
     
     if (!is_subview(view))
         throw Error("view is not a subview of this!");
+    
+    if (view->pos == pos) return; // no need to mark change if already there!
     
     view->pos = pos;
     
@@ -219,13 +221,29 @@ void NewGUIView::mouse_up(DispPoint coord) {
     }
 }
 void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
-    cout << "mouse motion!: " << rel_motion.x <<", "<< rel_motion.y << endl;
+//    cout << "mouse motion!: " << rel_motion.x <<", "<< rel_motion.y << endl;
     
     if (!handle_mouse_motion(coord, rel_motion)) {
         if (parent) parent->mouse_motion(coord + pos, rel_motion);
 //        else throw Unhandled_Click(coord);
     }
 }
+void NewGUIView::mouse_scroll_start(bool up_down) {
+    cout << "mouse scroll!: " << (up_down ? "up" : "down") << endl;
+    
+    if (!handle_mouse_scroll_start(up_down)) {
+        if (parent) parent->mouse_scroll_start(up_down);
+        //        else throw Unhandled_Click(coord);
+    }
+}void NewGUIView::mouse_scroll_stop(bool up_down) {
+    cout << "mouse scroll!: " << (up_down ? "up" : "down") << endl;
+    
+    if (!handle_mouse_scroll_stop(up_down)) {
+        if (parent) parent->mouse_scroll_stop(up_down);
+        //        else throw Unhandled_Click(coord);
+    }
+}
+
 
 void NewGUIView::key_down(SDL_keysym key) {
     cout << "key down!: " << key.sym << endl;
@@ -289,6 +307,9 @@ DispPoint NewGUIView::abs_from_rel(DispPoint coord) {
         return DispPoint(abs_pos.x + coord.x,
                          abs_pos.y + coord.y);
 }
+DispPoint NewGUIView::adjust_to_parent(DispPoint coord) {
+    return DispPoint(coord.x + pos.x, coord.y + pos.y);
+}
 DispPoint NewGUIView::adjust_to_rel(DispPoint coord) {
     return DispPoint(coord.x - pos.x, coord.y - pos.y);
 }
@@ -323,27 +344,12 @@ void NewGUIView::resize(int w_, int h_) {
 	SDL_BlitSurface(temp.image, 0, image, &dest_rect);
 
     mark_changed();
+    did_resize(w_,h_);
 }
 
 
 
-void NewGUIView::capture_focus() {
-    
-    if (NewGUIApp::get()->has_focus(this)) return;
-    
-//    if (captured) captured->lose_focus();
-    
-    NewGUIApp::get()->give_focus(this);
- 
-    got_focus();
-}
-void NewGUIView::lose_focus() {
-    if (!NewGUIApp::get()->has_focus(this)) return; //throw Error("Can't lose_focus if didn't already have it.");
 
-    NewGUIApp::get()->release_focus(this);
-
-    lost_focus();
-}
 
 
 
