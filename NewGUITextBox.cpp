@@ -33,9 +33,10 @@ const SDL_Color bg_color_c = {255,255,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
 
 
-NewGUITextView::NewGUITextView(int w_, int h_)
-:NewGUIView(w_,h_),
-text_size(30), color(default_color_c)
+NewGUITextView::NewGUITextView(int w_, int h_,
+                               bool resizeable_down_, bool resizeable_right_)
+:NewGUIView(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
+w_init(w_), h_init(h_), text_size(30), color(default_color_c)
 {
     set_clear_color(bg_color_c);
             
@@ -44,14 +45,39 @@ text_size(30), color(default_color_c)
 }
 
 void NewGUITextView::update(){
-	
-    GUIImage bg = GUIImage::create_blank(get_w(), get_h());
-    SDL_FillRect(bg, 0, SDL_MapRGB(bg->format, bg_color_c.r, bg_color_c.g, bg_color_c.b));
-    draw_onto_self(bg, DispPoint());
+//    resize(200, get_h());
+    
+    if (!letters.empty()) {
+//        resize(200, get_h());
+
+//        const NewLetter_Disp_Obj &last_letter = letters[letters.size()-1];
+//        if (resizeable_right && last_letter.get_pos().x + last_letter.get_width() > get_w()) {
+//            resize(200, get_h());
+//        }
+    }
     
 	for (int i = 0; i < letters.size(); i++){
 		letters[i].set_pos(pos_at_index(i));
 	}
+    
+    if (!letters.empty()) {
+        const NewLetter_Disp_Obj &last_letter = letters[letters.size()-1];
+        if (resizeable_right && last_letter.get_pos().x + last_letter.get_width() > get_w()) {
+            resize(300, get_h());
+            
+//            resize(last_letter.get_pos().x + last_letter.get_width(), get_h());
+//            return update();    // start over!
+        }
+        if (resizeable_down && last_letter.get_pos().y >= get_h()) {
+            const NewLetter_Disp_Obj &last_letter = letters[letters.size()-1];
+            resize(get_w(), last_letter.get_pos().y + last_letter.get_line_height());
+            return update();    // start over!
+        }
+    }
+    
+    GUIImage bg = GUIImage::create_blank(get_w(), get_h());
+    SDL_FillRect(bg, 0, SDL_MapRGB(bg->format, bg_color_c.r, bg_color_c.g, bg_color_c.b));
+    draw_onto_self(bg, DispPoint());
     
     for (int i = 0; i < letters.size(); i++){
         letters[i].drawself(this);
@@ -87,6 +113,12 @@ void NewGUITextView::set_text_size(int size) {
 void NewGUITextView::set_text_color(SDL_Color color_) {
     color = color_;
     set_text(get_text());
+}
+void NewGUITextView::did_resize(int w, int h)
+{
+//    if (NewGUITextBox* tb = dynamic_cast<NewGUITextBox*>(get_parent())) {
+//        tb->resize(w,h);
+//    }
 }
 
 
@@ -131,12 +163,12 @@ DispPoint NewGUITextView::pos_at_index(size_t i){
 		int width = letter.get_width();
 		position = DispPoint(letter.get_pos().x + width + 1, 
 							 letter.get_pos().y);
-		if (position.x + width >= get_w()){
+		
+        if (!resizeable_right && position.x + width >= get_w()){
 			position.x = 0;
             //			position.y += NewLetter_Disp_Obj::get_line_height();
 			position.y += text_size;
-		}
-		
+		}		
 	}
 	return position;
 }
@@ -171,9 +203,10 @@ int NewGUITextView::index_at_pos(DispPoint pos_){
 
 
 
-NewGUITextBox::NewGUITextBox(int w_, int h_)
-:NewGUITextView(w_,h_), cursor(this),
-key_is_held(false), modifiers_held(KMOD_NONE)
+NewGUITextBox::NewGUITextBox(int w_, int h_,
+                             bool resizeable_down_, bool resizeable_right_)
+:NewGUITextView(w_,h_, resizeable_down_, resizeable_right_), 
+cursor(this), key_is_held(false), modifiers_held(KMOD_NONE)
 {        
     attach_subview(&cursor, DispPoint());
     
@@ -344,7 +377,7 @@ void NewGUITextBox::Cursor::display(int text_size) {
 	}
 	else flicker = 1;
 	
-	SDL_Rect box = {0,0,1,text_size};
+//	SDL_Rect box = {0,0,1,text_size};
 	
 	GUIImage* image = GUIImage::get_image( string("images/cursor") + (flicker ? "1" : "0") + string(".bmp"));
 	draw_onto_self(*image, position);

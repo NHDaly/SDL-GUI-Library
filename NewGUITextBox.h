@@ -25,7 +25,8 @@ class SDL_Color;
 class NewGUITextView : public NewGUIView {
 public:	
 
-	NewGUITextView(int w_ = 200, int h_ = 200);
+	NewGUITextView(int w_ = 200, int h_ = 200, 
+                   bool resizeable_down = false, bool resizable_right = false);
 	
     
 	virtual void update();
@@ -37,6 +38,8 @@ public:
     void set_text_size(int size);
     void set_text_color(SDL_Color color);
 
+    virtual void did_resize(int w, int h);
+    
 //    enum Justification_e { LEFT, MIDDLE, RIGHT };
 //    
 //    void set_justification(Justification_e just);
@@ -55,6 +58,9 @@ protected:
 
 private:
 	
+    bool resizeable_down, resizeable_right;
+    int w_init, h_init;
+    
 	letters_ctr_t letters;
 	int text_size;
 	SDL_Color color;
@@ -65,7 +71,8 @@ private:
 class NewGUITextBox : public NewGUITextView {
 public:	
 	
-	NewGUITextBox(int w_ = 200, int h_ = 200);
+	NewGUITextBox(int w_ = 200, int h_ = 200, 
+                  bool resizeable_down = false, bool resizable_right = false);
 	
 	
 protected:
@@ -74,7 +81,9 @@ protected:
     virtual void lost_focus();
 	
 private:
-	
+    
+    bool resizeable_down, resizeable_right;
+
 	virtual bool handle_mouse_down(DispPoint pos_);
     virtual bool handle_key_down(SDL_keysym key);
     virtual bool handle_key_up(SDL_keysym key);

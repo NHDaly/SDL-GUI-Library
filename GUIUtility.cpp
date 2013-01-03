@@ -31,5 +31,5 @@ void initSDL(unsigned int flags){
 static void quit_SDL() {
     std::cout << "Thanks for playing!" << std::endl;
     
-//    SDL_Quit();
+//    SDL_Quit();   // Turned off for now because it causes an issue with screen flashing..
 }
