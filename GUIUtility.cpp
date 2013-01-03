@@ -5,9 +5,6 @@
 
 #include "Compatibility.h"
 
-const int SCREEN_WIDTH = 700;
-const int SCREEN_HEIGHT = 550;
-
 
 static void quit_SDL();
 

@@ -68,7 +68,10 @@ public:
     void quit() { throw GUIQuit(); }
     
 
+    DispPoint get_screen_size();    
 private:
+    
+    NewGUIWindow* window;
     
     int fps_cap;
     bool cap_frame_rate;

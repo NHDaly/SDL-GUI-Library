@@ -51,6 +51,8 @@ NewGUIWindow::NewGUIWindow(int w, int h, const string& name_,
     
 }
 
+DispPoint NewGUIWindow::get_dim() { return DispPoint(window->w, window->h); }
+
 
 void NewGUIWindow::crop(int w, int h) {
     

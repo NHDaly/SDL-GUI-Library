@@ -62,7 +62,7 @@ struct NewGUIApp_Quitter {
 
 
 NewGUIApp::NewGUIApp()
-:fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
+:fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true), window(0)
 { }
 
 void NewGUIApp::cancel_timer_op(GUITimer_command* op) {
@@ -76,7 +76,12 @@ void NewGUIApp::cancel_timer_op(GUITimer_command* op) {
     }
 }
 
-void NewGUIApp::run(NewGUIWindow* window) {
+DispPoint NewGUIApp::get_screen_size() { return window->get_dim(); }
+
+
+void NewGUIApp::run(NewGUIWindow* window_) {
+    
+    window = window_;
     
     register_error_handler<Error>(&print_msg);
     register_error_handler<Unhandled_Click>(&unhandled_click);

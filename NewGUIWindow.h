@@ -46,6 +46,8 @@ public:
     
     NewGUIView* get_main_view() { return main_view; }
 
+    DispPoint get_dim();
+        
     // Handle subviews to main_view:
     void attach_subview(NewGUIView* view, DispPoint pos);
     void move_subview(NewGUIView* view, DispPoint pos);

@@ -5,9 +5,6 @@
 #include <string>
 #include "stdint.h"
 
-extern const int SCREEN_WIDTH;
-extern const int SCREEN_HEIGHT;
-
 
 // a simple class for error exceptions - msg points to a C-string error message
 struct Error {

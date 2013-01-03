@@ -19,6 +19,8 @@
 //class GUIWindow;
 const SDL_Rect full_rect_c = {0,0,0,0};
 
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 600;
 
 class Letter;
 class Letter_Disp_Obj;
