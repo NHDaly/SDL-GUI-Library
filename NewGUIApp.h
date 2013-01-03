@@ -22,6 +22,15 @@
 // (This is the same as calling NewGUIApp::quit())
 class GUIQuit {};
 
+struct GUITimer_command {
+    GUITimer_command(double interval_) : interval(interval_) {
+        timer.start();
+    }
+    double interval;
+    GUITimer timer;
+    virtual void execute_command(){}
+};
+
 
 class NewGUIApp {
 public:
@@ -32,10 +41,15 @@ public:
     
     void run(NewGUIWindow* window);
     
-    // Perform op after interval seconds. Repeat if repeat == true.
-    template <typename Operation>
-    void repeat_on_timer(Operation op, double interval, bool repeat = true);
+//    struct GUITimer_command;
 
+   // Perform op after interval seconds. Repeat if repeat == true.
+    // returns a ptr to the timer command, so that it may be canceled later.
+    template <typename Operation>
+    GUITimer_command*  repeat_on_timer(Operation op, double interval, bool repeat = true);
+    // Perform op after interval seconds. Repeat if repeat == true.
+	void cancel_timer_op(GUITimer_command* op);
+    
     // When any code executed within the run() loop throws an instance of Error_t,
     // any Handler_t's registered for that Error_t will be called.
     template <typename Error_t, typename Handler_t>
@@ -64,18 +78,9 @@ private:
     error_handler_list_t handler_list;
     
     
-    class GUITimer_command;
 
     std::vector<GUITimer_command*> timer_commands;
     
-    struct GUITimer_command {
-        GUITimer_command(double interval_) : interval(interval_) {
-            timer.start();
-        }
-        double interval;
-        GUITimer timer;
-        virtual void execute_command(){}
-    };
     
     template <typename Operation>
     class GUITimer_command_impl : public GUITimer_command {
@@ -125,15 +130,20 @@ private:
 
 // Perform op after interval seconds. Repeat if repeat == true.
 template <typename Operation>
-void NewGUIApp::repeat_on_timer(Operation op, double interval, bool repeat) {
+GUITimer_command* NewGUIApp::repeat_on_timer(Operation op, double interval, bool repeat) {
     
-    timer_commands.push_back(create_timer_command(op,interval, repeat));
+    GUITimer_command* command = create_timer_command(op,interval, repeat);
+    timer_commands.push_back(command);
+    return command;
 }
+
+
 
 template <typename Error_t, typename Handler_t>
 void NewGUIApp::register_error_handler(const Handler_t &handler) {
     handler_list.push_back(create_error_handler<Error_t>(handler));
 }
+
 
 
 

@@ -65,6 +65,16 @@ NewGUIApp::NewGUIApp()
 :fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
 { }
 
+void NewGUIApp::cancel_timer_op(GUITimer_command* op) {
+    std::vector<GUITimer_command*>::iterator it
+    = std::find(timer_commands.begin(), timer_commands.end(), op);
+    if (it != timer_commands.end()) {
+        timer_commands.erase(it);
+    }
+    else {
+        throw Error("command not found!");
+    }
+}
 
 void NewGUIApp::run(NewGUIWindow* window) {
     

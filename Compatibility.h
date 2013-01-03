@@ -2,7 +2,7 @@
 #ifndef COMPATABILITY_H
 #define COMPATABILITY_H
 
-void initGame();
+void initGUI();
 
 #ifdef _MSC_VER // other possibilities are WIN32 _WIN32 or _WIN64
 

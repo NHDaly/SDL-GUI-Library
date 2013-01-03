@@ -45,6 +45,9 @@ struct DispPoint {
 	DispPoint(int x_, int y_) : x(x_), y(y_) { }
 
 	
+    bool operator== (DispPoint b) {
+        return (x == b.x && y == b.y); 
+    }
     DispPoint operator+ (DispPoint b) {
         return DispPoint (x + b.x, y + b.y); 
     }

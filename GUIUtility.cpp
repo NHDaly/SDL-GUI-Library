@@ -9,6 +9,8 @@ const int SCREEN_WIDTH = 700;
 const int SCREEN_HEIGHT = 550;
 
 
+static void quit_SDL();
+
 
 void initSDL(unsigned int flags){
     if ( SDL_Init(flags) < 0 ) {
@@ -22,5 +24,12 @@ void initSDL(unsigned int flags){
 	TTF_Init();
 	SDL_EnableUNICODE( SDL_ENABLE );
 
-    atexit(SDL_Quit);
+    atexit(quit_SDL);
+}
+
+#include <iostream>
+static void quit_SDL() {
+    std::cout << "Thanks for playing!" << std::endl;
+    
+//    SDL_Quit();
 }

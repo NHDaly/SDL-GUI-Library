@@ -5,7 +5,7 @@
 
 #define MY_RESOURCES_FOLDER "\code"
 
-void initGame(){
+void initGUI(){
 
 // Open the stdout as an output file. (By default, SDL on windows supresses stdout)
 	freopen("output.txt", "w", stdout);
@@ -22,7 +22,7 @@ void initGame(){
 
 #define MY_RESOURCES_FOLDER "/Contents/Resources"
 
-void initGame(){
+void initGUI(){
 	
 // Move the working directory to resources folder.
 	// Get the name of the application bundle
