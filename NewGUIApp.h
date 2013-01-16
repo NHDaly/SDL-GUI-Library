@@ -9,18 +9,20 @@
 #ifndef Deep_NewGUIApp_h
 #define Deep_NewGUIApp_h
 
-#include "NewGUIWindow.h"
 #include "NewGUIErrorHandling.h"
 #include "GUITimer.h"
+#include "GUIUtility.h"
 
 #include <vector>
 #include <list>
 #include <set>
 
+#include <SDL/SDL.h> // To ensure it is #included by main.
 
 // Throw an instance of GUIQuit to safely tell the application to exit.
 // (This is the same as calling NewGUIApp::quit())
 class GUIQuit {};
+class NewGUIWindow;
 
 class NewGUIController;
 

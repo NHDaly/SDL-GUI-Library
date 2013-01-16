@@ -24,10 +24,10 @@ class NewGUIButton : public NewGUIImageView {
 public:
     
     NewGUIButton()
-    : NewGUIImageView(GUIImage("images/button.bmp")), 
+    : NewGUIImageView(GUIImage("GUIImages/button.bmp")), 
     is_pressed(false), is_hovered(false),
-    image(GUIImage("images/button.bmp")), hovered_image(GUIImage("images/button2.bmp")), 
-    clicked_image(GUIImage("images/button3.bmp"))
+    image(GUIImage("GUIImages/button.bmp")), hovered_image(GUIImage("GUIImages/button2.bmp")), 
+    clicked_image(GUIImage("GUIImages/button3.bmp"))
     {
         SDL_Color clear = {0,0xff,0};
         set_clear_color(clear);

@@ -103,7 +103,7 @@ private:
     
 	class Cursor : public NewGUIImageView {
 	public:
-		Cursor(NewGUITextBox* tb_ptr) : NewGUIImageView(GUIImage("images/cursor1.bmp")), position(0,0), index(0), text_box_ptr(tb_ptr), flicker(true) { }
+		Cursor(NewGUITextBox* tb_ptr) : NewGUIImageView(GUIImage("GUIImages/cursor1.bmp")), position(0,0), index(0), text_box_ptr(tb_ptr), flicker(true) { }
 		
 		void display(int text_size);
 		

@@ -20,7 +20,7 @@ const int scroll_amount_c = 5;
 
 GUIScrollView::GUIScrollView(int w_, int h_, NewGUIView *display_view_)
 :NewGUIView(w_,h_), scroll_bar(SCROLL_BAR_W, h_ * h_/display_view_->get_h(), this),
-arrow_up(true, GUIImage("images/scroll_bar_vert2.bmp")), arrow_down(false, GUIImage("images/scroll_bar_vert3.bmp")),
+arrow_up(true, GUIImage("GUIImages/scroll_bar_vert2.bmp")), arrow_down(false, GUIImage("GUIImages/scroll_bar_vert3.bmp")),
 scroll_bar_bg(SCROLL_BAR_W, h_, this), display_view(display_view_),
 w_init(w_), h_init(h_),
 scroll_y(0), scroll_y_vel(0), scrolling(false)
@@ -146,9 +146,9 @@ bool GUIScrollView::ScrollBarBg::handle_mouse_down(DispPoint coord) {
 
 void GUIScrollView::ScrollBarBg::display() {
     
-    static GUIImage top("images/scroll_bar_vert0.bmp");
-    static GUIImage mid("images/scroll_bar_vert4.bmp");
-    static GUIImage bottom("images/scroll_bar_vert1.bmp");
+    static GUIImage top("GUIImages/scroll_bar_vert0.bmp");
+    static GUIImage mid("GUIImages/scroll_bar_vert4.bmp");
+    static GUIImage bottom("GUIImages/scroll_bar_vert1.bmp");
 
     draw_onto_self(top, DispPoint());
     
@@ -168,9 +168,9 @@ void GUIScrollView::ScrollBar::display() {
     int h = view->scroll_bar_bottom - view->scroll_bar_top;
     resize(get_w(), h * h/view->display_view->get_h());
     
-    static GUIImage top("images/scroll_bar_vert5.bmp");
-    static GUIImage mid("images/scroll_bar_vert7.bmp");
-    static GUIImage bottom("images/scroll_bar_vert6.bmp");
+    static GUIImage top("GUIImages/scroll_bar_vert5.bmp");
+    static GUIImage mid("GUIImages/scroll_bar_vert7.bmp");
+    static GUIImage bottom("GUIImages/scroll_bar_vert6.bmp");
     
     draw_onto_self(top, DispPoint());
     

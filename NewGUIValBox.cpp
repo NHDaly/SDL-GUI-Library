@@ -72,23 +72,23 @@ void NewGUIValue_Horiz_Slider::display() {
 	loc.y = get_h()/2 - HORIZ_SLIDER_DIM.y/2;
 	
 	//Display left cap:
-    static GUIImage left_cap("images/slider_horiz_L.bmp", true);
+    static GUIImage left_cap("GUIImages/slider_horiz_L.bmp", true);
 	draw_onto_self(left_cap, loc);
 	loc.x += HORIZ_SLIDER_CAP_DIM.x;
 	
 	//Display center_pieces:
 	for (int i = 0; i < get_w()-4; i++){
-        static GUIImage middle("images/slider_horiz_M.bmp", true);
+        static GUIImage middle("GUIImages/slider_horiz_M.bmp", true);
         draw_onto_self(middle, loc);
 		loc.x += HORIZ_SLIDER_DIM.x;
 	}
 	
 	//Display right cap:
-    static GUIImage right_cap("images/slider_horiz_R.bmp", true);
+    static GUIImage right_cap("GUIImages/slider_horiz_R.bmp", true);
 	draw_onto_self(right_cap, loc);
 
     //Dipslay Bubble
-    static GUIImage bubble("images/slider_bubble.bmp", true);
+    static GUIImage bubble("GUIImages/slider_bubble.bmp", true);
     DispPoint position(get_percent() * get_w(), get_h()/2);
     
     draw_onto_self(bubble, DispPoint(position.x - bubble.getw()/2,
@@ -131,7 +131,7 @@ void NewGUIValue_Vert_Slider::display() {
     draw_onto_self(bg, DispPoint());
 
     
-    static GUIImage bubble("images/slider_bubble.bmp", true);
+    static GUIImage bubble("GUIImages/slider_bubble.bmp", true);
     
     DispPoint position(get_w()/2, get_percent() * get_h());
     

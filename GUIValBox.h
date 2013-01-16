@@ -46,7 +46,7 @@ public:
 class GUIValue_Text_Box : public GUIValue_Box {
 public:
     
-    GUIValue_Text_Box(int w_, int h_, std::string bg_image = "images/bg.bmp");    
+    GUIValue_Text_Box(int w_, int h_, std::string bg_image = "GUIImages/bg.bmp");    
     
     virtual void display();
     

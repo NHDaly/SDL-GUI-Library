@@ -62,7 +62,8 @@ GUILetter* GUILetter::get_letter(char letter_, int size_, SDL_Color color_){
 
 		TTF_Font* &font = fonts[size_];
 		if (!font){
-			font = TTF_OpenFont("fonts/arial.ttf", size_);
+			font = TTF_OpenFont("GUIFonts/arial.ttf", size_);
+            if (!font) throw Error("Couldn't open font!");
 		}
 		letter = new GUILetter(letter_, font, size_, color_);
 	}
