@@ -1,11 +1,15 @@
 
 #include "Compatibility.h"
 
+#include "GUIUtility.h"
+
 #ifdef _MSC_VER // other possibilities are WIN32 _WIN32 or _WIN64
 
 #define MY_RESOURCES_FOLDER "\code"
 
 void initGUI(){
+
+    initSDL(SDL_INIT_EVERYTHING);
 
 // Open the stdout as an output file. (By default, SDL on windows supresses stdout)
 	freopen("output.txt", "w", stdout);
@@ -24,6 +28,8 @@ void initGUI(){
 
 void initGUI(){
 	
+    initSDL(SDL_INIT_EVERYTHING);
+
 // Move the working directory to resources folder.
 	// Get the name of the application bundle
     CFBundleRef mainBundle = CFBundleGetMainBundle();
