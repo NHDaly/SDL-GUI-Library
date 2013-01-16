@@ -44,6 +44,7 @@ public:
 	int getw() const { return sdl_impl->w; }
 	int geth() const { return sdl_impl->h; }
 	
+	void set_alpha(Uint32);
 	Uint32 get_Alpha() const;
 	
 private:

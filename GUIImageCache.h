@@ -34,7 +34,7 @@ public:
 	mutable GUIImage image;
 
 private:
-	GUIImage_Cache() : image (0) {}
+	GUIImage_Cache() : image () {}
 //	GUIImage_Cache(std::string image_) { 
 //		set_image (image_);
 //	}

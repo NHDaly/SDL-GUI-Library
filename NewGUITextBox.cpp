@@ -410,7 +410,7 @@ int NewLetter_Disp_Obj::get_width() const{
 
 void NewLetter_Disp_Obj::drawself(NewGUIView *dest) const{
 	
-	letter->drawself(dest, position.x, position.y + height-letter->get_height());
+	letter->drawself(dest, position.x, position.y); //+ height-letter->get_height());
 }
 
 

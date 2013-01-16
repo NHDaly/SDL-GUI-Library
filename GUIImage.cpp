@@ -36,8 +36,11 @@ GUIImage::GUIImage(int w, int h, bool alpha, const SDL_Color& color_key)
 
 }
 
-GUIImage::GUIImage(SDL_Surface* surface){
+GUIImage::GUIImage(SDL_Surface* surface)
+:is_alpha(false)
+{
 	
+    if (surface == 0) throw Error("Cannot form a GUIImage from NULL surface!");
 	sdl_impl = surface;
 }
 
@@ -69,6 +72,7 @@ GUIImage::~GUIImage(){
 
 GUIImage::GUIImage(const GUIImage& image_){
 	
+    if (image_.sdl_impl == 0) throw Error("Cannot form a GUIImage from bad image");
 	SDL_Surface* temp = create_SDL_Surface(image_.getw(), image_.geth());
 	if (!temp){
 		throw Error("Could not copy GUIImage. Not enough memory.");
@@ -78,13 +82,17 @@ GUIImage::GUIImage(const GUIImage& image_){
 		throw Error("Could not copy GUIImage. Not enough memory.");
 	}
 
+
     Uint32 colorkey = image_.sdl_impl->format->colorkey;
+
+    Uint8 alpha = image_.sdl_impl->format->alpha;
+    
     
     // First fill background with the clear color, then display and re-clear.
     SDL_FillRect(sdl_impl, 0, colorkey);
     
 	display_image(image_.sdl_impl, sdl_impl, 0, 0, 1);
-    if (image_.is_alpha) {
+    if (image_.is_alpha /*|| alpha != 0*/) {
         //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
         SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, colorkey);
     }
@@ -105,6 +113,13 @@ GUIImage* GUIImage::get_image(std::string filename, bool alpha, const SDL_Color&
 	}
 	return images[filename];
 }
+
+void GUIImage::set_alpha(Uint32 alpha) {
+    
+    alpha_color = alpha;
+    is_alpha = true;
+}
+
 
 Uint32 GUIImage::get_Alpha() const{
     

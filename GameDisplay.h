@@ -51,6 +51,10 @@ SDL_Surface* createText (const std::string &a);
 SDL_Surface* create_SDL_Surface(int w, int h);
 
 
+Uint32 getpixel(SDL_Surface *surface, int x, int y);
+void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+
+
 
 
 

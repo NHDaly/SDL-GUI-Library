@@ -71,7 +71,8 @@ GUILetter* GUILetter::get_letter(char letter_, int size_, SDL_Color color_){
 
 GUILetter::GUILetter(char letter_, TTF_Font* font, int size_, SDL_Color color_){
 
-	image = TTF_RenderGlyph_Solid(font, letter_, color_);
+    string ch(1,letter_);
+	image = TTF_RenderText_Solid(font, ch.c_str(), color_);
 }
 
 GUILetter::Print_GUILetter::Print_GUILetter(SDL_Surface *dest, int x_, int y_) 
