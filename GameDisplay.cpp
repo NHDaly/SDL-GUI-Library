@@ -136,7 +136,7 @@ void displayToScreen (SDL_Surface *src, int x, int y, bool update, SDL_Rect rect
 
 void displayTextToScreen (const string &a, int x, int y, int size, bool update){
 	
-	static TTF_Font* font = TTF_OpenFont("fonts/arial.ttf", size);
+	static TTF_Font* font = TTF_OpenFont("GUIFonts/arial.ttf", size);
 	
 	if (!font) throw Error("Couldn't load font: arial.ttf");
 	
@@ -151,7 +151,7 @@ void displayTextToScreen (const string &a, int x, int y, int size, bool update){
 
 SDL_Surface* createText2 (const string &a, int size, SDL_Color textColor){
 
-	TTF_Font* font = TTF_OpenFont("fonts/arial.ttf", size);
+	TTF_Font* font = TTF_OpenFont("GUIFonts//arial.ttf", size);
 	
 	if (!font) throw Error("Couldn't load font: arial.ttf");
 		

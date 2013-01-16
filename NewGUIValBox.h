@@ -45,7 +45,7 @@ public:
 class NewGUIValue_Text_Box : public NewGUIValue_Box {
 public:
     
-    NewGUIValue_Text_Box(int w_, int h_, std::string bg_image = "images/bg.bmp");    
+    NewGUIValue_Text_Box(int w_, int h_, std::string bg_image = "GUIImages/bg.bmp");    
     
     virtual double get_value() const;
 

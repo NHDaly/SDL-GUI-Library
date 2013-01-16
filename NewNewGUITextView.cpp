@@ -139,7 +139,7 @@ const GUIImage& LetterCache::get_image(const LetterData& data) {
     static map<int, TTF_Font*> fonts;
     
     if (fonts.count(data.size) == 0) {
-        fonts[data.size] = TTF_OpenFont("fonts/arial.ttf", data.size);
+        fonts[data.size] = TTF_OpenFont("GUIFonts/arial.ttf", data.size);
     }
     TTF_Font *font = fonts[data.size];
     

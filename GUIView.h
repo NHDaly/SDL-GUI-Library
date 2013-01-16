@@ -28,7 +28,7 @@ class Letter_Disp_Obj;
 class SDL_Surface;
 class GUIView : public std::tr1::enable_shared_from_this<GUIView> {
 public:
-	GUIView(int w_ = SCREEN_WIDTH, int h_ = SCREEN_HEIGHT, std::string bg_image = "images/bg.bmp");
+	GUIView(int w_ = SCREEN_WIDTH, int h_ = SCREEN_HEIGHT, std::string bg_image = "GUIImages/bg.bmp");
 	virtual ~GUIView();
 	
 	virtual void draw_onto_view(SDL_Surface* source, DispPoint pos, SDL_Rect rect = full_rect_c, bool update = 0);

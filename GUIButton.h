@@ -40,7 +40,7 @@ public:
 
         if (event.button.type == SDL_MOUSEBUTTONDOWN) {
             is_pressed = true;
-            set_bg(GUIImage("images/button2.bmp"));
+            set_bg(GUIImage("GUIImages/button2.bmp"));
         }
         // Only perform event on mouse release.
         else if (is_pressed) {

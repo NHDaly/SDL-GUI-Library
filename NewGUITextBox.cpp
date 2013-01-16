@@ -379,9 +379,9 @@ void NewGUITextBox::Cursor::display(int text_size) {
 	
 //	SDL_Rect box = {0,0,1,text_size};
 	
-	GUIImage* image = GUIImage::get_image( string("images/cursor") + (flicker ? "1" : "0") + string(".bmp"));
+	GUIImage* image = GUIImage::get_image( string("GUIImages/cursor") + (flicker ? "1" : "0") + string(".bmp"));
 	draw_onto_self(*image, position);
-    //	ShowBMP("images/fireball.bmp", screen, position.x, position.y, 0);
+    //	ShowBMP("GUIImages/fireball.bmp", screen, position.x, position.y, 0);
 }
 
 
