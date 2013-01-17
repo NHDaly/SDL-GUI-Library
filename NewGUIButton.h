@@ -112,7 +112,7 @@ private:
 
 class NewGUITextButton : public NewGUIButton { 
 public:
-    NewGUITextButton(const std::string &button_text_)
+    NewGUITextButton(const std::string &button_text_ = "")
     {
         button_text = new NewGUITextView(get_w()-30, get_h());
         button_text->set_text(button_text_);
@@ -121,7 +121,8 @@ public:
     }
     
     NewGUITextView* get_text_view() { return button_text; }
-        
+    void set_text(const std::string &button_text_) { button_text->set_text(button_text_); }
+    
 public:
     NewGUITextView *button_text;
 };
@@ -132,7 +133,7 @@ public:
     void operator()() { }
 };
 template <typename Oper = NoAction>
-class NewGUIActionButton : public NewGUIButton {
+class NewGUIActionButton : public NewGUITextButton {
 public:
 
     NewGUIActionButton(Oper oper = Oper())
