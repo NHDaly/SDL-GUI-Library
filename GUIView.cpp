@@ -41,7 +41,7 @@ GUIView::~GUIView()
 void GUIView::draw_onto_view(SDL_Surface* source, DispPoint pos, SDL_Rect rect, bool update) {
 	
 	if (!source) {
-		throw Error("Bad source image");
+		throw GUIError("Bad source image");
 	}
 	//	display_image(source, screen, x, screen.geth() - y, update);	
 	display_image(source, screen, pos.x, pos.y, update, rect);	
@@ -123,7 +123,7 @@ Selectable_view::Selectable_view(int w_, int h_)
 	}
 	
 	background = create_SDL_Surface(screen.getw(), screen.geth());
-	if (!background) throw Error("Couldn't load background. Not enough mem.");
+	if (!background) throw GUIError("Couldn't load background. Not enough mem.");
 	SDL_PixelFormat *fmt = background->format;
 	Uint32 background_color = SDL_MapRGB(fmt, colors[color].r, colors[color].g, colors[color].b);
 	SDL_FillRect(background, 0, background_color);

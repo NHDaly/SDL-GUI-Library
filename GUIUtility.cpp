@@ -11,7 +11,7 @@ static void quit_SDL();
 
 void initSDL(unsigned int flags){
     if ( SDL_Init(flags) < 0 ) {
-        throw Error("Unable to init SDL: \n" + std::string(SDL_GetError()));
+        throw GUIError("Unable to init SDL: \n" + std::string(SDL_GetError()));
     }
 
 	if(flags & SDL_INIT_AUDIO){

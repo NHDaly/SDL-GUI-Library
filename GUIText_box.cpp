@@ -29,7 +29,7 @@ GUIText_box::GUIText_box(int w_, int h_)
 text_size(13), color(default_color_c)
 {
 	background = create_SDL_Surface(screen.getw(), screen.geth());
-	if (!background) throw Error("Couldn't load background. Not enough mem.");
+	if (!background) throw GUIError("Couldn't load background. Not enough mem.");
 	
 	SDL_PixelFormat *fmt = background->format;
 	Uint32 background_color = SDL_MapRGB(fmt, bg_color_c.r, bg_color_c.g, bg_color_c.b);
@@ -45,7 +45,7 @@ void GUIText_box::add_letter(char ltr, int index){
 	try{
 		letters.insert(letters.begin()+index, Letter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
 	}
-	catch(const Error& e){
+	catch(const GUIError& e){
 		cout << e.msg << endl;
 	}
 	update();
@@ -275,7 +275,7 @@ Letter_Disp_Obj::Letter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Color co
 	if (!letter) {
 		string error_msg = string("Couldn't load image for letter") + ltr + string(": ")+ SDL_GetError() +"\n";
 		cout << error_msg << endl;
-		throw Error(error_msg.c_str());
+		throw GUIError(error_msg.c_str());
 	}
 	line_height = letter->get_height()+2; // for a line spacing
 }

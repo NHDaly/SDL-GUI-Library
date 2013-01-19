@@ -82,7 +82,7 @@ public:
     
     void set_new_value(double value_) {
         
-        if (value_ > max || value_ < min) throw Error("value out of range");
+        if (value_ > max || value_ < min) throw GUIError("value out of range");
         set_value((value_-min)/(max-min));
     }
 

@@ -25,13 +25,13 @@ NewGUIWindow::NewGUIWindow(int w, int h, const string& name_,
 :main_view(0), name(name_), num_colors(numColors), flags(flags)
 {    
     /// @TODO HACK!
-    if (WINDOW_ALREADY_CREATED) throw Error("Sorry, already created a window!");
+    if (WINDOW_ALREADY_CREATED) throw GUIError("Sorry, already created a window!");
 
     SDL_Color colors[numColors];
 	// Create a display surface with a 16 bit palette 
 	window = createDisplay(window, w, h, 16, colors, numColors, flags);
 	
-	if (!window) throw Error("Couldn't Create Window.");
+	if (!window) throw GUIError("Couldn't Create Window.");
 	
 	//Set the window caption 
     if (name != "") {

@@ -199,7 +199,7 @@ void GUIWin_Ctrl::run(int fps_cap){
 			for_each(timer_commands.begin(), timer_commands.end(), bind(&GUITimer_command::execute_command, _1));
 			window->display();
 		}
-		catch(const Error& e){
+		catch(const GUIError& e){
 			cout << e.msg << endl;
 		}
 //		catch(...){

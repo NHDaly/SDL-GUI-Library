@@ -7,14 +7,14 @@
 
 
 // a simple class for error exceptions - msg points to a C-string error message
-struct Error {
-	Error(std::string in_msg) : msg(in_msg) { }
+struct GUIError {
+	GUIError(std::string in_msg) : msg(in_msg) { }
 	std::string msg;
 };
 
 // an exception class for handling Errors not caused by the User. Probably should not output these in a release.
-struct Programming_Error {
-	Programming_Error(std::string in_msg) : msg(in_msg) { }
+struct GUIProgramming_Error {
+	GUIProgramming_Error(std::string in_msg) : msg(in_msg) { }
 	std::string msg;
 };
 

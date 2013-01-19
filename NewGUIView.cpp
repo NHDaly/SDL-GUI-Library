@@ -52,11 +52,11 @@ SDL_Surface* prepare_SDL_surface(int w, int h) {
     SDL_Surface *temp = SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 32,
                                              rmask, gmask, bmask, amask);
     if(temp == NULL) {
-		throw Error("CreateRGBSurface failed: \n" + string(SDL_GetError()));
+		throw GUIError("CreateRGBSurface failed: \n" + string(SDL_GetError()));
     }
 	SDL_Surface* image = SDL_DisplayFormat(temp);
 	if(!image) {
-        throw Error("updateimage in CreateRGBSurface failed: \n" + string(SDL_GetError()));
+        throw GUIError("updateimage in CreateRGBSurface failed: \n" + string(SDL_GetError()));
     }
 	SDL_FreeSurface(temp);
     
@@ -152,10 +152,10 @@ void NewGUIView::refresh() {
 
 void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
     if (view->parent)
-        throw Error("Candidate vew is already a subview of another view.");
+        throw GUIError("Candidate vew is already a subview of another view.");
     
     if (view == this) 
-        throw Error("Cannot attach a view to itself!");
+        throw GUIError("Cannot attach a view to itself!");
 
     /// @todo Check if out of bounds? Or maybe not..?
     
@@ -169,7 +169,7 @@ void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
 void NewGUIView::remove_subview(NewGUIView* view) {
     
     if (!is_subview(view))
-        throw Error("view is not a subview of this!");
+        throw GUIError("view is not a subview of this!");
     
     children.remove(view);
     view->parent = 0;
@@ -179,7 +179,7 @@ void NewGUIView::remove_subview(NewGUIView* view) {
 void NewGUIView::remove_last_subview() {
     
     if (children.empty())
-        throw Error("view has not subviews!");
+        throw GUIError("view has not subviews!");
     
     NewGUIView *view = children.back();
     children.pop_back();
@@ -195,7 +195,7 @@ bool NewGUIView::is_subview(NewGUIView* view) {
 void NewGUIView::move_subview(NewGUIView* view, DispPoint pos) {
     
     if (!is_subview(view))
-        throw Error("view is not a subview of this!");
+        throw GUIError("view is not a subview of this!");
     
     if (view->pos == pos) return; // no need to mark change if already there!
     

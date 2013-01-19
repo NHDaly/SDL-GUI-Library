@@ -33,7 +33,7 @@ GUIWindow::GUIWindow(int w_, int h_, string name_)
 	// Create a display surface with a 16 bit palette 
 	screen = createDisplay(screen, w, h, 16, colors, numColors);
 	
-	if (!screen) throw Error("Couldn't Load Screen");
+	if (!screen) throw GUIError("Couldn't Load Screen");
 	
 	//Set the window caption 
 	SDL_WM_SetCaption( name.c_str(), 0 );

@@ -41,13 +41,13 @@ NewGUIApp::NewGUIApp_destroyer::~NewGUIApp_destroyer(){
 }
 
 // Forward Declarations
-void print_msg(const Error &e);
+void print_msg(const GUIError &e);
 void unhandled_click(const Unhandled_Click &e);
 
 
 // NewGUIApp Implementation:
 
-void print_msg(const Error &e) {
+void print_msg(const GUIError &e) {
     cout << e.msg << endl;
 }
 void unhandled_click(const Unhandled_Click &e) {
@@ -72,7 +72,7 @@ void NewGUIApp::cancel_timer_op(GUITimer_command* op) {
         timer_commands.erase(it);
     }
     else {
-        throw Error("command not found!");
+        throw GUIError("command not found!");
     }
 }
 
@@ -83,8 +83,8 @@ void NewGUIApp::run(NewGUIWindow* window_) {
     
     window = window_;
     
-    register_error_handler<Error>(&print_msg);
-    register_error_handler<Unhandled_Click>(&unhandled_click);
+    register_error_handler<GUIError>(&print_msg);
+//    register_error_handler<Unhandled_Click>(&unhandled_click);
 
     bool running = true;
 

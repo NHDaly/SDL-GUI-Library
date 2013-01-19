@@ -132,7 +132,7 @@ void NewGUITextView::add_letter(char ltr, int index){
         cout << "letter: '" << letters[index].get_ltr() << "'\n";
         cout << "width: " << letters[index].get_width() << "\n";
 	}
-	catch(const Error& e){
+	catch(const GUIError& e){
 		cout << e.msg << endl;
 	}
 	update();
@@ -157,7 +157,7 @@ DispPoint NewGUITextView::pos_at_index(size_t i){
 		position = DispPoint(3,0);
 	}
 	else {
-//        if (i >= letters.size()) throw Error("NewGUITextView: Couldn't get position -- index out of range");
+//        if (i >= letters.size()) throw GUIError("NewGUITextView: Couldn't get position -- index out of range");
         
 		const NewLetter_Disp_Obj& letter = letters[i-1];
 		int width = letter.get_width();
@@ -399,7 +399,7 @@ NewLetter_Disp_Obj::NewLetter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Co
 	if (!letter) {
 		string error_msg = string("Couldn't load image for letter") + ltr + string(": ")+ SDL_GetError() +"\n";
 		cout << error_msg << endl;
-		throw Error(error_msg.c_str());
+		throw GUIError(error_msg.c_str());
 	}
 	line_height = letter->get_height()+2; // for a line spacing
 }

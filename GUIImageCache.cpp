@@ -54,7 +54,7 @@ void GUIImage_Cache::set_image(const std::string& filename) {
 	image = GUIImage(loadBMPAlpha(filename, transparent));
 	if (!image) {
 		string error_msg = "Couldn't load " + filename +": "+ SDL_GetError() +"\n";
-		throw Error(error_msg.c_str());
+		throw GUIError(error_msg.c_str());
 	}
 }
 

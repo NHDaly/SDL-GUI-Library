@@ -21,7 +21,7 @@ void NewGUIController::capture_focus() {
     got_focus();
 }
 void NewGUIController::lose_focus() {
-    if (!NewGUIApp::get()->has_focus(this)) return; //throw Error("Can't lose_focus if didn't already have it.");
+    if (!NewGUIApp::get()->has_focus(this)) return; //throw GUIError("Can't lose_focus if didn't already have it.");
     
     NewGUIApp::get()->release_focus(this);
     

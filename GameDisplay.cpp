@@ -23,7 +23,7 @@ SDL_Surface* load_letter(char ch_, string text_image_file, string extension);
 void updateScreen(SDL_Surface *screen){
 	
 	if (SDL_Flip( screen ) == -1){
-		throw Error("Failed Screen Flip");
+		throw GUIError("Failed Screen Flip");
 	}
 }
 
@@ -32,7 +32,7 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
     /* Create a display surface with a grayscale palette */
     
 	if (width <= 0 || height <= 0 || bpp <= 0){
-		throw Error("non-positive values in createDisplay not allowed!");
+		throw GUIError("non-positive values in createDisplay not allowed!");
 	}
     
 //    /* Fill colors with color information */
@@ -45,12 +45,12 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
     /* Create display */
     screen=SDL_SetVideoMode(width, height, bpp, flags);
     if(!screen){
-        throw Error("Couldn't set video mode: \n" + string(SDL_GetError()));
+        throw GUIError("Couldn't set video mode: \n" + string(SDL_GetError()));
     }
     
 //    /* Set palette */
 //    if (!SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, colors, 0, numColors)) {
-//        throw Error("Couldn't set color palette: \n" + string(SDL_GetError()));
+//        throw GUIError("Couldn't set color palette: \n" + string(SDL_GetError()));
 //    }
 	
     return screen;
@@ -64,7 +64,7 @@ SDL_Surface * loadBMP(string file) {
     //If nothing went wrong in loading the image
     if( !loadedImage ) {
 		string error_msg = "Couldn't load " + file +": "+ SDL_GetError() +"\n";
-		throw Error(error_msg);
+		throw GUIError(error_msg);
 	}
 
 	//The optimized image that will be used
@@ -75,7 +75,7 @@ SDL_Surface * loadBMP(string file) {
     
 	if (!optimizedImage) {
 		string error_msg = "Couldn't optimize " + file +": "+ SDL_GetError() +"\n";
-		throw Error(error_msg);
+		throw GUIError(error_msg);
 	}
 	
     //Return the optimized image
@@ -138,7 +138,7 @@ void displayTextToScreen (const string &a, int x, int y, int size, bool update){
 	
 	static TTF_Font* font = TTF_OpenFont("GUIFonts/arial.ttf", size);
 	
-	if (!font) throw Error("Couldn't load font: arial.ttf");
+	if (!font) throw GUIError("Couldn't load font: arial.ttf");
 	
 	SDL_Color textColor = {255, 255, 255};
 	
@@ -153,7 +153,7 @@ SDL_Surface* createText2 (const string &a, int size, SDL_Color textColor){
 
 	TTF_Font* font = TTF_OpenFont("GUIFonts//arial.ttf", size);
 	
-	if (!font) throw Error("Couldn't load font: arial.ttf");
+	if (!font) throw GUIError("Couldn't load font: arial.ttf");
 		
 	SDL_Surface* message = TTF_RenderText_Solid(font, a.c_str(), textColor);
 
