@@ -149,7 +149,7 @@ private:
 };
 
 template <typename Oper>
-NewGUIButton* NewGUI_create_button(Oper oper) {
+NewGUITextButton* NewGUI_create_button(Oper oper) {
     
     return new NewGUIActionButton<Oper>(oper);
 }

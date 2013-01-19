@@ -40,6 +40,7 @@ public:
 
     virtual void did_resize(int w, int h);
     
+    /// @todo
 //    enum Justification_e { LEFT, MIDDLE, RIGHT };
 //    
 //    void set_justification(Justification_e just);

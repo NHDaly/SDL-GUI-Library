@@ -154,7 +154,7 @@ DispPoint NewGUITextView::pos_at_index(size_t i){
 	
 	DispPoint position;
 	if (i == 0){
-		position = DispPoint(0,0);
+		position = DispPoint(3,0);
 	}
 	else {
 //        if (i >= letters.size()) throw Error("NewGUITextView: Couldn't get position -- index out of range");
