@@ -87,7 +87,8 @@ private:
     
     
 
-    std::vector<GUITimer_command*> timer_commands;
+    typedef std::vector<GUITimer_command*> timer_cmnds_list_t;
+    timer_cmnds_list_t timer_commands;
     
     
     template <typename Operation>
@@ -116,6 +117,9 @@ private:
     GUITimer_command* create_timer_command(Operation oper, double interval_, bool repeat_ = true){
         return new GUITimer_command_impl<Operation>(oper, interval_, repeat_);
     }
+    
+    timer_cmnds_list_t::iterator next_timer_cmd;
+    void cycle_timer_commands();
 
 //SINGLETON MEMBERS:
 	static NewGUIApp * singleton_ptr; 

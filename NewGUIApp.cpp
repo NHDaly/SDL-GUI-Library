@@ -92,6 +92,9 @@ void NewGUIApp::run(NewGUIWindow* window_) {
     
     window->refresh();
     
+    
+    next_timer_cmd = timer_commands.begin();
+    
     while(running) {
         SDL_Event event;
         
@@ -268,10 +271,11 @@ void NewGUIApp::run(NewGUIWindow* window_) {
                 }
             }
 
-            for_each(timer_commands.begin(), timer_commands.end(), bind(&GUITimer_command::execute_command, _1));
+            cycle_timer_commands();
+//            for_each(timer_commands.begin(), timer_commands.end(), bind(&GUITimer_command::execute_command, _1));
             
         }
-
+        
         catch(...) {
             
             call_error_handlers(handler_list.begin(), handler_list.end());
@@ -283,6 +287,20 @@ void NewGUIApp::run(NewGUIWindow* window_) {
     }
 }
 
+void NewGUIApp::cycle_timer_commands() {
+    
+    for (int i = 0; i < timer_commands.size(); i++) {
+        
+        GUITimer_command *cmd = *next_timer_cmd;
+        
+        if (++next_timer_cmd == timer_commands.end()) {
+            next_timer_cmd = timer_commands.begin();
+        }
+        
+        cmd->execute_command();
+    }
+    
+}
 
 
 
