@@ -78,38 +78,38 @@ void NewGUIWindow::refresh() {
 
         // Using SDL, perform a blit from main_view to self.
         SDL_Rect dest_rect = {0,0, main_view->w, main_view->h};
-//        SDL_BlitSurface(main_view->display, 0, window, &dest_rect);
-//
-//        updateScreen(window);
-//        
+        SDL_BlitSurface(main_view->display, 0, window, &dest_rect);
+
+        updateScreen(window);
+        
 //        static int loop = 1;
 //        if (loop++ % 10) { 
 //            return;
 //        }
-        
-        char buffer[5999999];
-        SDL_RWops *ops = SDL_RWFromMem(buffer, sizeof(buffer));
-        int succ = SDL_SaveBMP_RW(main_view->image, ops, 0);
-        assert(succ == 0);
-        
-        cout << "ops->hidden.mem.base" << (long)ops->hidden.mem.base << endl;
-        cout << "ops->hidden.mem.here" << (long)ops->hidden.mem.here << endl;
-        cout << "ops->hidden.mem.stop" << (long)ops->hidden.mem.stop << endl;
-        int len = ops->hidden.mem.stop - ops->hidden.mem.base;
-        cout << "len\n " << (int)len << endl;
-
-        len = ops->seek(ops, 0,SEEK_CUR);
-        cout << "len\n " << (int)len << endl;
-
-        main_view->image = SDL_LoadBMP_RW(SDL_RWFromMem(&buffer, 5999999), 1);
-        if(!main_view) {
-            cout << SDL_GetError() << endl;
-            assert(0);
-        }
-        SDL_BlitSurface(main_view->display, 0, window, &dest_rect);
-        updateScreen(window);
-   
-        SDL_FreeRW(ops);
+//        
+//        char buffer[5999999];
+//        SDL_RWops *ops = SDL_RWFromMem(buffer, sizeof(buffer));
+//        int succ = SDL_SaveBMP_RW(main_view->image, ops, 0);
+//        assert(succ == 0);
+//        
+////        cout << "ops->hidden.mem.base" << (long)ops->hidden.mem.base << endl;
+////        cout << "ops->hidden.mem.here" << (long)ops->hidden.mem.here << endl;
+////        cout << "ops->hidden.mem.stop" << (long)ops->hidden.mem.stop << endl;
+//        int len = ops->hidden.mem.stop - ops->hidden.mem.base;
+////        cout << "len\n " << (int)len << endl;
+//
+//        len = ops->seek(ops, 0,SEEK_CUR);
+//        cout << "len\n " << (int)len << endl;
+//
+//        main_view->image = SDL_LoadBMP_RW(SDL_RWFromMem(&buffer, 5999999), 1);
+//        if(!main_view) {
+//            cout << SDL_GetError() << endl;
+//            assert(0);
+//        }
+//        SDL_BlitSurface(main_view->display, 0, window, &dest_rect);
+//        updateScreen(window);
+//   
+//        SDL_FreeRW(ops);
     }
 }
 
