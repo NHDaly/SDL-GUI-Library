@@ -9,7 +9,7 @@
 #ifndef Deep_NewGUIApp_h
 #define Deep_NewGUIApp_h
 
-#include "NewGUIErrorHandling.h"
+#include "GUIErrorHandling.h"
 #include "GUITimer.h"
 #include "GUIUtility.h"
 
