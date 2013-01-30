@@ -13,8 +13,9 @@
 
 class ErrorCatcher {
 public:
-    virtual void operator()(std::vector<ErrorCatcher*>::iterator begin,
-                            std::vector<ErrorCatcher*>::iterator end, bool &handled) = 0;
+    typedef std::vector<ErrorCatcher*>::iterator ErrorCatcherIter_t;
+    virtual void operator()(ErrorCatcherIter_t begin,
+                            ErrorCatcherIter_t end, bool &handled) = 0;
 protected:
 };
 
@@ -27,18 +28,21 @@ public:
     : handler(handler_)
     { }
     
-    virtual void operator()(std::vector<ErrorCatcher*>::iterator begin,
-                            std::vector<ErrorCatcher*>::iterator end, bool &handled) {
+    virtual void operator()(ErrorCatcherIter_t begin,
+                            ErrorCatcherIter_t end, bool &handled) {
         
+        // nest a try block for each ErrorCatcher
         try {
-            if (begin != end) {
-                (**begin)(begin+1, end, handled);
+            if (begin == end) { // base case
+                throw;
             }
-            else throw; // only the bottom one throws
+            ErrorCatcher *next = *begin;
+            (*next)(++begin, end, handled); // unravel until end
         }
+        // Each ErrorCatcher gets a chance to try to catch.
         catch(const Error_t &e) {
             
-            handler(e);
+            handler(e);     // handler() is only called if Error_t matches.
             handled = true;
             throw;
         }
@@ -66,30 +70,17 @@ void call_error_handlers_helper(InputIterator begin,
                                  InputIterator end, bool handled) {
     
     try {
-    std::vector<ErrorCatcher*> catchers(begin, end);
-    (**begin)(catchers.begin()+1, catchers.end(), handled);
+        // Create the handlers 
+        std::vector<ErrorCatcher*> catchers(begin, end);
+        
+        (*catchers.front())(++catchers.begin(), catchers.end(), handled);
         
     }
     catch (...) {
-        if (!handled) {
+        if (!handled) { // Only rethrow if none of the Handlers caught the error.
             throw;
         }
     }
-//    if (begin == end) { 
-//        if (!handled) {
-//            throw;
-//        }
-//        return;
-//    }
-//    
-//    try {
-////        (**begin)();
-//    }
-//    catch (...) {
-//        if (!handled)
-//            handled = (*begin)->handled();
-//        call_error_handlers_helper(++begin, end, handled);
-//    }
 }
 
 
