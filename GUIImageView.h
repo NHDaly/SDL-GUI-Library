@@ -9,7 +9,7 @@
 #ifndef NEWGUIIMAGEVIEW_H
 #define NEWGUIIMAGEVIEW_H
 
-#include "NewGUIView.h"
+#include "GUIView.h"
 
 class GUIImage;
 class NewGUIImageView : public NewGUIView {

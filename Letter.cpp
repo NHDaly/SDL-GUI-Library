@@ -20,9 +20,6 @@ using std::cout; using std::endl;
 const char* const letters_file_path = "fonts/black/";
 
 
-#include "GUIWin_Ctrl.h"
-#include "GUIWindow.h"
-
 void Letter::drawself(SDL_Surface *dest, int x, int y) const{
 	
 	display_image(image, dest, x, y, 0);

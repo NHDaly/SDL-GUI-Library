@@ -9,7 +9,7 @@
 #ifndef Deep_NewGUIButton_h
 #define Deep_NewGUIButton_h
 
-#include "NewGUIImageView.h"
+#include "GUIImageView.h"
 
 class QuitAction {
 public:
@@ -108,7 +108,7 @@ private:
     GUIImage image, hovered_image, clicked_image;
 };
 
-#include "NewGUITextBox.h"
+#include "GUITextBox.h"
 
 class NewGUITextButton : public NewGUIButton { 
 public:

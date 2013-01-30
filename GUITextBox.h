@@ -6,8 +6,8 @@
 #define NEW_GUI_TEXT_BOX_H
 
 
-#include "NewGUIView.h"
-#include "NewGUIImageView.h"
+#include "GUIView.h"
+#include "GUIImageView.h"
 #include "GUIUtility.h"
 #include "Ptr_config.h"
 #include "GUITimer.h"

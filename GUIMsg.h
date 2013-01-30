@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-class GUIMsg : GUIView {
+class GUIMsg : NewGUIView {
 public:
     
     // Size of button_texts must == num_buttons

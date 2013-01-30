@@ -9,8 +9,8 @@
 #ifndef Deep_GUIScrollView_h
 #define Deep_GUIScrollView_h
 
-#include "NewGUIView.h"
-#include "NewGUIImageView.h"
+#include "GUIView.h"
+#include "GUIImageView.h"
 
 class GUIScrollView : public NewGUIView  {
 public:

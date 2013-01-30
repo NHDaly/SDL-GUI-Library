@@ -8,9 +8,9 @@
 
 #include <iostream>
 
-#include "NewGUIController.h"
+#include "GUIController.h"
 
-#include "NewGUIApp.h"
+#include "GUIApp.h"
 
 void NewGUIController::capture_focus() {
     

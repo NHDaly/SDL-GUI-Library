@@ -6,7 +6,7 @@
 //  Copyright 2012 Lions Entertainment. All rights reserved.
 //
 
-#include "NewGUIValBox.h"
+#include "GUIValBox.h"
 #include "GameDisplay.h"
 
 #include "SDL/SDL.h"
@@ -170,7 +170,7 @@ bool NewGUIValue_Vert_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel
     return true;
 }
 
-#include "NewGUIApp.h"
+#include "GUIApp.h"
 #include <tr1/functional>
 using std::tr1::bind;
 

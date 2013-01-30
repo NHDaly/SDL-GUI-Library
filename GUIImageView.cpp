@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#include "NewGUIImageView.h"
+#include "GUIImageView.h"
 
 #include "GUIImage.h"
 #include "GameDisplay.h"

@@ -1,11 +1,10 @@
 
 
-#include "NewGUITextBox.h"
-#include "NewGUIImageView.h"
-#include "NewGUIApp.h"
+#include "GUITextBox.h"
+#include "GUIImageView.h"
+#include "GUIApp.h"
 
 #include "GameDisplay.h"
-#include "GUIWin_Ctrl.h"
 #include "GUIView.h"
 #include "GUIImage.h"
 
@@ -213,7 +212,7 @@ cursor(this), key_is_held(false), modifiers_held(KMOD_NONE)
     NewGUIApp::get()->repeat_on_timer(bind(&NewGUITextBox::handle_key_held, this), 0.05);
 }
 
-#include "NewGUIApp.h"
+#include "GUIApp.h"
 bool NewGUITextBox::handle_key_down(SDL_keysym key_in) {
     
     cout << "text box key down: '" << key_in.sym << "'" << endl;

@@ -6,14 +6,14 @@
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#include "NewGUIView.h"
-#include "NewGUIApp.h"
+#include "GUIView.h"
+#include "GUIApp.h"
 #include "GUIImage.h"
 
 #include "SDL/SDL_video.h"
 
-#include "NewGUIWindow.h" // For Unhandled Click.
-#include "NewGUIApp.h"  // For capture focus
+#include "GUIWindow.h" // For Unhandled Click.
+#include "GUIApp.h"  // For capture focus
 
 
 #include <iostream>

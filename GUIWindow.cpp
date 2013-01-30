@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#include "NewGUIWindow.h"
+#include "GUIWindow.h"
 #include "GameDisplay.h"
 #include "GUIUtility.h"
-#include "NewGUIView.h"
+#include "GUIView.h"
 #include "SDL/SDL.h"
 
 #include <iostream>

@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#include "NewGUIApp.h"
-#include "NewGUIView.h"
-#include "NewGUIWindow.h"
+#include "GUIApp.h"
+#include "GUIView.h"
+#include "GUIWindow.h"
 
 #include "GUIUtility.h"
 

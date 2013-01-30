@@ -7,7 +7,7 @@
 //
 
 #include "GUIScrollView.h"
-#include "NewGUIApp.h"
+#include "GUIApp.h"
 
 #include <iostream>
 #include <tr1/functional>

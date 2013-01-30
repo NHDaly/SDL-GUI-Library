@@ -6,9 +6,9 @@
 //  Copyright 2012 Lions Entertainment. All rights reserved.
 //
 
-#include "NewGUIView.h"
+#include "GUIView.h"
 
-#include "NewGUITextBox.h"
+#include "GUITextBox.h"
 
 #include <cctype>   // For isalpha().
 #include <sstream>

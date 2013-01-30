@@ -9,7 +9,7 @@
 #ifndef Deep_NewNewGUITextView_h
 #define Deep_NewNewGUITextView_h
 
-#include "NewGUIView.h"
+#include "GUIView.h"
 
 //#include <vector>
 #include <list>

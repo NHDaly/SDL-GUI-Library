@@ -12,7 +12,7 @@
 #include <list>
 
 #include "GUIUtility.h"
-#include "NewGUIController.h"
+#include "GUIController.h"
 
 class SDL_Surface;
 class NewGUIWindow;
