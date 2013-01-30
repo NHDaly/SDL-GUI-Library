@@ -17,7 +17,7 @@ const SDL_Color color = {0xbb, 0xbb, 0xbb, 0};
 
 GUIMsg::GUIMsg(int w_, int h_, const std::string& msg_, int num_buttons, 
                     std::vector<std::string> button_texts)
-:NewGUIView(w_,h_)
+:GUIView(w_,h_)
 {
 //    GUIImage bg = GUIImage::create_filled(w_, h_, color);
 ////    draw_onto_view(bg, DispPoint());

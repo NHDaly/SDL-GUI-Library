@@ -1,13 +1,13 @@
 //
-//  NewNewGUITextView.h
+//  NewGUITextView.h
 //  Deep
 //
 //  Created by Nathan Daly on 1/4/13.
 //  Copyright (c) 2013 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_NewNewGUITextView_h
-#define Deep_NewNewGUITextView_h
+#ifndef Deep_NewGUITextView_h
+#define Deep_NewGUITextView_h
 
 #include "GUIView.h"
 
@@ -31,9 +31,9 @@ struct LetterData {
 
 extern const SDL_Color text_color_black_c;
 
-class NewNewGUITextView : public NewGUIView {
+class NewGUITextView : public GUIView {
 public:
-    NewNewGUITextView(int w, int h, int size = 30, SDL_Color color = text_color_black_c);
+    NewGUITextView(int w, int h, int size = 30, SDL_Color color = text_color_black_c);
     
     virtual void draw();
     

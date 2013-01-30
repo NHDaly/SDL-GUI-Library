@@ -1,13 +1,13 @@
 //
-//  NewGUIWindow.h
+//  GUIWindow.h
 //  Deep
 //
 //  Created by Nathan Daly on 9/18/12.
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#ifndef NEWGUIWINDOW_H
-#define NEWGUIWINDOW_H
+#ifndef GUIWINDOW_H
+#define GUIWINDOW_H
 
 
 #include <string>
@@ -27,16 +27,16 @@ struct Unhandled_Key {
     SDL_keysym key;
 };
 
-class NewGUIView;
+class GUIView;
 class SDL_Surface;
 
 // This class maintains information about the Window. 
 // (i.e name, size, etc.) Has one View instance that shows what is displayed in
 // the window.
-class NewGUIWindow {
+class GUIWindow {
 public:
 
-    NewGUIWindow(int w, int h, const std::string& name_ = "",
+    GUIWindow(int w, int h, const std::string& name_ = "",
                  int numColors = 256, const Uint32 flags = SDL_SWSURFACE);
     
     void crop(int w, int h);
@@ -44,14 +44,14 @@ public:
     
     void rename(const std::string& name_);
     
-    NewGUIView* get_main_view() { return main_view; }
+    GUIView* get_main_view() { return main_view; }
 
     DispPoint get_dim();
         
     // Handle subviews to main_view:
-    void attach_subview(NewGUIView* view, DispPoint pos);
-    void move_subview(NewGUIView* view, DispPoint pos);
-    void remove_subview(NewGUIView* view);
+    void attach_subview(GUIView* view, DispPoint pos);
+    void move_subview(GUIView* view, DispPoint pos);
+    void remove_subview(GUIView* view);
     void remove_last_subview(); // Remove subview last added
 
     
@@ -60,7 +60,7 @@ public:
     
 private:
     SDL_Surface* window;
-    NewGUIView* main_view;
+    GUIView* main_view;
     std::string name;
     
     int num_colors;
@@ -69,4 +69,4 @@ private:
     static bool WINDOW_ALREADY_CREATED;
 };
 
-#endif /* NEWGUIWINDOW_H */
+#endif /* GUIWINDOW_H */

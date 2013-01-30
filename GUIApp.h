@@ -1,13 +1,13 @@
 //
-//  NewGUIApp.h
+//  GUIApp.h
 //  Deep
 //
 //  Created by Nathan Daly on 11/27/12.
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_NewGUIApp_h
-#define Deep_NewGUIApp_h
+#ifndef Deep_GUIApp_h
+#define Deep_GUIApp_h
 
 #include "GUIErrorHandling.h"
 #include "GUITimer.h"
@@ -20,11 +20,11 @@
 #include <SDL/SDL.h> // To ensure it is #included by main.
 
 // Throw an instance of GUIQuit to safely tell the application to exit.
-// (This is the same as calling NewGUIApp::quit())
+// (This is the same as calling GUIApp::quit())
 class GUIQuit {};
-class NewGUIWindow;
+class GUIWindow;
 
-class NewGUIController;
+class GUIController;
 
 struct GUITimer_command {
     GUITimer_command(double interval_) : interval(interval_) {
@@ -36,14 +36,14 @@ struct GUITimer_command {
 };
 
 
-class NewGUIApp {
+class GUIApp {
 public:
-  	static NewGUIApp* get();
+  	static GUIApp* get();
     
     void set_framerate_cap(int fps_cap_) { fps_cap = fps_cap_; cap_frame_rate = true;}
     void disable_framerate_cap() { cap_frame_rate = false; }
     
-    void run(NewGUIWindow* window);
+    void run(GUIWindow* window);
     
 //    struct GUITimer_command;
 
@@ -61,9 +61,9 @@ public:
 
     // Provides a Controller with the ability to receive mouse/keyboard input.
     //  (Views receive mouse input by defualt when hovered over.)
-    void give_focus(NewGUIController* view) { captured_focus.insert(view); }
-    bool has_focus(NewGUIController* view) { return captured_focus.count(view) != 0; }
-    void release_focus(NewGUIController* view) { captured_focus.erase(view); }
+    void give_focus(GUIController* view) { captured_focus.insert(view); }
+    bool has_focus(GUIController* view) { return captured_focus.count(view) != 0; }
+    void release_focus(GUIController* view) { captured_focus.erase(view); }
     
     
     // Equivalent to a user clicking the "x" or pressing cmd-q.
@@ -73,12 +73,12 @@ public:
     DispPoint get_screen_size();    
 private:
     
-    NewGUIWindow* window;
+    GUIWindow* window;
     
     int fps_cap;
     bool cap_frame_rate;
     
-    typedef std::set<NewGUIController*> view_list_t;
+    typedef std::set<GUIController*> view_list_t;
     view_list_t captured_focus;
 
     
@@ -122,27 +122,27 @@ private:
     void cycle_timer_commands();
 
 //SINGLETON MEMBERS:
-	static NewGUIApp * singleton_ptr; 
+	static GUIApp * singleton_ptr; 
 	
-	friend class NewGUIApp_destroyer;
+	friend class GUIApp_destroyer;
 	
 	// no public creation/deletion
-	NewGUIApp();
+	GUIApp();
 	
 	// no copy or assignment allowed
-	NewGUIApp(const NewGUIApp&);
-	NewGUIApp& operator= (const NewGUIApp&);
+	GUIApp(const GUIApp&);
+	GUIApp& operator= (const GUIApp&);
 	
     
-    struct NewGUIApp_destroyer {
-        ~NewGUIApp_destroyer();
+    struct GUIApp_destroyer {
+        ~GUIApp_destroyer();
     };
-    static NewGUIApp_destroyer the_NewGUIApp_destroyer;
+    static GUIApp_destroyer the_GUIApp_destroyer;
 };
 
 // Perform op after interval seconds. Repeat if repeat == true.
 template <typename Operation>
-GUITimer_command* NewGUIApp::repeat_on_timer(Operation op, double interval, bool repeat) {
+GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool repeat) {
     
     GUITimer_command* command = create_timer_command(op,interval, repeat);
     timer_commands.push_back(command);
@@ -152,7 +152,7 @@ GUITimer_command* NewGUIApp::repeat_on_timer(Operation op, double interval, bool
 
 
 template <typename Error_t, typename Handler_t>
-void NewGUIApp::register_error_handler(const Handler_t &handler) {
+void GUIApp::register_error_handler(const Handler_t &handler) {
     handler_list.push_back(create_error_handler<Error_t>(handler));
 }
 

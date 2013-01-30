@@ -1,5 +1,5 @@
 //
-//  NewGUIWindow.cpp
+//  GUIWindow.cpp
 //  Deep
 //
 //  Created by Nathan Daly on 9/18/12.
@@ -16,11 +16,11 @@
 #include <algorithm>
 using namespace std;
 
-bool NewGUIWindow::WINDOW_ALREADY_CREATED = false;
+bool GUIWindow::WINDOW_ALREADY_CREATED = false;
 
 SDL_Color bg_color = {208, 208, 208};
 
-NewGUIWindow::NewGUIWindow(int w, int h, const string& name_, 
+GUIWindow::GUIWindow(int w, int h, const string& name_, 
                            int numColors, const Uint32 flags)
 :main_view(0), name(name_), num_colors(numColors), flags(flags)
 {    
@@ -38,7 +38,7 @@ NewGUIWindow::NewGUIWindow(int w, int h, const string& name_,
         SDL_WM_SetCaption( name.c_str(), 0 );
     }
     
-    main_view = new NewGUIView(w,h);
+    main_view = new GUIView(w,h);
     main_view->mark_changed();
     
    	Uint32 color = SDL_MapRGB(main_view->image->format, bg_color.r, 
@@ -51,26 +51,26 @@ NewGUIWindow::NewGUIWindow(int w, int h, const string& name_,
     
 }
 
-DispPoint NewGUIWindow::get_dim() { return DispPoint(window->w, window->h); }
+DispPoint GUIWindow::get_dim() { return DispPoint(window->w, window->h); }
 
 
-void NewGUIWindow::crop(int w, int h) {
+void GUIWindow::crop(int w, int h) {
     
-    NewGUIWindow temp(w,h, name, num_colors, flags);
+    GUIWindow temp(w,h, name, num_colors, flags);
     
     std::swap(temp.window, window);    
     main_view->mark_changed();
 }
-void NewGUIWindow::stretch(int w, int h) {
+void GUIWindow::stretch(int w, int h) {
     
 }
 
-void NewGUIWindow::rename(const string& name_) {
+void GUIWindow::rename(const string& name_) {
     name = name_;
 }
 
 #include <cassert>
-void NewGUIWindow::refresh() {
+void GUIWindow::refresh() {
     
     if (main_view->need_to_refresh()) {
         
@@ -114,16 +114,16 @@ void NewGUIWindow::refresh() {
 }
 
 
-void NewGUIWindow::attach_subview(NewGUIView* view, DispPoint pos) {
+void GUIWindow::attach_subview(GUIView* view, DispPoint pos) {
     main_view->attach_subview(view, pos);
 }
-void NewGUIWindow::move_subview(NewGUIView* view, DispPoint pos) {
+void GUIWindow::move_subview(GUIView* view, DispPoint pos) {
     main_view->move_subview(view, pos);
 }
-void NewGUIWindow::remove_subview(NewGUIView* view) {
+void GUIWindow::remove_subview(GUIView* view) {
     main_view->remove_subview(view); 
 }
-void NewGUIWindow::remove_last_subview() {
+void GUIWindow::remove_last_subview() {
     main_view->remove_last_subview();
 }
 

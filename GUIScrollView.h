@@ -12,10 +12,10 @@
 #include "GUIView.h"
 #include "GUIImageView.h"
 
-class GUIScrollView : public NewGUIView  {
+class GUIScrollView : public GUIView  {
 public:
     
-    GUIScrollView(int w_, int h_, NewGUIView *display_view_);
+    GUIScrollView(int w_, int h_, GUIView *display_view_);
     ~GUIScrollView();
     
     void update();
@@ -28,10 +28,10 @@ public:
 
 private:
     
-    class ScrollBarBg : public NewGUIView {
+    class ScrollBarBg : public GUIView {
     public:
         ScrollBarBg(int w_, int h_, GUIScrollView *view_) 
-        : NewGUIView(w_,h_), view(view_) { }
+        : GUIView(w_,h_), view(view_) { }
         
         void display();
         
@@ -40,10 +40,10 @@ private:
     private:
         GUIScrollView *view;
     };
-    class ScrollBar : public NewGUIView {
+    class ScrollBar : public GUIView {
     public:
         ScrollBar(int w_, int h_, GUIScrollView *view_) 
-        : NewGUIView(w_,h_), view(view_), clicked(false) { }
+        : GUIView(w_,h_), view(view_), clicked(false) { }
         
         void display();
 
@@ -56,10 +56,10 @@ private:
         DispPoint click;
         GUIScrollView *view;
     };
-    class ScrollArrow : public NewGUIImageView {
+    class ScrollArrow : public GUIImageView {
     public:
         ScrollArrow(bool up_down_, const GUIImage& image)
-        : NewGUIImageView(image), up_down(up_down_) { }
+        : GUIImageView(image), up_down(up_down_) { }
  
         virtual bool handle_mouse_down(DispPoint coord);
         virtual bool handle_mouse_up(DispPoint coord);
@@ -75,7 +75,7 @@ private:
     ScrollBarBg scroll_bar_bg;
     ScrollBar scroll_bar;
     ScrollArrow arrow_up, arrow_down;
-    NewGUIView *display_view;
+    GUIView *display_view;
 
     int w_init, h_init;
     

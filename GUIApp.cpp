@@ -1,5 +1,5 @@
 //
-//  NewGUIApp.cpp
+//  GUIApp.cpp
 //  Deep
 //
 //  Created by Nathan Daly on 11/27/12.
@@ -26,18 +26,18 @@ using namespace std::tr1::placeholders;
 
 // SINGLETON MEMBERS
 
-NewGUIApp* NewGUIApp::singleton_ptr = 0;
-NewGUIApp::NewGUIApp_destroyer NewGUIApp::the_NewGUIApp_destroyer;
+GUIApp* GUIApp::singleton_ptr = 0;
+GUIApp::GUIApp_destroyer GUIApp::the_GUIApp_destroyer;
 
-NewGUIApp* NewGUIApp::get(){
+GUIApp* GUIApp::get(){
 	
 	if (!singleton_ptr)
-		singleton_ptr = new NewGUIApp;
+		singleton_ptr = new GUIApp;
 	return singleton_ptr;
 }
 
-NewGUIApp::NewGUIApp_destroyer::~NewGUIApp_destroyer(){
-	delete NewGUIApp::singleton_ptr;
+GUIApp::GUIApp_destroyer::~GUIApp_destroyer(){
+	delete GUIApp::singleton_ptr;
 }
 
 // Forward Declarations
@@ -45,7 +45,7 @@ void print_msg(const GUIError &e);
 void unhandled_click(const Unhandled_Click &e);
 
 
-// NewGUIApp Implementation:
+// GUIApp Implementation:
 
 void print_msg(const GUIError &e) {
     cout << e.msg << endl;
@@ -54,18 +54,18 @@ void unhandled_click(const Unhandled_Click &e) {
     cout << "unhandled click" << endl;
 }
 
-struct NewGUIApp_Quitter {
-    NewGUIApp_Quitter(bool &running_) : running(running_) {}
+struct GUIApp_Quitter {
+    GUIApp_Quitter(bool &running_) : running(running_) {}
     void operator()(GUIQuit) { running = false; }
     bool &running;
 };
 
 
-NewGUIApp::NewGUIApp()
+GUIApp::GUIApp()
 :fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true), window(0)
 { }
 
-void NewGUIApp::cancel_timer_op(GUITimer_command* op) {
+void GUIApp::cancel_timer_op(GUITimer_command* op) {
     std::vector<GUITimer_command*>::iterator it
     = std::find(timer_commands.begin(), timer_commands.end(), op);
     if (it != timer_commands.end()) {
@@ -76,10 +76,10 @@ void NewGUIApp::cancel_timer_op(GUITimer_command* op) {
     }
 }
 
-DispPoint NewGUIApp::get_screen_size() { return window->get_dim(); }
+DispPoint GUIApp::get_screen_size() { return window->get_dim(); }
 
 
-void NewGUIApp::run(NewGUIWindow* window_) {
+void GUIApp::run(GUIWindow* window_) {
     
     window = window_;
     
@@ -88,7 +88,7 @@ void NewGUIApp::run(NewGUIWindow* window_) {
 
     bool running = true;
 
-    register_error_handler<GUIQuit>(NewGUIApp_Quitter(running));
+    register_error_handler<GUIQuit>(GUIApp_Quitter(running));
     
     window->refresh();
     
@@ -118,17 +118,17 @@ void NewGUIApp::run(NewGUIWindow* window_) {
                         DispPoint click_pos(event.button.x, event.button.y);
                         DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
                         
-                        list<NewGUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
+                        list<GUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
                         
-                        for (list<NewGUIController*>::iterator it = focus_copy.begin();
+                        for (list<GUIController*>::iterator it = focus_copy.begin();
                                             it != focus_copy.end(); ++it) {
                             
-                            NewGUIController *captured = *it;
+                            GUIController *captured = *it;
                             
                             DispPoint new_pos(click_pos);
 
                             // If the Controller is a view, adjust pos for view.
-                            if (NewGUIView *view = dynamic_cast<NewGUIView*>(captured)) {
+                            if (GUIView *view = dynamic_cast<GUIView*>(captured)) {
                                 new_pos.x -= view->get_abs_pos().x; 
                                 new_pos.y -= view->get_abs_pos().y; 
                             }
@@ -171,7 +171,7 @@ void NewGUIApp::run(NewGUIWindow* window_) {
 //                            }
                         }
                         
-                        NewGUIView* hovered_view =
+                        GUIView* hovered_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
 
@@ -220,7 +220,7 @@ void NewGUIApp::run(NewGUIWindow* window_) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            NewGUIController *captured = *it;
+                            GUIController *captured = *it;
                             
                             bool handled = captured->handle_key_down(event.key.keysym);
                             
@@ -253,7 +253,7 @@ void NewGUIApp::run(NewGUIWindow* window_) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            NewGUIController *captured = *it;
+                            GUIController *captured = *it;
                         
                             bool handled = captured->handle_key_up(event.key.keysym);
                         
@@ -287,7 +287,7 @@ void NewGUIApp::run(NewGUIWindow* window_) {
     }
 }
 
-void NewGUIApp::cycle_timer_commands() {
+void GUIApp::cycle_timer_commands() {
     
     for (int i = 0; i < timer_commands.size(); i++) {
         

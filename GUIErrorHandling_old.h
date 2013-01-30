@@ -1,13 +1,13 @@
 //
-//  NewGUIErrorHandling.h
+//  GUIErrorHandling.h
 //  Deep
 //
 //  Created by Nathan Daly on 12/14/12.
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_NewGUIErrorHandling_h
-#define Deep_NewGUIErrorHandling_h
+#ifndef Deep_GUIErrorHandling_h
+#define Deep_GUIErrorHandling_h
 
 class ErrorCatcher {
 public:

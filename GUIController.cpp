@@ -1,5 +1,5 @@
 //
-//  NewGUIController.cpp
+//  GUIController.cpp
 //  Deep
 //
 //  Created by Nathan Daly on 1/2/13.
@@ -12,18 +12,18 @@
 
 #include "GUIApp.h"
 
-void NewGUIController::capture_focus() {
+void GUIController::capture_focus() {
     
-    if (NewGUIApp::get()->has_focus(this)) return;
+    if (GUIApp::get()->has_focus(this)) return;
     
-    NewGUIApp::get()->give_focus(this);
+    GUIApp::get()->give_focus(this);
     
     got_focus();
 }
-void NewGUIController::lose_focus() {
-    if (!NewGUIApp::get()->has_focus(this)) return; //throw GUIError("Can't lose_focus if didn't already have it.");
+void GUIController::lose_focus() {
+    if (!GUIApp::get()->has_focus(this)) return; //throw GUIError("Can't lose_focus if didn't already have it.");
     
-    NewGUIApp::get()->release_focus(this);
+    GUIApp::get()->release_focus(this);
     
     lost_focus();
 }

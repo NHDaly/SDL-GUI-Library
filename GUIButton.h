@@ -1,13 +1,13 @@
 //
-//  NewGUIButton.h
+//  GUIButton.h
 //  Deep
 //
 //  Created by Nathan Daly on 9/18/12.
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_NewGUIButton_h
-#define Deep_NewGUIButton_h
+#ifndef Deep_GUIButton_h
+#define Deep_GUIButton_h
 
 #include "GUIImageView.h"
 
@@ -20,11 +20,11 @@ public:
 
 #include <iostream>
 
-class NewGUIButton : public NewGUIImageView { 
+class GUIButton : public GUIImageView { 
 public:
     
-    NewGUIButton()
-    : NewGUIImageView(GUIImage("GUIImages/button.bmp")), 
+    GUIButton()
+    : GUIImageView(GUIImage("GUIImages/button.bmp")), 
     is_pressed(false), is_hovered(false),
     image(GUIImage("GUIImages/button.bmp")), hovered_image(GUIImage("GUIImages/button2.bmp")), 
     clicked_image(GUIImage("GUIImages/button3.bmp"))
@@ -110,21 +110,21 @@ private:
 
 #include "GUITextBox.h"
 
-class NewGUITextButton : public NewGUIButton { 
+class GUITextButton : public GUIButton { 
 public:
-    NewGUITextButton(const std::string &button_text_ = "")
+    GUITextButton(const std::string &button_text_ = "")
     {
-        button_text = new NewGUITextView(get_w()-30, get_h());
+        button_text = new GUITextView(get_w()-30, get_h());
         button_text->set_text(button_text_);
         button_text->set_text_size(16);
         attach_subview(button_text, DispPoint(get_w()-button_text->get_w(), 0));
     }
     
-    NewGUITextView* get_text_view() { return button_text; }
+    GUITextView* get_text_view() { return button_text; }
     void set_text(const std::string &button_text_) { button_text->set_text(button_text_); }
     
 public:
-    NewGUITextView *button_text;
+    GUITextView *button_text;
 };
 
 
@@ -133,10 +133,10 @@ public:
     void operator()() { }
 };
 template <typename Oper = NoAction>
-class NewGUIActionButton : public NewGUITextButton {
+class GUIActionButton : public GUITextButton {
 public:
 
-    NewGUIActionButton(Oper oper = Oper())
+    GUIActionButton(Oper oper = Oper())
 	:oper(oper) { }
 
     virtual void operation() {
@@ -149,9 +149,9 @@ private:
 };
 
 template <typename Oper>
-NewGUITextButton* NewGUI_create_button(Oper oper) {
+GUITextButton* GUI_create_button(Oper oper) {
     
-    return new NewGUIActionButton<Oper>(oper);
+    return new GUIActionButton<Oper>(oper);
 }
 
 #endif

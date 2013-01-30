@@ -32,9 +32,9 @@ const SDL_Color bg_color_c = {255,255,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
 
 
-NewGUITextView::NewGUITextView(int w_, int h_,
+GUITextView::GUITextView(int w_, int h_,
                                bool resizeable_down_, bool resizeable_right_)
-:NewGUIView(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
+:GUIView(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
 w_init(w_), h_init(h_), text_size(30), color(default_color_c)
 {
     set_clear_color(bg_color_c);
@@ -43,7 +43,7 @@ w_init(w_), h_init(h_), text_size(30), color(default_color_c)
     
 }
 
-void NewGUITextView::update(){
+void GUITextView::update(){
 //    resize(200, get_h());
     
     if (!letters.empty()) {
@@ -84,20 +84,20 @@ void NewGUITextView::update(){
     
 	mark_changed();
 }
-void NewGUITextView::clear(){
+void GUITextView::clear(){
 	letters.clear();
 }
 
 
 
-void NewGUITextView::set_text(const string& text) {
+void GUITextView::set_text(const string& text) {
     clear();
     
     for (int i = 0; i < text.length(); ++i) {
         add_letter(text[i], i);
     };
 }
-string NewGUITextView::get_text() const {
+string GUITextView::get_text() const {
 	string text;
 	for (letters_ctr_t::const_iterator it = letters.begin(); it != letters.end(); ++it){
 		text += it->get_ltr();
@@ -105,24 +105,24 @@ string NewGUITextView::get_text() const {
 	return text;	
 }
 
-void NewGUITextView::set_text_size(int size) {
+void GUITextView::set_text_size(int size) {
     text_size = size;
     set_text(get_text());
 }
-void NewGUITextView::set_text_color(SDL_Color color_) {
+void GUITextView::set_text_color(SDL_Color color_) {
     color = color_;
     set_text(get_text());
 }
-void NewGUITextView::did_resize(int w, int h)
+void GUITextView::did_resize(int w, int h)
 {
-//    if (NewGUITextBox* tb = dynamic_cast<NewGUITextBox*>(get_parent())) {
+//    if (GUITextBox* tb = dynamic_cast<GUITextBox*>(get_parent())) {
 //        tb->resize(w,h);
 //    }
 }
 
 
 
-void NewGUITextView::add_letter(char ltr, int index){
+void GUITextView::add_letter(char ltr, int index){
     
     cout << "ADDING LETTER: '" << ltr << "'" << endl;
 	
@@ -136,7 +136,7 @@ void NewGUITextView::add_letter(char ltr, int index){
 	}
 	update();
 }
-void NewGUITextView::remove_letter(int index){
+void GUITextView::remove_letter(int index){
     cout << "REMOVVVVEEEEE LETTTERRRRR: " << letters.size() << endl;
     cout << "index: " << index << " SIZE: " << letters.size() << endl;
 
@@ -149,14 +149,14 @@ void NewGUITextView::remove_letter(int index){
 
 
 
-DispPoint NewGUITextView::pos_at_index(size_t i){
+DispPoint GUITextView::pos_at_index(size_t i){
 	
 	DispPoint position;
 	if (i == 0){
 		position = DispPoint(3,0);
 	}
 	else {
-//        if (i >= letters.size()) throw GUIError("NewGUITextView: Couldn't get position -- index out of range");
+//        if (i >= letters.size()) throw GUIError("GUITextView: Couldn't get position -- index out of range");
         
 		const NewLetter_Disp_Obj& letter = letters[i-1];
 		int width = letter.get_width();
@@ -171,7 +171,7 @@ DispPoint NewGUITextView::pos_at_index(size_t i){
 	}
 	return position;
 }
-int NewGUITextView::index_at_pos(DispPoint pos_){
+int GUITextView::index_at_pos(DispPoint pos_){
 	if (letters.empty()){
 		return 0;
 	}
@@ -202,18 +202,18 @@ int NewGUITextView::index_at_pos(DispPoint pos_){
 
 
 
-NewGUITextBox::NewGUITextBox(int w_, int h_,
+GUITextBox::GUITextBox(int w_, int h_,
                              bool resizeable_down_, bool resizeable_right_)
-:NewGUITextView(w_,h_, resizeable_down_, resizeable_right_), 
+:GUITextView(w_,h_, resizeable_down_, resizeable_right_), 
 cursor(this), key_is_held(false), modifiers_held(KMOD_NONE)
 {        
     attach_subview(&cursor, DispPoint());
     
-    NewGUIApp::get()->repeat_on_timer(bind(&NewGUITextBox::handle_key_held, this), 0.05);
+    GUIApp::get()->repeat_on_timer(bind(&GUITextBox::handle_key_held, this), 0.05);
 }
 
 #include "GUIApp.h"
-bool NewGUITextBox::handle_key_down(SDL_keysym key_in) {
+bool GUITextBox::handle_key_down(SDL_keysym key_in) {
     
     cout << "text box key down: '" << key_in.sym << "'" << endl;
     
@@ -227,7 +227,7 @@ bool NewGUITextBox::handle_key_down(SDL_keysym key_in) {
     return true;
 }
 
-bool NewGUITextBox::handle_key_up(SDL_keysym key_in) {
+bool GUITextBox::handle_key_up(SDL_keysym key_in) {
     
     cout << "text box key up" << endl;
 
@@ -237,7 +237,7 @@ bool NewGUITextBox::handle_key_up(SDL_keysym key_in) {
     
     return false;
 }
-void NewGUITextBox::handle_key_held() {
+void GUITextBox::handle_key_held() {
     
     if (!key_is_held) return;
     if (!(time_key_held.get_time() > 500)) return; 
@@ -245,7 +245,7 @@ void NewGUITextBox::handle_key_held() {
     handle_key();
 }
 
-void NewGUITextBox::handle_key() {
+void GUITextBox::handle_key() {
  	
     SDLKey key = key_held;
 
@@ -279,7 +279,7 @@ void NewGUITextBox::handle_key() {
 
 
 
-void NewGUITextBox::handle_alpha_num(char ltr){
+void GUITextBox::handle_alpha_num(char ltr){
     
     if (!isprint(ltr)) return;
 
@@ -295,14 +295,14 @@ void NewGUITextBox::handle_alpha_num(char ltr){
 	cursor.move_right();
 }
 
-void NewGUITextBox::handle_modifier(SDLMod mod){
+void GUITextBox::handle_modifier(SDLMod mod){
     
     modifiers_held = mod;
 
 }
 
 
-bool NewGUITextBox::handle_mouse_down(DispPoint pos_){
+bool GUITextBox::handle_mouse_down(DispPoint pos_){
 	
     if (!rel_point_is_on_me(pos_)) {
         lose_focus();
@@ -327,21 +327,21 @@ static char SDL_to_a(SDLKey key){
 	return static_cast<char>(key);
 }
 
-void NewGUITextBox::lost_focus() {
+void GUITextBox::lost_focus() {
     cout << "LOSTTTTT FOCUSSSSS" << endl;
     move_subview(&cursor, DispPoint(-100,-100));
     update();
 }
 
-void NewGUITextBox::Cursor::move_right(){
+void GUITextBox::Cursor::move_right(){
 	if (index == text_box_ptr->get_letters().size()) return;
 	move_to(index + 1);
 }
-void NewGUITextBox::Cursor::move_left(){
+void GUITextBox::Cursor::move_left(){
 	if (index == 0) return;
 	move_to(index - 1);
 }
-void NewGUITextBox::Cursor::move_up(){
+void GUITextBox::Cursor::move_up(){
 	
 	DispPoint new_pos = position;
 	new_pos.y -= NewLetter_Disp_Obj::get_line_height();
@@ -350,7 +350,7 @@ void NewGUITextBox::Cursor::move_up(){
 	
 	move_to(new_index);
 }
-void NewGUITextBox::Cursor::move_down(){
+void GUITextBox::Cursor::move_down(){
 	DispPoint new_pos = position;
 	new_pos.y += NewLetter_Disp_Obj::get_line_height();
 	
@@ -359,7 +359,7 @@ void NewGUITextBox::Cursor::move_down(){
 	move_to(new_index);
 }
 
-void NewGUITextBox::Cursor::move_to(int index_) {
+void GUITextBox::Cursor::move_to(int index_) {
 	
 	if (index_ < 0 || index_ > text_box_ptr->get_letters().size()) return;
 	
@@ -370,7 +370,7 @@ void NewGUITextBox::Cursor::move_to(int index_) {
     text_box_ptr->move_subview(this, position);
 }
 
-void NewGUITextBox::Cursor::display(int text_size) {
+void GUITextBox::Cursor::display(int text_size) {
 	if (std::clock() % 300000 >= 150000){
 		flicker = 0;
 	}
@@ -407,7 +407,7 @@ int NewLetter_Disp_Obj::get_width() const{
 	return letter->get_width();
 }
 
-void NewLetter_Disp_Obj::drawself(NewGUIView *dest) const{
+void NewLetter_Disp_Obj::drawself(GUIView *dest) const{
 	
 	letter->drawself(dest, position.x, position.y); //+ height-letter->get_height());
 }
@@ -460,7 +460,7 @@ static char symbol_to_upper(char ltr) {
             return '?';
           
         default:
-            throw "NewGUITextBox: Symbol To Upper: invalid symbol";
+            throw "GUITextBox: Symbol To Upper: invalid symbol";
             break;
     }
 }

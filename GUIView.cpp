@@ -1,5 +1,5 @@
 //
-//  NewGUIView.cpp
+//  GUIView.cpp
 //  Deep
 //
 //  Created by Nathan Daly on 9/10/12.
@@ -25,7 +25,7 @@ SDL_Surface* prepare_SDL_surface(int w, int h);
 const SDL_Color default_clear_color = {255,0,255,0};
 
 
-NewGUIView::NewGUIView(int w_, int h_) 
+GUIView::GUIView(int w_, int h_) 
 :changed(false), w(w_), h(h_), parent(0),
 image(prepare_SDL_surface(w_, h_)), display(prepare_SDL_surface(w_, h_)),
 is_alpha(false)
@@ -64,7 +64,7 @@ SDL_Surface* prepare_SDL_surface(int w, int h) {
 }
 
 
-NewGUIView::~NewGUIView() {
+GUIView::~GUIView() {
     
     while (!children.empty()) {
         
@@ -76,7 +76,7 @@ NewGUIView::~NewGUIView() {
     SDL_FreeSurface(display);
 }
 
-void NewGUIView::draw_onto_self(const GUIImage &image_, DispPoint pos) {
+void GUIView::draw_onto_self(const GUIImage &image_, DispPoint pos) {
     
     mark_changed();
     
@@ -88,34 +88,34 @@ void NewGUIView::draw_onto_self(const GUIImage &image_, DispPoint pos) {
 
 
 // Draws image onto display.
-void NewGUIView::render_image(SDL_Surface* source, int w, int h, DispPoint pos) {
+void GUIView::render_image(SDL_Surface* source, int w, int h, DispPoint pos) {
     
     // Using SDL, perform a blit from view to self.
 	SDL_Rect dest_rect = {pos.x, pos.y, w, h};
 	SDL_BlitSurface(source, 0, display, &dest_rect);
 }
 
-void NewGUIView::set_clear_color(SDL_Color clear_color_) {
+void GUIView::set_clear_color(SDL_Color clear_color_) {
     
     is_alpha = true;
     clear_color = clear_color_;
     Uint32 colorkey = SDL_MapRGBA(image->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
     SDL_SetColorKey(display, SDL_SRCCOLORKEY, colorkey); // reset alpha
 }
-void NewGUIView::clear_alpha() {
+void GUIView::clear_alpha() {
     
     is_alpha = false;
     SDL_SetColorKey(display, 0, 0); // reset alpha
 }
 
 
-bool x_then_y_view_less_than(const NewGUIView* a, const NewGUIView* b) {
+bool x_then_y_view_less_than(const GUIView* a, const GUIView* b) {
     if (a->pos.x < b->pos.x) return true;
     else if (a->pos.x == b->pos.x) return (a->pos.y < b->pos.y);
     else /*(a->pos.x > b->pos.x)*/ return false;
 }
 
-void NewGUIView::mark_changed() {
+void GUIView::mark_changed() {
     
     changed = true;
     
@@ -131,7 +131,7 @@ void NewGUIView::mark_changed() {
 }
 
 
-void NewGUIView::refresh() {
+void GUIView::refresh() {
     
     if (!need_to_refresh()) return;
     
@@ -150,7 +150,7 @@ void NewGUIView::refresh() {
     changed = false;
 }
 
-void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
+void GUIView::attach_subview(GUIView* view, DispPoint pos) {
     if (view->parent)
         throw GUIError("Candidate vew is already a subview of another view.");
     
@@ -166,7 +166,7 @@ void NewGUIView::attach_subview(NewGUIView* view, DispPoint pos) {
     mark_changed();
 }
 // NOTE: Does not delete the view, only removes it from list!
-void NewGUIView::remove_subview(NewGUIView* view) {
+void GUIView::remove_subview(GUIView* view) {
     
     if (!is_subview(view))
         throw GUIError("view is not a subview of this!");
@@ -176,23 +176,23 @@ void NewGUIView::remove_subview(NewGUIView* view) {
     
     mark_changed();
 }
-void NewGUIView::remove_last_subview() {
+void GUIView::remove_last_subview() {
     
     if (children.empty())
         throw GUIError("view has not subviews!");
     
-    NewGUIView *view = children.back();
+    GUIView *view = children.back();
     children.pop_back();
     view->parent = 0;
     
     mark_changed();
 }
-bool NewGUIView::is_subview(NewGUIView* view) {
+bool GUIView::is_subview(GUIView* view) {
     
     return (find(children.begin(), children.end(), view) != children.end());
 }
 
-void NewGUIView::move_subview(NewGUIView* view, DispPoint pos) {
+void GUIView::move_subview(GUIView* view, DispPoint pos) {
     
     if (!is_subview(view))
         throw GUIError("view is not a subview of this!");
@@ -204,7 +204,7 @@ void NewGUIView::move_subview(NewGUIView* view, DispPoint pos) {
     mark_changed();
 }
 
-void NewGUIView::mouse_down(DispPoint coord) {
+void GUIView::mouse_down(DispPoint coord) {
     cout << "mouse down!: " << coord.x <<", "<< coord.y << endl;
     
     if (!handle_mouse_down(coord)) {
@@ -212,7 +212,7 @@ void NewGUIView::mouse_down(DispPoint coord) {
 //        else throw Unhandled_Click(coord);
     }
 }
-void NewGUIView::mouse_up(DispPoint coord) {
+void GUIView::mouse_up(DispPoint coord) {
     cout << "mouse up!: " << coord.x <<", "<< coord.y << endl;
     
     if (!handle_mouse_up(coord)) {
@@ -220,7 +220,7 @@ void NewGUIView::mouse_up(DispPoint coord) {
 //        else throw Unhandled_Click(coord);
     }
 }
-void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
+void GUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
 //    cout << "mouse motion!: " << rel_motion.x <<", "<< rel_motion.y << endl;
     
     if (!handle_mouse_motion(coord, rel_motion)) {
@@ -228,14 +228,14 @@ void NewGUIView::mouse_motion(DispPoint coord, DispPoint rel_motion) {
 //        else throw Unhandled_Click(coord);
     }
 }
-void NewGUIView::mouse_scroll_start(bool up_down) {
+void GUIView::mouse_scroll_start(bool up_down) {
     cout << "mouse scroll!: " << (up_down ? "up" : "down") << endl;
     
     if (!handle_mouse_scroll_start(up_down)) {
         if (parent) parent->mouse_scroll_start(up_down);
         //        else throw Unhandled_Click(coord);
     }
-}void NewGUIView::mouse_scroll_stop(bool up_down) {
+}void GUIView::mouse_scroll_stop(bool up_down) {
     cout << "mouse scroll!: " << (up_down ? "up" : "down") << endl;
     
     if (!handle_mouse_scroll_stop(up_down)) {
@@ -245,14 +245,14 @@ void NewGUIView::mouse_scroll_start(bool up_down) {
 }
 
 
-void NewGUIView::key_down(SDL_keysym key) {
+void GUIView::key_down(SDL_keysym key) {
     cout << "key down!: " << key.sym << endl;
     
     if (!handle_key_down(key)) {
 //        throw Unhandled_Key(key);
     }
 }
-void NewGUIView::key_up(SDL_keysym key) {
+void GUIView::key_up(SDL_keysym key) {
     cout << "key up!: " << key.sym << endl;
     
     if (!handle_key_up(key)) {
@@ -261,20 +261,20 @@ void NewGUIView::key_up(SDL_keysym key) {
 }
 
 
-NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
+GUIView* GUIView::get_view_from_point(DispPoint coord) {
     
     coord = adjust_to_rel(coord);
     if (!rel_point_is_on_me(coord)) return 0;
         
     // At worst, we know the point is on this view.
-    NewGUIView* result = this;
+    GUIView* result = this;
     
     // Check if any children have a deeper subview:
     Subview_list_t::iterator child;
     for (child = children.begin(); child != children.end(); ++child) {
         
         // Can assume that Views are sorted, so any new best will be above old best.
-        NewGUIView* new_best = (*child)->get_view_from_point(coord);
+        GUIView* new_best = (*child)->get_view_from_point(coord);
         if (new_best) {
             result = new_best;
         }
@@ -283,17 +283,17 @@ NewGUIView* NewGUIView::get_view_from_point(DispPoint coord) {
     return result;
 }
 
-bool NewGUIView::rel_point_is_on_me(DispPoint coord) {
+bool GUIView::rel_point_is_on_me(DispPoint coord) {
     
     return (coord.x >= 0 && coord.y >= 0
             && coord.x < w && coord.y < h);
 }
-//bool NewGUIView::rel_point_is_on_me(DispPoint coord) {
+//bool GUIView::rel_point_is_on_me(DispPoint coord) {
 //    
 //    return (coord.x >= pos.x && coord.y >= pos.y
 //            && coord.x < pos.x + w && coord.y < pos.y + h);
 //}
-bool NewGUIView::abs_point_is_on_me(DispPoint coord) {
+bool GUIView::abs_point_is_on_me(DispPoint coord) {
     
     DispPoint abs_pos = get_abs_pos();
     return (coord.x >= abs_pos.x && coord.y >= abs_pos.y
@@ -301,21 +301,21 @@ bool NewGUIView::abs_point_is_on_me(DispPoint coord) {
 }
 
 
-DispPoint NewGUIView::abs_from_rel(DispPoint coord) {
+DispPoint GUIView::abs_from_rel(DispPoint coord) {
     
     DispPoint abs_pos = get_abs_pos();
         return DispPoint(abs_pos.x + coord.x,
                          abs_pos.y + coord.y);
 }
-DispPoint NewGUIView::adjust_to_parent(DispPoint coord) {
+DispPoint GUIView::adjust_to_parent(DispPoint coord) {
     return DispPoint(coord.x + pos.x, coord.y + pos.y);
 }
-DispPoint NewGUIView::adjust_to_rel(DispPoint coord) {
+DispPoint GUIView::adjust_to_rel(DispPoint coord) {
     return DispPoint(coord.x - pos.x, coord.y - pos.y);
 }
 
 
-DispPoint NewGUIView::get_abs_pos() {
+DispPoint GUIView::get_abs_pos() {
     if (parent == 0) return pos;
     else {
         DispPoint parent_abs_pos = parent->get_abs_pos();
@@ -323,15 +323,15 @@ DispPoint NewGUIView::get_abs_pos() {
                          parent_abs_pos.y + pos.y);
     }
 }
-DispPoint NewGUIView::get_rel_pos() {
+DispPoint GUIView::get_rel_pos() {
     return pos;
 }
 
 
-void NewGUIView::resize(int w_, int h_) {
+void GUIView::resize(int w_, int h_) {
     
     w = w_; h = h_;
-    NewGUIView temp(w,h);
+    GUIView temp(w,h);
 
     std::swap(image, temp.image);
     std::swap(display, temp.display);

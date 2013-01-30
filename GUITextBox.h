@@ -22,10 +22,10 @@ class NewLetter_Disp_Obj;
 class GUILetter;
 class SDL_Color;
 
-class NewGUITextView : public NewGUIView {
+class GUITextView : public GUIView {
 public:	
 
-	NewGUITextView(int w_ = 200, int h_ = 200, 
+	GUITextView(int w_ = 200, int h_ = 200, 
                    bool resizeable_down = false, bool resizable_right = false);
 	
     
@@ -69,10 +69,10 @@ private:
 };
 
 
-class NewGUITextBox : public NewGUITextView {
+class GUITextBox : public GUITextView {
 public:	
 	
-	NewGUITextBox(int w_ = 200, int h_ = 200, 
+	GUITextBox(int w_ = 200, int h_ = 200, 
                   bool resizeable_down = false, bool resizable_right = false);
 	
 	
@@ -102,9 +102,9 @@ private:
     void handle_modifier(SDLMod key);
 
     
-	class Cursor : public NewGUIImageView {
+	class Cursor : public GUIImageView {
 	public:
-		Cursor(NewGUITextBox* tb_ptr) : NewGUIImageView(GUIImage("GUIImages/cursor1.bmp")), position(0,0), index(0), text_box_ptr(tb_ptr), flicker(true) { }
+		Cursor(GUITextBox* tb_ptr) : GUIImageView(GUIImage("GUIImages/cursor1.bmp")), position(0,0), index(0), text_box_ptr(tb_ptr), flicker(true) { }
 		
 		void display(int text_size);
 		
@@ -123,7 +123,7 @@ private:
 	private:
 		DispPoint position;
 		int index; 
-		NewGUITextBox* text_box_ptr;
+		GUITextBox* text_box_ptr;
 		
 		bool flicker;
 	} cursor;
@@ -135,7 +135,7 @@ class NewLetter_Disp_Obj{
 public:
 	NewLetter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Color color);
 	
-	void drawself(NewGUIView *dest) const;
+	void drawself(GUIView *dest) const;
 	int get_width() const;
 	DispPoint get_pos() const
     { return position; }

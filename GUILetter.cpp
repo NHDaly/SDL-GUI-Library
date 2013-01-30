@@ -27,7 +27,7 @@ void GUILetter::drawself(SDL_Surface *dest, int x, int y) const{
 	
 	display_image(image, dest, x, y, 0);
 }
-void GUILetter::drawself(NewGUIView *dest, int x, int y) const{
+void GUILetter::drawself(GUIView *dest, int x, int y) const{
 	
     dest->draw_onto_self((GUIImage&)image, DispPoint(x,y));
 }

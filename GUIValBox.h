@@ -19,46 +19,46 @@
 #ifndef NEW_GUI_VALUE_BOX_H
 #define NEW_GUI_VALUE_BOX_H
 
-class NewGUIValue_Box: public NewGUIView {
+class GUIValue_Box: public GUIView {
 public:
     
-    NewGUIValue_Box(int w_, int h_)
-    : NewGUIView(w_,h_)
+    GUIValue_Box(int w_, int h_)
+    : GUIView(w_,h_)
     {}
 
     virtual double get_value() const = 0;
 };
 
 
-class NewGUIInteger_Text_Box : public NewGUITextBox {
+class GUIInteger_Text_Box : public GUITextBox {
 public:
     
-    NewGUIInteger_Text_Box(int w_, int h_)
-    : NewGUITextBox(w_,h_) { }
+    GUIInteger_Text_Box(int w_, int h_)
+    : GUITextBox(w_,h_) { }
     
 	virtual void add_letter(char ltr, int index) {
-        if (isdigit(ltr)) NewGUITextBox::add_letter(ltr, index);
+        if (isdigit(ltr)) GUITextBox::add_letter(ltr, index);
     }
 };
 
 
-class NewGUIValue_Text_Box : public NewGUIValue_Box {
+class GUIValue_Text_Box : public GUIValue_Box {
 public:
     
-    NewGUIValue_Text_Box(int w_, int h_, std::string bg_image = "GUIImages/bg.bmp");    
+    GUIValue_Text_Box(int w_, int h_, std::string bg_image = "GUIImages/bg.bmp");    
     
     virtual double get_value() const;
 
 private:
     
-    NewGUIInteger_Text_Box text_box;
+    GUIInteger_Text_Box text_box;
 };
 
-class NewGUIValue_Slider : public NewGUIValue_Box {
+class GUIValue_Slider : public GUIValue_Box {
 public:
   
-    NewGUIValue_Slider(int w_, int h_, int max_ = 1, int min_ = 0, int initial = -1)
-    : NewGUIValue_Box(w_,h_), value(0), clicked(false),
+    GUIValue_Slider(int w_, int h_, int max_ = 1, int min_ = 0, int initial = -1)
+    : GUIValue_Box(w_,h_), value(0), clicked(false),
     min(min_), max(max_)
     {
         set_clear_color(default_color_key_c);
@@ -66,7 +66,7 @@ public:
         else set_value(initial);
     }
     
-    virtual ~NewGUIValue_Slider() = 0;
+    virtual ~GUIValue_Slider() = 0;
 
     virtual void display() {}
 
@@ -103,10 +103,10 @@ private:
     double min, max;
 };
 
-class NewGUIValue_Horiz_Slider : public NewGUIValue_Slider {
+class GUIValue_Horiz_Slider : public GUIValue_Slider {
 public:
-    NewGUIValue_Horiz_Slider(int w_)
-    : NewGUIValue_Slider(w_, 20),
+    GUIValue_Horiz_Slider(int w_)
+    : GUIValue_Slider(w_, 20),
     left_edge(0), right_edge(0)
     { }
         
@@ -119,10 +119,10 @@ private:
     int left_edge, right_edge;    
 };
 
-class NewGUIValue_Vert_Slider : public NewGUIValue_Slider {
+class GUIValue_Vert_Slider : public GUIValue_Slider {
 public:
-    NewGUIValue_Vert_Slider(int h_)
-    : NewGUIValue_Slider(20, h_),
+    GUIValue_Vert_Slider(int h_)
+    : GUIValue_Slider(20, h_),
     bottom_edge(0), top_edge(0)
     { }
     
@@ -137,20 +137,20 @@ private:
 
 
 // Can either be hooked up to a value_box or can have values entered manually.
-class NewGUIValue_Display : public NewGUIView {
+class GUIValue_Display : public GUIView {
 public:
-    NewGUIValue_Display(int w_, int h_, const NewGUIValue_Box* linked_box = 0);
+    GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box = 0);
     
     virtual void display();
     
-    void link_value_box(const NewGUIValue_Box* value_box_)
+    void link_value_box(const GUIValue_Box* value_box_)
 	    { value_box = value_box_; }
     
     const std::string& get_text() { return text; }
     void set_value(double value_) { set_text(value_); }
     
 private:
-    const NewGUIValue_Box* value_box;
+    const GUIValue_Box* value_box;
     
     std::string text;
     

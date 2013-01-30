@@ -1,23 +1,23 @@
 //
-//  NewGUIController.h
+//  GUIController.h
 //  Deep
 //
 //  Created by Nathan Daly on 1/2/13.
 //  Copyright (c) 2013 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_NewGUIController_h
-#define Deep_NewGUIController_h
+#ifndef Deep_GUIController_h
+#define Deep_GUIController_h
 
 #include "Compatibility.h"
 #include "GUIUtility.h"
 
 // This class is seperated out from GUIView to allow creation of a class to 
 // receive mouse/key events without having to associate it with a displayed view.
-class NewGUIController {
+class GUIController {
 	
 public:	
-	virtual ~NewGUIController() {}
+	virtual ~GUIController() {}
 
     // Mouse Events. Following three functions all work the same:
     //  Return true if the mouse-event is finished being handled, false otherwise.

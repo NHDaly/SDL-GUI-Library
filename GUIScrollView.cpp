@@ -18,8 +18,8 @@ using namespace std::tr1;
 const int SCROLL_BAR_W = 15;
 const int scroll_amount_c = 5;
 
-GUIScrollView::GUIScrollView(int w_, int h_, NewGUIView *display_view_)
-:NewGUIView(w_,h_), scroll_bar(SCROLL_BAR_W, h_ * h_/display_view_->get_h(), this),
+GUIScrollView::GUIScrollView(int w_, int h_, GUIView *display_view_)
+:GUIView(w_,h_), scroll_bar(SCROLL_BAR_W, h_ * h_/display_view_->get_h(), this),
 arrow_up(true, GUIImage("GUIImages/scroll_bar_vert2.bmp")), arrow_down(false, GUIImage("GUIImages/scroll_bar_vert3.bmp")),
 scroll_bar_bg(SCROLL_BAR_W, h_, this), display_view(display_view_),
 w_init(w_), h_init(h_),
@@ -52,7 +52,7 @@ scroll_y(0), scroll_y_vel(0), scrolling(false)
 
     attach_subview(&scroll_bar, DispPoint(scroll_bar_x, scroll_bar_top));
 
-    NewGUIApp::get()->repeat_on_timer(bind(&GUIScrollView::update, this), -1);
+    GUIApp::get()->repeat_on_timer(bind(&GUIScrollView::update, this), -1);
 }
 GUIScrollView::~GUIScrollView()
 {

@@ -1,5 +1,5 @@
 //
-//  NewNewGUITextView.cpp
+//  NewGUITextView.cpp
 //  Deep
 //
 //  Created by Nathan Daly on 1/4/13.
@@ -31,14 +31,14 @@ const SDL_Color clear_color_c = {0xFF, 0, 0xFF};
 const SDL_Color white_color_c = {0xFF, 0xFF, 0xFF};
 
 
-NewNewGUITextView::NewNewGUITextView(int w, int h, int size, SDL_Color color)
-:NewGUIView(w,h), prev('a', size, color)
+NewGUITextView::NewGUITextView(int w, int h, int size, SDL_Color color)
+:GUIView(w,h), prev('a', size, color)
 {
     draw_onto_self(GUIImage::create_filled(w, h, clear_color_c), DispPoint());
     set_clear_color(clear_color_c);    
 }
 
-void NewNewGUITextView::draw() {
+void NewGUITextView::draw() {
     
     DispPoint pos(0,0);
 
@@ -75,7 +75,7 @@ bool LetterData::operator<(const LetterData& rhs) const {
 }
 
 
-void NewNewGUITextView::set_letter_data(const LetterData& data,
+void NewGUITextView::set_letter_data(const LetterData& data,
                      size_t startIdx, size_t endIdx) {
     
     prev = data;
@@ -92,12 +92,12 @@ void NewNewGUITextView::set_letter_data(const LetterData& data,
 }
 
 
-void NewNewGUITextView::set_text(const std::string& text_){
+void NewGUITextView::set_text(const std::string& text_){
 	
     text.clear();
     add_text(text_, 0);
 }
-void NewNewGUITextView::add_text(const std::string& text_, int index){
+void NewGUITextView::add_text(const std::string& text_, int index){
 	
     if (index > text.size()) {
         throw GUIError("Cannot add text: Index is out of bounds.");
@@ -116,11 +116,11 @@ void NewNewGUITextView::add_text(const std::string& text_, int index){
     draw();
 }
 
-void NewNewGUITextView::append_text(const std::string& text_){
+void NewGUITextView::append_text(const std::string& text_){
 	add_text(text_, text.size());
 }
 
-std::string NewNewGUITextView::get_text() const {
+std::string NewGUITextView::get_text() const {
 	
     string result;
     
