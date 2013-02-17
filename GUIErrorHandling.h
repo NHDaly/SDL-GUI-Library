@@ -11,6 +11,8 @@
 
 #include <vector>
 
+namespace GUI {
+
 class ErrorCatcher {
 public:
     typedef std::vector<ErrorCatcher*>::iterator ErrorCatcherIter_t;
@@ -83,6 +85,6 @@ void call_error_handlers_helper(InputIterator begin,
     }
 }
 
-
+} // namespace GUI
 
 #endif

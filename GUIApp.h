@@ -19,6 +19,7 @@
 
 #include <SDL/SDL.h> // To ensure it is #included by main.
 
+
 // Throw an instance of GUIQuit to safely tell the application to exit.
 // (This is the same as calling GUIApp::quit())
 class GUIQuit {};
@@ -82,7 +83,7 @@ private:
     view_list_t captured_focus;
 
     
-    typedef std::list<ErrorCatcher*> error_handler_list_t;
+    typedef std::list<GUI::ErrorCatcher*> error_handler_list_t;
     error_handler_list_t handler_list;
     
     
@@ -153,7 +154,7 @@ GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool re
 
 template <typename Error_t, typename Handler_t>
 void GUIApp::register_error_handler(const Handler_t &handler) {
-    handler_list.push_back(create_error_handler<Error_t>(handler));
+    handler_list.push_back(GUI::create_error_handler<Error_t>(handler));
 }
 
 

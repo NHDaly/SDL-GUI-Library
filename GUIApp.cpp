@@ -278,7 +278,7 @@ void GUIApp::run(GUIWindow* window_) {
         
         catch(...) {
             
-            call_error_handlers(handler_list.begin(), handler_list.end());
+            GUI::call_error_handlers(handler_list.begin(), handler_list.end());
             
         }
        
