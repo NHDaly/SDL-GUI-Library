@@ -146,6 +146,10 @@ GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool re
     
     GUITimer_command* command = create_timer_command(op,interval, repeat);
     timer_commands.push_back(command);
+    
+    next_timer_cmd = --timer_commands.end();
+    
+
     return command;
 }
 

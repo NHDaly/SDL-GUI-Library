@@ -93,7 +93,8 @@ void GUIApp::run(GUIWindow* window_) {
     window->refresh();
     
     
-    next_timer_cmd = timer_commands.begin();
+    if (timer_commands.size())
+        next_timer_cmd = timer_commands.begin();
     
     while(running) {
         SDL_Event event;

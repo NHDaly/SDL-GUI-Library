@@ -35,6 +35,7 @@ public:
     // Should this be a view or an image, you think?
     void draw_onto_self(const GUIImage &image, DispPoint pos);
 
+    void fill_with_color(SDL_Color color);
     
     // NOTE: once attached, a subview "belongs" to this view. If this view is
     //   deleted, all subviews are deleted as well.
