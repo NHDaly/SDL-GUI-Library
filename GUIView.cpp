@@ -85,6 +85,10 @@ void GUIView::draw_onto_self(const GUIImage &image_, DispPoint pos) {
 	SDL_BlitSurface(image_, 0, image, &dest_rect);
 
 }
+void GUIView::fill_with_color(SDL_Color color) {
+   
+    draw_onto_self(GUIImage::create_filled(w, h, color), DispPoint());
+}
 
 
 // Draws image onto display.
