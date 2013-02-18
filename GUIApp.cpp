@@ -23,6 +23,7 @@ using namespace std::tr1::placeholders;
 
 #define FPS_CAP_DEFAULT 40
 
+using GUI::call_error_handlers;
 
 // SINGLETON MEMBERS
 
@@ -84,7 +85,6 @@ void GUIApp::run(GUIWindow* window_) {
     window = window_;
     
     register_error_handler<GUIError>(&print_msg);
-//    register_error_handler<Unhandled_Click>(&unhandled_click);
 
     bool running = true;
 
@@ -271,14 +271,12 @@ void GUIApp::run(GUIWindow* window_) {
                 }
             }
 
-            cycle_timer_commands();
-//            for_each(timer_commands.begin(), timer_commands.end(), bind(&GUITimer_command::execute_command, _1));
-            
+            cycle_timer_commands();            
         }
         
         catch(...) {
             
-            GUI::call_error_handlers(handler_list.begin(), handler_list.end());
+            call_error_handlers(handler_list.begin(), handler_list.end());
             
         }
        

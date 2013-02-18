@@ -24,6 +24,8 @@ void initGUI();
 #include <tr1/functional>
 
 
+// Linux?
+
 #endif
 
 
