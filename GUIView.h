@@ -77,16 +77,20 @@ public:
     GUIView* get_view_from_point(DispPoint coord);
     
 
-    DispPoint get_abs_pos(); // Pos on screen
-    DispPoint get_rel_pos(); // Pos on parent
+    DispPoint get_abs_pos() const; // Pos on screen
+    DispPoint get_rel_pos() const; // Pos on parent
     
     
-    int get_w() { return w; }
-    int get_h() { return h; }
+    int get_w() const { return w; }
+    int get_h() const { return h; }
     
     
     void resize(int w, int h);
         
+    void set_clear_color(SDL_Color clear_color);
+    void clear_alpha();
+    
+
     
 //    // *** The following two functions will call got_focus() and lost_focus(). 
 //    // *** Derived behavior may be specified by overriding those two functions.
@@ -101,9 +105,6 @@ public:
     friend class GUIApp;
     
 protected:
-    
-    void set_clear_color(SDL_Color clear_color);
-    void clear_alpha();
     
     void mark_changed();
     
@@ -137,15 +138,16 @@ protected:
     GUIView* get_parent() { return parent; }
 //    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
 
-    DispPoint abs_from_rel(DispPoint coord);
-    DispPoint adjust_to_parent(DispPoint coord);    
-    DispPoint adjust_to_rel(DispPoint coord);    
+    // Convert a point to abs, or coordinates relative to this view or parent view.
+    DispPoint abs_from_rel(DispPoint coord) const;
+    DispPoint adjust_to_parent(DispPoint coord) const;    
+    DispPoint adjust_to_rel(DispPoint coord) const;    
 
     // returns true if coord is within this view's rectangle.
     bool rel_point_is_on_me(DispPoint coord);
     bool abs_point_is_on_me(DispPoint coord);
 
-    const SDL_Surface* get_image_ptr() { return image; }
+    const SDL_Surface* get_image_ptr() const { return image; }
     
 private:
     bool changed;

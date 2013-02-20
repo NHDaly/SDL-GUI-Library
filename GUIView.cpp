@@ -267,6 +267,8 @@ void GUIView::key_up(SDL_keysym key) {
 
 GUIView* GUIView::get_view_from_point(DispPoint coord) {
     
+    // Can we cache this? Would that be faster?
+    
     coord = adjust_to_rel(coord);
     if (!rel_point_is_on_me(coord)) return 0;
         
@@ -305,21 +307,21 @@ bool GUIView::abs_point_is_on_me(DispPoint coord) {
 }
 
 
-DispPoint GUIView::abs_from_rel(DispPoint coord) {
+DispPoint GUIView::abs_from_rel(DispPoint coord) const {
     
     DispPoint abs_pos = get_abs_pos();
         return DispPoint(abs_pos.x + coord.x,
                          abs_pos.y + coord.y);
 }
-DispPoint GUIView::adjust_to_parent(DispPoint coord) {
+DispPoint GUIView::adjust_to_parent(DispPoint coord) const {
     return DispPoint(coord.x + pos.x, coord.y + pos.y);
 }
-DispPoint GUIView::adjust_to_rel(DispPoint coord) {
+DispPoint GUIView::adjust_to_rel(DispPoint coord) const {
     return DispPoint(coord.x - pos.x, coord.y - pos.y);
 }
 
 
-DispPoint GUIView::get_abs_pos() {
+DispPoint GUIView::get_abs_pos() const {
     if (parent == 0) return pos;
     else {
         DispPoint parent_abs_pos = parent->get_abs_pos();
@@ -327,12 +329,18 @@ DispPoint GUIView::get_abs_pos() {
                          parent_abs_pos.y + pos.y);
     }
 }
-DispPoint GUIView::get_rel_pos() {
+DispPoint GUIView::get_rel_pos() const {
     return pos;
 }
 
 
 void GUIView::resize(int w_, int h_) {
+    
+    if (w == w_ && h == h_) {
+        
+        did_resize(w_,h_);
+        return;
+    }
     
     w = w_; h = h_;
     GUIView temp(w,h);
