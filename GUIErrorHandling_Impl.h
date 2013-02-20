@@ -13,47 +13,47 @@
 
 namespace GUI {
     
-// Abstract ErrorCatcher Base Class.
+// Abstract ExceptionCatcher Base Class.
 // Derived class will be templated for Error type and Handler type.
-class ErrorCatcher {
+class ExceptionCatcher {
 public:
-    typedef std::vector<ErrorCatcher*>::iterator ErrorCatcherIter_t;
+    typedef std::vector<ExceptionCatcher*>::iterator ExceptionCatcherIter_t;
     
-    virtual void try_catch(ErrorCatcherIter_t begin,
-                           ErrorCatcherIter_t end, bool &handled) = 0;
+    virtual void try_catch(ExceptionCatcherIter_t begin,
+                           ExceptionCatcherIter_t end, bool &handled) = 0;
 };
 
 
-// Implementation of ErrorCatcher. Nests try statements for all ErrorCatchers
-// passed in, and rethrows the current exception. Then each ErrorCatcher
-// attempts to catch during the unravelling.
+// Implementation of ExceptionCatcher. Nests try statements for all 
+// ExceptionCatchers passed in, and rethrows the current exception.
+// Then each ExceptionCatcher attempts to catch during the unravelling.
 //
 // Error_t : The type of errors that will be caught by handler
 // Handler_t : a function or function object that overrides operator()(Error_t);
 template <typename Error_t, typename Handler_t>
-class ErrorCatcher_Impl : public ErrorCatcher {
+class ExceptionCatcher_Impl : public ExceptionCatcher {
 public:
     
     // handler_ should be able to call handler_(Error_t)
     // NOTE: handler_ will be copied.
-    ErrorCatcher_Impl(const Handler_t &handler_) : handler(handler_) { }
+    ExceptionCatcher_Impl(const Handler_t &handler_) : handler(handler_) { }
     
-    // for each ErrorCatcher in [begin:end), try to handle the error.
-    // RESULT: handled will be set to true if any ErrorCatcher successfully
+    // for each ExceptionCatcher in [begin:end), try to handle the error.
+    // RESULT: handled will be set to true if any ExceptionCatcher successfully
     // handled the current exception.
     // REQUIRES: this must be called from inside a catch{} block.
-    virtual void try_catch(ErrorCatcherIter_t begin,
-                           ErrorCatcherIter_t end, bool &handled) {
+    virtual void try_catch(ExceptionCatcherIter_t begin,
+                           ExceptionCatcherIter_t end, bool &handled) {
         
-        // nest a try block for each ErrorCatcher
+        // nest a try block for each ExceptionCatcher
         try {
             if (begin == end) { // base case
                 throw;
             }
-            ErrorCatcher *next = *begin;
+            ExceptionCatcher *next = *begin;
             next->try_catch(++begin, end, handled); // unravel until end
         }
-        // Each ErrorCatcher gets a chance to try to catch the exception.
+        // Each ExceptionCatcher gets a chance to try to catch the exception.
         catch(const Error_t &e) { // Will only catch if exception is Error_t
             
             handler(e);     // handler() is only called if Error_t matches.

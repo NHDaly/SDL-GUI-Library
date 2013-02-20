@@ -58,7 +58,7 @@ public:
     // When any code executed within the run() loop throws an instance of Error_t,
     // any Handler_t's registered for that Error_t will be called.
     template <typename Error_t, typename Handler_t>
-    void register_error_handler(const Handler_t &handler);
+    void register_exception_handler(const Handler_t &handler);
 
     // Provides a Controller with the ability to receive mouse/keyboard input.
     //  (Views receive mouse input by defualt when hovered over.)
@@ -84,7 +84,7 @@ private:
 
     
     // vector because it's fast to iterate through!
-    typedef std::vector<GUI::ErrorCatcher*> error_handler_list_t;
+    typedef std::vector<GUI::ExceptionCatcher*> error_handler_list_t;
     error_handler_list_t handler_list;
     
     
@@ -158,7 +158,7 @@ GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool re
 
 
 template <typename Error_t, typename Handler_t>
-void GUIApp::register_error_handler(const Handler_t &handler) {
+void GUIApp::register_exception_handler(const Handler_t &handler) {
     handler_list.push_back(GUI::create_error_handler<Error_t>(handler));
 }
 

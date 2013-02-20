@@ -84,11 +84,11 @@ void GUIApp::run(GUIWindow* window_) {
     
     window = window_;
     
-    register_error_handler<GUIError>(&print_msg);
+    register_exception_handler<GUIError>(&print_msg);
 
     bool running = true;
 
-    register_error_handler<GUIQuit>(GUIApp_Quitter(running));
+    register_exception_handler<GUIQuit>(GUIApp_Quitter(running));
     
     window->refresh();
     
