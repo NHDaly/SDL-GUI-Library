@@ -8,7 +8,7 @@
 
 #include "GUIView.h"
 
-#include "GUITextBox.h"
+#include "GUITextViews.h"
 
 #include <cctype>   // For isalpha().
 #include <sstream>
@@ -16,8 +16,8 @@
 
 
 
-#ifndef NEW_GUI_VALUE_BOX_H
-#define NEW_GUI_VALUE_BOX_H
+#ifndef GUI_VALUE_BOX_H
+#define GUI_VALUE_BOX_H
 
 class GUIValue_Box: public GUIView {
 public:

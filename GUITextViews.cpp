@@ -1,6 +1,6 @@
 
 
-#include "GUITextBox.h"
+#include "GUITextViews.h"
 #include "GUIImageView.h"
 #include "GUIApp.h"
 

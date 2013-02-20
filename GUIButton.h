@@ -108,7 +108,7 @@ private:
     GUIImage image, hovered_image, clicked_image;
 };
 
-#include "GUITextBox.h"
+#include "GUITextViews.h"
 
 class GUITextButton : public GUIButton { 
 public:
