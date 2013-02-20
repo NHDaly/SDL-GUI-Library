@@ -14,7 +14,7 @@ void initGUI();
 #include <functional>
 #include <direct.h>
 
-#else // Mac OSX
+#elif __APPLE__ // Mac OSX
 
 #include "SDL/SDL.h"
 #include "SDL_ttf/SDL_ttf.h"
@@ -24,7 +24,15 @@ void initGUI();
 #include <tr1/functional>
 
 
-// Linux?
+#else // Linux?
+
+#include "SDL/SDL.h"
+#include "SDL_ttf/SDL_ttf.h"
+#include "SDL_mixer/SDL_mixer.h"
+#include "SDL_image/SDL_image.h"
+#include <tr1/memory>
+#include <tr1/functional>
+
 
 #endif
 
