@@ -83,7 +83,8 @@ private:
     view_list_t captured_focus;
 
     
-    typedef std::list<GUI::ErrorCatcher*> error_handler_list_t;
+    // vector because it's fast to iterate through!
+    typedef std::vector<GUI::ErrorCatcher*> error_handler_list_t;
     error_handler_list_t handler_list;
     
     
