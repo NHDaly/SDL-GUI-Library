@@ -28,7 +28,7 @@ using namespace std::tr1::placeholders;
 static char SDL_to_a(SDLKey key);
 static char symbol_to_upper(char ltr);
 
-const SDL_Color bg_color_c = {255,255,255,0};
+const SDL_Color bg_color_c = {255,0,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
 
 
@@ -74,9 +74,7 @@ void GUITextView::update(){
         }
     }
     
-    GUIImage bg = GUIImage::create_blank(get_w(), get_h());
-    SDL_FillRect(bg, 0, SDL_MapRGB(bg->format, bg_color_c.r, bg_color_c.g, bg_color_c.b));
-    draw_onto_self(bg, DispPoint());
+    fill_with_color(bg_color_c);
     
     for (int i = 0; i < letters.size(); i++){
         letters[i].drawself(this);
@@ -84,14 +82,16 @@ void GUITextView::update(){
     
 	mark_changed();
 }
-void GUITextView::clear(){
+void GUITextView::clear_text(){
 	letters.clear();
 }
 
-
-
 void GUITextView::set_text(const string& text) {
-    clear();
+    clear_text();
+    
+    append_text(text);
+}
+void GUITextView::append_text(const string& text) {
     
     for (int i = 0; i < text.length(); ++i) {
         add_letter(text[i], i);
@@ -113,23 +113,28 @@ void GUITextView::set_text_color(SDL_Color color_) {
     color = color_;
     set_text(get_text());
 }
-void GUITextView::did_resize(int w, int h)
-{
-//    if (GUITextBox* tb = dynamic_cast<GUITextBox*>(get_parent())) {
-//        tb->resize(w,h);
-//    }
+int GUITextView::get_text_size() {
+    return text_size;
 }
+SDL_Color GUITextView::get_text_color() {
+    return color;
+}
+
+//void GUITextView::did_resize(int w, int h)
+//{
+////    if (GUITextField* tb = dynamic_cast<GUITextField*>(get_parent())) {
+////        tb->resize(w,h);
+////    }
+//}
 
 
 
 void GUITextView::add_letter(char ltr, int index){
-    
-    cout << "ADDING LETTER: '" << ltr << "'" << endl;
-	
+    	
 	try{
 		letters.insert(letters.begin()+index, NewLetter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
-        cout << "letter: '" << letters[index].get_ltr() << "'\n";
-        cout << "width: " << letters[index].get_width() << "\n";
+//        cout << "letter: '" << letters[index].get_ltr() << "'\n";
+//        cout << "width: " << letters[index].get_width() << "\n";
 	}
 	catch(const GUIError& e){
 		cout << e.msg << endl;
@@ -137,8 +142,6 @@ void GUITextView::add_letter(char ltr, int index){
 	update();
 }
 void GUITextView::remove_letter(int index){
-    cout << "REMOVVVVEEEEE LETTTERRRRR: " << letters.size() << endl;
-    cout << "index: " << index << " SIZE: " << letters.size() << endl;
 
 	if (index < 0) return;
 	if (index >= letters.size()) return;
@@ -189,9 +192,9 @@ int GUITextView::index_at_pos(DispPoint pos_){
 			}		
 		
 		else if (i > 0 && ((pos_.x >= letters[i-1].get_pos().x + letters[i-1].get_width()/2
-							&& pos_.x < letters[i-1].get_pos().x + letters[i-1].get_width()) 
+							&& pos_.x <= letters[i-1].get_pos().x + letters[i-1].get_width()) 
                            && (pos_.y >= letters[i-1].get_pos().y 
-                               && pos_.y < letters[i-1].get_pos().y + NewLetter_Disp_Obj::get_line_height()))) 
+                               && pos_.y <= letters[i-1].get_pos().y + NewLetter_Disp_Obj::get_line_height()))) 
 		{
             
 			break;
@@ -202,18 +205,18 @@ int GUITextView::index_at_pos(DispPoint pos_){
 
 
 
-GUITextBox::GUITextBox(int w_, int h_,
+GUITextField::GUITextField(int w_, int h_,
                              bool resizeable_down_, bool resizeable_right_)
 :GUITextView(w_,h_, resizeable_down_, resizeable_right_), 
 cursor(this), key_is_held(false), modifiers_held(KMOD_NONE)
 {        
-    attach_subview(&cursor, DispPoint());
+    attach_subview(&cursor, DispPoint(-1,0)); // start it out off screen.
     
-    GUIApp::get()->repeat_on_timer(bind(&GUITextBox::handle_key_held, this), 0.05);
+    GUIApp::get()->repeat_on_timer(bind(&GUITextField::handle_key_held, this), 0.05);
 }
 
 #include "GUIApp.h"
-bool GUITextBox::handle_key_down(SDL_keysym key_in) {
+bool GUITextField::handle_key_down(SDL_keysym key_in) {
     
     cout << "text box key down: '" << key_in.sym << "'" << endl;
     
@@ -227,7 +230,7 @@ bool GUITextBox::handle_key_down(SDL_keysym key_in) {
     return true;
 }
 
-bool GUITextBox::handle_key_up(SDL_keysym key_in) {
+bool GUITextField::handle_key_up(SDL_keysym key_in) {
     
     cout << "text box key up" << endl;
 
@@ -237,7 +240,7 @@ bool GUITextBox::handle_key_up(SDL_keysym key_in) {
     
     return false;
 }
-void GUITextBox::handle_key_held() {
+void GUITextField::handle_key_held() {
     
     if (!key_is_held) return;
     if (!(time_key_held.get_time() > 500)) return; 
@@ -245,7 +248,7 @@ void GUITextBox::handle_key_held() {
     handle_key();
 }
 
-void GUITextBox::handle_key() {
+void GUITextField::handle_key() {
  	
     SDLKey key = key_held;
 
@@ -279,7 +282,7 @@ void GUITextBox::handle_key() {
 
 
 
-void GUITextBox::handle_alpha_num(char ltr){
+void GUITextField::handle_alpha_num(char ltr){
     
     if (!isprint(ltr)) return;
 
@@ -289,20 +292,23 @@ void GUITextBox::handle_alpha_num(char ltr){
         if (isalpha(ltr)) ltr = toupper(ltr);
         else ltr = symbol_to_upper(ltr);
     }
+    else if (modifiers_held & KMOD_CAPS) {
+        if (isalpha(ltr)) ltr = toupper(ltr);
+    }
     
     add_letter(ltr, index);
 	
 	cursor.move_right();
 }
 
-void GUITextBox::handle_modifier(SDLMod mod){
+void GUITextField::handle_modifier(SDLMod mod){
     
     modifiers_held = mod;
 
 }
 
 
-bool GUITextBox::handle_mouse_down(DispPoint pos_){
+bool GUITextField::handle_mouse_down(DispPoint pos_){
 	
     if (!rel_point_is_on_me(pos_)) {
         lose_focus();
@@ -327,21 +333,29 @@ static char SDL_to_a(SDLKey key){
 	return static_cast<char>(key);
 }
 
-void GUITextBox::lost_focus() {
+void GUITextField::lost_focus() {
     cout << "LOSTTTTT FOCUSSSSS" << endl;
     move_subview(&cursor, DispPoint(-100,-100));
     update();
 }
 
-void GUITextBox::Cursor::move_right(){
+GUITextField::Cursor::Cursor(GUITextField* tb_ptr) 
+: GUIView(1,1), position(0,0), index(0),
+text_box_ptr(tb_ptr), flicker(true)
+{ 
+    GUIApp::get()->repeat_on_timer(bind(&Cursor::display, this,
+                                        bind(&GUITextField::get_text_size, text_box_ptr)), 0.5);
+}
+
+void GUITextField::Cursor::move_right(){
 	if (index == text_box_ptr->get_letters().size()) return;
 	move_to(index + 1);
 }
-void GUITextBox::Cursor::move_left(){
+void GUITextField::Cursor::move_left(){
 	if (index == 0) return;
 	move_to(index - 1);
 }
-void GUITextBox::Cursor::move_up(){
+void GUITextField::Cursor::move_up(){
 	
 	DispPoint new_pos = position;
 	new_pos.y -= NewLetter_Disp_Obj::get_line_height();
@@ -350,7 +364,7 @@ void GUITextBox::Cursor::move_up(){
 	
 	move_to(new_index);
 }
-void GUITextBox::Cursor::move_down(){
+void GUITextField::Cursor::move_down(){
 	DispPoint new_pos = position;
 	new_pos.y += NewLetter_Disp_Obj::get_line_height();
 	
@@ -359,7 +373,7 @@ void GUITextBox::Cursor::move_down(){
 	move_to(new_index);
 }
 
-void GUITextBox::Cursor::move_to(int index_) {
+void GUITextField::Cursor::move_to(int index_) {
 	
 	if (index_ < 0 || index_ > text_box_ptr->get_letters().size()) return;
 	
@@ -370,17 +384,50 @@ void GUITextBox::Cursor::move_to(int index_) {
     text_box_ptr->move_subview(this, position);
 }
 
-void GUITextBox::Cursor::display(int text_size) {
-	if (std::clock() % 300000 >= 150000){
-		flicker = 0;
-	}
-	else flicker = 1;
-	
-//	SDL_Rect box = {0,0,1,text_size};
-	
-	GUIImage* image = GUIImage::get_image( string("GUIImages/cursor") + (flicker ? "1" : "0") + string(".bmp"));
-	draw_onto_self(*image, position);
-    //	ShowBMP("GUIImages/fireball.bmp", screen, position.x, position.y, 0);
+void GUITextField::Cursor::display(int text_size) {
+    flicker = 1-flicker;
+    
+    static const SDL_Color black = {0,0,0};
+    static const SDL_Color white = {0xff,0xff,0xff};
+
+    resize(1, text_size+2);
+    fill_with_color((flicker ? black : white));
+    
+}
+
+
+GUITextBox::GUITextBox(int w_, int h_)
+:GUIView(w_,h_), field(new GUITextField(w_-4,h_-4))
+{
+    const SDL_Color clear = {0xff, 0, 0xff};
+    fill_with_color(clear);
+    set_clear_color(clear);
+    
+    const SDL_Color field_bg_color = {0xff,0xff,0xff};
+
+    fill_with_color(field_bg_color);
+
+    attach_subview(field, DispPoint(2,2));
+   
+    draw_onto_self(GUIImage("GUIImages/corner0.bmp"), DispPoint(0,    0));
+    draw_onto_self(GUIImage("GUIImages/corner1.bmp"), DispPoint(w_-5, 0));
+    draw_onto_self(GUIImage("GUIImages/corner2.bmp"), DispPoint(w_-5, h_-5));
+    draw_onto_self(GUIImage("GUIImages/corner3.bmp"), DispPoint(0,    h_-5));
+
+    // Should ideally use a mask layer instead so that bg color could be changed,
+    // but right now the problem is it receives the mouse clicks instead of field.
+//    const SDL_Color mask_clear = {0, 0xff, 0xff};
+//    GUIView *mask = new GUIView(w_,h_);
+//    mask->fill_with_color(mask_clear);
+//    mask->set_clear_color(mask_clear);
+//    
+//    mask->draw_onto_self(GUIImage("GUIImages/corner0.bmp"), DispPoint(0,    0));
+//    mask->draw_onto_self(GUIImage("GUIImages/corner1.bmp"), DispPoint(w_-5, 0));
+//    mask->draw_onto_self(GUIImage("GUIImages/corner2.bmp"), DispPoint(w_-5, h_-5));
+//    mask->draw_onto_self(GUIImage("GUIImages/corner3.bmp"), DispPoint(0,    h_-5));
+// 
+//    attach_subview(mask, DispPoint(0,0));
+
 }
 
 
@@ -396,8 +443,8 @@ NewLetter_Disp_Obj::NewLetter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Co
 {
 	letter = GUILetter::get_letter(ltr, size, color);
 	if (!letter) {
-		string error_msg = string("Couldn't load image for letter") + ltr + string(": ")+ SDL_GetError() +"\n";
-		cout << error_msg << endl;
+		string error_msg = string("Couldn't load image for letter") 
+                            + ltr + string(": ")+ SDL_GetError() +"\n";
 		throw GUIError(error_msg.c_str());
 	}
 	line_height = letter->get_height()+2; // for a line spacing
@@ -460,7 +507,6 @@ static char symbol_to_upper(char ltr) {
             return '?';
           
         default:
-            throw "GUITextBox: Symbol To Upper: invalid symbol";
-            break;
+            return ltr;
     }
 }

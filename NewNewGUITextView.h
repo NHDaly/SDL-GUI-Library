@@ -50,6 +50,9 @@ public:
     void append_text(const std::string& text);
 	std::string get_text() const;
 
+    // NOTE: for index_at_pos, make each letter a subview, and have mouse click 
+    // just return its index? Not a bad idea.
+    
 private:
     typedef std::list<LetterData> letter_ctr_t;
     letter_ctr_t text;

@@ -30,14 +30,14 @@ public:
 };
 
 
-class GUIInteger_Text_Box : public GUITextBox {
+class GUIInteger_Text_Box : public GUITextField {
 public:
     
     GUIInteger_Text_Box(int w_, int h_)
-    : GUITextBox(w_,h_) { }
+    : GUITextField(w_,h_) { }
     
 	virtual void add_letter(char ltr, int index) {
-        if (isdigit(ltr)) GUITextBox::add_letter(ltr, index);
+        if (isdigit(ltr)) GUITextField::add_letter(ltr, index);
     }
 };
 

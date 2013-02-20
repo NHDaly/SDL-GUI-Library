@@ -2,8 +2,8 @@
 
 
 
-#ifndef NEW_GUI_TEXT_BOX_H
-#define NEW_GUI_TEXT_BOX_H
+#ifndef GUI_TEXT_VIEWS_H
+#define GUI_TEXT_VIEWS_H
 
 
 #include "GUIView.h"
@@ -18,32 +18,33 @@
 
 
 class NewLetter_Disp_Obj;
-
 class GUILetter;
-class SDL_Color;
 
+// A View that displays text atop a clear background.
 class GUITextView : public GUIView {
 public:	
 
 	GUITextView(int w_ = 200, int h_ = 200, 
                    bool resizeable_down = false, bool resizable_right = false);
 	
-    
-	virtual void update();
-	virtual void clear();
-    
+    // Text functions
+	virtual void clear_text();
     void set_text(const std::string& text);
+    void append_text(const std::string& text);
 	std::string get_text() const;
 
+    // Display features
     void set_text_size(int size);
     void set_text_color(SDL_Color color);
-
-    virtual void did_resize(int w, int h);
+    int get_text_size();
+    SDL_Color get_text_color();
     
-    /// @todo
+    /// @todo 
+    // Justification
 //    enum Justification_e { LEFT, MIDDLE, RIGHT };
 //    
 //    void set_justification(Justification_e just);
+    
     
 protected:    
     typedef std::vector<NewLetter_Disp_Obj> letters_ctr_t;
@@ -57,6 +58,8 @@ protected:
     DispPoint pos_at_index(size_t i);
 	int index_at_pos(DispPoint pos_);
 
+    virtual void update();
+
 private:
 	
     bool resizeable_down, resizeable_right;
@@ -69,16 +72,17 @@ private:
 };
 
 
-class GUITextBox : public GUITextView {
+// A TextView that allows for text entry (including mouse motion, deletion, etc.)
+class GUITextField : public GUITextView {
 public:	
 	
-	GUITextBox(int w_ = 200, int h_ = 200, 
+	GUITextField(int w_ = 200, int h_ = 200, 
                   bool resizeable_down = false, bool resizable_right = false);
 	
 	
 protected:
     
-//    virtual void got_focus();
+    // remove cursor when lose focus.
     virtual void lost_focus();
 	
 private:
@@ -102,10 +106,10 @@ private:
     void handle_modifier(SDLMod key);
 
     
-	class Cursor : public GUIImageView {
+	class Cursor : public GUIView {
 	public:
-		Cursor(GUITextBox* tb_ptr) : GUIImageView(GUIImage("GUIImages/cursor1.bmp")), position(0,0), index(0), text_box_ptr(tb_ptr), flicker(true) { }
-		
+		Cursor(GUITextField* tb_ptr);
+
 		void display(int text_size);
 		
 		void move_right();
@@ -123,7 +127,7 @@ private:
 	private:
 		DispPoint position;
 		int index; 
-		GUITextBox* text_box_ptr;
+		GUITextField* text_box_ptr;
 		
 		bool flicker;
 	} cursor;
@@ -131,6 +135,28 @@ private:
 };
 
 
+// Wraps a TextField with a white background and bevelled corners.
+class GUITextBox : public GUIView {
+public:	
+	
+	GUITextBox(int w_, int h_);
+
+    void set_text(const std::string& text) { field->set_text(text); }
+	std::string get_text() const { return field->get_text(); }
+    
+    void set_text_size(int size) { return field->set_text_size(size); }
+    void set_text_color(SDL_Color color) { return field->set_text_color(color);}
+    
+    int get_text_size() { return field->get_text_size(); }
+    SDL_Color get_text_color() { return field->get_text_color(); }
+
+private:
+    GUITextField *field;
+
+};
+
+
+// Implements the Flyweight pattern.
 class NewLetter_Disp_Obj{
 public:
 	NewLetter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Color color);
