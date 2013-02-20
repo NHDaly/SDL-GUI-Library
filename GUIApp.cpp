@@ -63,7 +63,7 @@ struct GUIApp_Quitter {
 
 
 GUIApp::GUIApp()
-:fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true), window(0)
+:window(0), fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
 { }
 
 void GUIApp::cancel_timer_op(GUITimer_command* op) {
@@ -224,7 +224,7 @@ void GUIApp::run(GUIWindow* window_) {
                             GUIController *captured = *it;
                             
                             bool handled = captured->handle_key_down(event.key.keysym);
-                            
+                            if (!handled) {}
                         }
 
                         break;
@@ -257,7 +257,8 @@ void GUIApp::run(GUIWindow* window_) {
                             GUIController *captured = *it;
                         
                             bool handled = captured->handle_key_up(event.key.keysym);
-                        
+                            if (!handled) {}
+                    
                         }
                         break;
                     }
@@ -288,7 +289,7 @@ void GUIApp::run(GUIWindow* window_) {
 
 void GUIApp::cycle_timer_commands() {
     
-    for (int i = 0; i < timer_commands.size(); i++) {
+    for (size_t i = 0; i < timer_commands.size(); i++) {
         
         GUITimer_command *cmd = *next_timer_cmd;
         

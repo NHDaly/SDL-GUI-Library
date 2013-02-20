@@ -83,7 +83,7 @@ void NewGUITextView::set_letter_data(const LetterData& data,
     if (endIdx == string::npos) endIdx = text.size();
 
     letter_ctr_t::iterator it = text.begin();
-    for (int i = 0; i < startIdx; i++) ++it;   // advance to correct position.
+    for (size_t i = 0; i < startIdx; i++) ++it;   // advance to correct position.
   
     for (size_t i = startIdx; i < endIdx; ++i, ++it) { 
         it->size = data.size;
@@ -99,12 +99,12 @@ void NewGUITextView::set_text(const std::string& text_){
 }
 void NewGUITextView::add_text(const std::string& text_, int index){
 	
-    if (index > text.size()) {
+    if (index > (int)text.size()) {
         throw GUIError("Cannot add text: Index is out of bounds.");
     }
             
     letter_ctr_t new_text;
-    for (int i = 0; i < text_.size(); ++i) { 
+    for (size_t i = 0; i < text_.size(); ++i) { 
         new_text.push_back(LetterData(text_[i], prev.size, prev.color));
     }
     

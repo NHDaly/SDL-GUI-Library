@@ -26,9 +26,9 @@ const SDL_Color default_clear_color = {255,0,255,0};
 
 
 GUIView::GUIView(int w_, int h_) 
-:changed(false), w(w_), h(h_), parent(0),
-image(prepare_SDL_surface(w_, h_)), display(prepare_SDL_surface(w_, h_)),
-is_alpha(false)
+:changed(false), w(w_), h(h_), image(prepare_SDL_surface(w_, h_)),
+display(prepare_SDL_surface(w_, h_)), is_alpha(false),
+parent(0)
 { 
     
 }

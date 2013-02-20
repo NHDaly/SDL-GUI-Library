@@ -19,9 +19,12 @@ const int SCROLL_BAR_W = 15;
 const int scroll_amount_c = 5;
 
 GUIScrollView::GUIScrollView(int w_, int h_, GUIView *display_view_)
-:GUIView(w_,h_), scroll_bar(SCROLL_BAR_W, h_ * h_/display_view_->get_h(), this),
-arrow_up(true, GUIImage("GUIImages/scroll_bar_vert2.bmp")), arrow_down(false, GUIImage("GUIImages/scroll_bar_vert3.bmp")),
-scroll_bar_bg(SCROLL_BAR_W, h_, this), display_view(display_view_),
+:GUIView(w_,h_), 
+scroll_bar(SCROLL_BAR_W, h_ * h_/display_view_->get_h(), this),
+scroll_bar_bg(SCROLL_BAR_W, h_, this), 
+arrow_up(true, GUIImage("GUIImages/scroll_bar_vert2.bmp")),
+arrow_down(false, GUIImage("GUIImages/scroll_bar_vert3.bmp")),
+display_view(display_view_),
 w_init(w_), h_init(h_),
 scroll_y(0), scroll_y_vel(0), scrolling(false)
 {
@@ -84,8 +87,8 @@ void GUIScrollView::update() {
 
     }
     
-    const double display_scroll_range = display_view->get_h() - get_h();
-    const double scroll_bar_range = scroll_bar_bottom - scroll_bar_top - scroll_bar.get_h();
+//    const double display_scroll_range = display_view->get_h() - get_h();
+//    const double scroll_bar_range = scroll_bar_bottom - scroll_bar_top - scroll_bar.get_h();
 
     scroll_y += scroll_y_vel;
     move_display_to(DispPoint(0,scroll_y));

@@ -55,7 +55,7 @@ void GUITextView::update(){
 //        }
     }
     
-	for (int i = 0; i < letters.size(); i++){
+	for (size_t i = 0; i < letters.size(); i++){
 		letters[i].set_pos(pos_at_index(i));
 	}
     
@@ -76,7 +76,7 @@ void GUITextView::update(){
     
     fill_with_color(bg_color_c);
     
-    for (int i = 0; i < letters.size(); i++){
+    for (size_t i = 0; i < letters.size(); i++){
         letters[i].drawself(this);
 	}
     
@@ -93,7 +93,7 @@ void GUITextView::set_text(const string& text) {
 }
 void GUITextView::append_text(const string& text) {
     
-    for (int i = 0; i < text.length(); ++i) {
+    for (size_t i = 0; i < text.length(); ++i) {
         add_letter(text[i], i);
     };
 }
@@ -144,7 +144,7 @@ void GUITextView::add_letter(char ltr, int index){
 void GUITextView::remove_letter(int index){
 
 	if (index < 0) return;
-	if (index >= letters.size()) return;
+	if (index >= (int)letters.size()) return;
 	
 	letters.erase(letters.begin()+index);
 	update();
@@ -182,7 +182,7 @@ int GUITextView::index_at_pos(DispPoint pos_){
 		return 0;
 	}
 	int i;
-	for (i = 0; i < letters.size(); i++) {
+	for (i = 0; i < (int)letters.size(); i++) {
 		if ((pos_.x >= letters[i].get_pos().x 
 			 && pos_.x < letters[i].get_pos().x + letters[i].get_width()/2) 
 			&& (pos_.y >= letters[i].get_pos().y 
@@ -207,8 +207,8 @@ int GUITextView::index_at_pos(DispPoint pos_){
 
 GUITextField::GUITextField(int w_, int h_,
                              bool resizeable_down_, bool resizeable_right_)
-:GUITextView(w_,h_, resizeable_down_, resizeable_right_), 
-cursor(this), key_is_held(false), modifiers_held(KMOD_NONE)
+:GUITextView(w_,h_, resizeable_down_, resizeable_right_),
+key_is_held(false), modifiers_held(KMOD_NONE), cursor(this)
 {        
     attach_subview(&cursor, DispPoint(-1,0)); // start it out off screen.
     
@@ -348,7 +348,7 @@ text_box_ptr(tb_ptr), flicker(true)
 }
 
 void GUITextField::Cursor::move_right(){
-	if (index == text_box_ptr->get_letters().size()) return;
+	if (index == (int)text_box_ptr->get_letters().size()) return;
 	move_to(index + 1);
 }
 void GUITextField::Cursor::move_left(){
@@ -375,7 +375,7 @@ void GUITextField::Cursor::move_down(){
 
 void GUITextField::Cursor::move_to(int index_) {
 	
-	if (index_ < 0 || index_ > text_box_ptr->get_letters().size()) return;
+	if (index_ < 0 || index_ > (int)text_box_ptr->get_letters().size()) return;
 	
 	index = index_;
 	

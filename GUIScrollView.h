@@ -52,9 +52,9 @@ private:
         virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion);
 
     private:
+        GUIScrollView *view;
         bool clicked;
         DispPoint click;
-        GUIScrollView *view;
     };
     class ScrollArrow : public GUIImageView {
     public:
@@ -72,8 +72,8 @@ private:
     void move_display_to(DispPoint pos);
     void move_scroll_bar_to(DispPoint pos);
     
-    ScrollBarBg scroll_bar_bg;
     ScrollBar scroll_bar;
+    ScrollBarBg scroll_bar_bg;
     ScrollArrow arrow_up, arrow_down;
     GUIView *display_view;
 

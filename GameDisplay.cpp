@@ -176,7 +176,7 @@ SDL_Surface* createText (const string &a){
 	int x = 0;
 	
 	string filePath = alphaImage;
-	for (int i = 0; i < a.size(); i++) {
+	for (size_t i = 0; i < a.size(); i++) {
 		SDL_Surface *letter = load_letter(a[i], alphaImage, fileExtension);
 		if (!letter) {
 			return 0;
@@ -187,10 +187,10 @@ SDL_Surface* createText (const string &a){
 	
 	SDL_Surface *surface = create_SDL_Surface(x, letters[0]->h);
 	x = 0;
-	for (int i = 0; i < letters.size(); i++) {
+	for (size_t i = 0; i < letters.size(); i++) {
 		
 		
-		
+        
 		SDL_Rect rect = {x, 0, letters[i]->w, letters[i]->h};
 		SDL_BlitSurface(letters[i], NULL, surface, &rect);
 		
