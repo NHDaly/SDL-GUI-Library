@@ -1,9 +1,9 @@
 CC = g++
 LD = g++
 
-CFLAGS = -c -Wall -fno-elide-constructors
+CFLAGS = -c -Wall -fno-elide-constructors -Iincludes
 LFLAGS = -Wall -F/SDL.framework -framework SDL
-OBJ_CFLAGS = -c -Wall
+OBJ_CFLAGS = -c -Wall -Iincludes
 
 PROG = p6exe
 
