@@ -89,7 +89,11 @@ public:
         
     void set_clear_color(SDL_Color clear_color);
     void clear_alpha();
-    
+
+    bool has_alpha_color() { return is_alpha; }
+    // Only valid if has_alpha_color.
+    SDL_Color get_clear_color() { return clear_color; }
+
 
     
 //    // *** The following two functions will call got_focus() and lost_focus(). 

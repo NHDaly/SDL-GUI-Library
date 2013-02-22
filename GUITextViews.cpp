@@ -339,10 +339,13 @@ void GUITextField::lost_focus() {
     update();
 }
 
+const SDL_Color cursor_clear_c = {0, 0xff, 0};
+
 GUITextField::Cursor::Cursor(GUITextField* tb_ptr) 
 : GUIView(1,1), position(0,0), index(0),
 text_box_ptr(tb_ptr), flicker(true)
 { 
+    set_clear_color(cursor_clear_c);
     GUIApp::get()->repeat_on_timer(bind(&Cursor::display, this,
                                         bind(&GUITextField::get_text_size, text_box_ptr)), 0.5);
 }
@@ -385,13 +388,18 @@ void GUITextField::Cursor::move_to(int index_) {
 }
 
 void GUITextField::Cursor::display(int text_size) {
-    flicker = 1-flicker;
+    flicker = !flicker;
     
-    static const SDL_Color black = {0,0,0};
-    static const SDL_Color white = {0xff,0xff,0xff};
+    const SDL_Color colors[2] = {cursor_clear_c, {0xff,0xff,0xff}};
 
     resize(1, text_size+2);
-    fill_with_color((flicker ? black : white));
+    fill_with_color(colors[flicker]); // bool will be 0 or 1 index
+    
+//    SDL_Color color = (flicker ? black : white);
+    SDL_Color color = colors[flicker];
+    
+    cout << "flicker: " << flicker << endl;
+    cout << "color: " << (int)color.r <<" "<< (int)color.b <<" "<< (int)color.g << endl;
     
 }
 
