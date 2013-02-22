@@ -208,11 +208,24 @@ int GUITextView::index_at_pos(DispPoint pos_){
 GUITextField::GUITextField(int w_, int h_,
                              bool resizeable_down_, bool resizeable_right_)
 :GUITextView(w_,h_, resizeable_down_, resizeable_right_),
-key_is_held(false), modifiers_held(KMOD_NONE), cursor(this)
+key_is_held(false), modifiers_held(KMOD_NONE), cursor(new Cursor(this)), flicker(false)
 {        
-    attach_subview(&cursor, DispPoint(-1,0)); // start it out off screen.
+    attach_subview(cursor, DispPoint(-1,0)); // start it out off screen.
     
     GUIApp::get()->repeat_on_timer(bind(&GUITextField::handle_key_held, this), 0.05);
+//    GUIApp::get()->repeat_on_timer(bind(&GUITextField::blink_cursor, this), 0.5);
+
+}
+
+void GUITextField::blink_cursor() {
+    cursor->display(get_text_size());
+    if (flicker) {
+        attach_subview(cursor, cursor->get_rel_pos());
+    }
+    else {
+        remove_subview(cursor);
+    }
+    flicker = !flicker;
 }
 
 #include "GUIApp.h"
@@ -254,24 +267,24 @@ void GUITextField::handle_key() {
 
     switch (key) {
 		case SDLK_LEFT:
-			cursor.move_left();
+			cursor->move_left();
 			break;
 		case SDLK_RIGHT:
-			cursor.move_right();
+			cursor->move_right();
 			break;
 		case SDLK_UP:
-			cursor.move_up();
+			cursor->move_up();
 			break;
 		case SDLK_DOWN:
-			cursor.move_down();
+			cursor->move_down();
 			break;
 			
         case SDLK_BACKSPACE:
-			remove_letter(cursor.get_index()-1);
-			cursor.move_left();
+			remove_letter(cursor->get_index()-1);
+			cursor->move_left();
 			break;
         case SDLK_DELETE:
-            remove_letter(cursor.get_index());
+            remove_letter(cursor->get_index());
 			break;
 
 		default:
@@ -286,7 +299,7 @@ void GUITextField::handle_alpha_num(char ltr){
     
     if (!isprint(ltr)) return;
 
-	int index = cursor.get_index();
+	int index = cursor->get_index();
 	
     if (modifiers_held & KMOD_SHIFT) {
         if (isalpha(ltr)) ltr = toupper(ltr);
@@ -298,7 +311,7 @@ void GUITextField::handle_alpha_num(char ltr){
     
     add_letter(ltr, index);
 	
-	cursor.move_right();
+	cursor->move_right();
 }
 
 void GUITextField::handle_modifier(SDLMod mod){
@@ -316,7 +329,7 @@ bool GUITextField::handle_mouse_down(DispPoint pos_){
         return false;
     }
     
-	cursor.move_to(index_at_pos(pos_));
+	cursor->move_to(index_at_pos(pos_));
 
     capture_focus();
     
@@ -335,7 +348,7 @@ static char SDL_to_a(SDLKey key){
 
 void GUITextField::lost_focus() {
     cout << "LOSTTTTT FOCUSSSSS" << endl;
-    move_subview(&cursor, DispPoint(-100,-100));
+    move_subview(cursor, DispPoint(-100,-100));
     update();
 }
 
@@ -345,6 +358,10 @@ GUITextField::Cursor::Cursor(GUITextField* tb_ptr)
 : GUIView(1,1), position(0,0), index(0),
 text_box_ptr(tb_ptr), flicker(true)
 { 
+
+    const SDL_Color black = {0,0,0};
+    fill_with_color(black);
+
     set_clear_color(cursor_clear_c);
     GUIApp::get()->repeat_on_timer(bind(&Cursor::display, this,
                                         bind(&GUITextField::get_text_size, text_box_ptr)), 0.5);
@@ -390,16 +407,32 @@ void GUITextField::Cursor::move_to(int index_) {
 void GUITextField::Cursor::display(int text_size) {
     flicker = !flicker;
     
-    const SDL_Color colors[2] = {cursor_clear_c, {0xff,0xff,0xff}};
+    const SDL_Color colors[2] = {{0,0,0}, cursor_clear_c};
 
     resize(1, text_size+2);
-    fill_with_color(colors[flicker]); // bool will be 0 or 1 index
+    cout << "Width: "<< get_w() << endl;
+    cout << "Height: "<< get_h() << endl;
+    SDL_Color color = colors[flicker];
+    fill_with_color(color); // bool will be 0 or 1 index
+
+//    const SDL_Color black = {0,0,0};
+//    fill_with_color(black);
+
+//    if (!flicker) {
+//        text_box_ptr->remove_subview(this);
+//    }
+//    if (!flicker) {
+//        text_box_ptr->attach_subview(this, get_rel_pos());
+//    }
+    
+    
+    cout << "pos.x" << get_pos().x << endl;
+    cout << "pos.y" << get_pos().y	 << endl;
     
 //    SDL_Color color = (flicker ? black : white);
-    SDL_Color color = colors[flicker];
     
     cout << "flicker: " << flicker << endl;
-    cout << "color: " << (int)color.r <<" "<< (int)color.b <<" "<< (int)color.g << endl;
+    cout << "color: " << (int)color.r <<" "<< (int)color.g <<" "<< (int)color.b << endl;
     
 }
 

@@ -130,8 +130,10 @@ private:
 		GUITextField* text_box_ptr;
 		
 		bool flicker;
-	} cursor;
-	
+	};
+    Cursor *cursor;
+	bool flicker;
+    void blink_cursor();
 };
 
 
