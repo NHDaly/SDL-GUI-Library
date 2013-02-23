@@ -13,12 +13,12 @@
 
 namespace GUI {
 
-// Error_t : The type of errors that will be caught by handler
-// Handler_t : a function or function object that overrides operator()(Error_t);
+// Exception_t : The type of errors that will be caught by handler
+// Handler_t : a function or object that overrides operator()(Exception_t);
 // NOTE: handler will be copied.
-template <typename Error_t, typename Handler_t>
+template <typename Exception_t, typename Handler_t>
 ExceptionCatcher* create_error_handler(const Handler_t &handler) {
-    return new ExceptionCatcher_Impl<Error_t, Handler_t>(handler);
+    return new ExceptionCatcher_Impl<Exception_t, Handler_t>(handler);
 }
 
 // REQUIRES: This function MUST be called from within a catch(){} block!

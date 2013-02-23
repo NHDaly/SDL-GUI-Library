@@ -28,13 +28,13 @@ public:
 // ExceptionCatchers passed in, and rethrows the current exception.
 // Then each ExceptionCatcher attempts to catch during the unravelling.
 //
-// Error_t : The type of errors that will be caught by handler
-// Handler_t : a function or function object that overrides operator()(Error_t);
-template <typename Error_t, typename Handler_t>
+// Exception_t : The type of errors that will be caught by handler
+// Handler_t : a function or object that overrides operator()(Exception_t);
+template <typename Exception_t, typename Handler_t>
 class ExceptionCatcher_Impl : public ExceptionCatcher {
 public:
     
-    // handler_ should be able to call handler_(Error_t)
+    // handler_ should be able to call handler_(Exception_t)
     // NOTE: handler_ will be copied.
     ExceptionCatcher_Impl(const Handler_t &handler_) : handler(handler_) { }
     
@@ -54,9 +54,9 @@ public:
             next->try_catch(++begin, end, handled); // unravel until end
         }
         // Each ExceptionCatcher gets a chance to try to catch the exception.
-        catch(const Error_t &e) { // Will only catch if exception is Error_t
+        catch(const Exception_t &e) { // Will only catch if e is of Exception_t
             
-            handler(e);     // handler() is only called if Error_t matches.
+            handler(e);     // handler() is only called if Exception_t matches.
             handled = true;
             throw;          // continue up the chain.
         }

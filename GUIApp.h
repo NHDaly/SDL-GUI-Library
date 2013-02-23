@@ -55,9 +55,10 @@ public:
     // Perform op after interval seconds. Repeat if repeat == true.
 	void cancel_timer_op(GUITimer_command* op);
     
-    // When any code executed within the run() loop throws an instance of Error_t,
-    // any Handler_t's registered for that Error_t will be called.
-    template <typename Error_t, typename Handler_t>
+    // When any code executed within the run() loop throws an instance of 
+    // Exception_t, any Handler_t's that have been registered for that
+    // Exception_t will be called, with the exception passed as the argument.
+    template <typename Exception_t, typename Handler_t>
     void register_exception_handler(const Handler_t &handler);
 
     // Provides a Controller with the ability to receive mouse/keyboard input.
@@ -157,9 +158,9 @@ GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool re
 
 
 
-template <typename Error_t, typename Handler_t>
+template <typename Exception_t, typename Handler_t>
 void GUIApp::register_exception_handler(const Handler_t &handler) {
-    handler_list.push_back(GUI::create_error_handler<Error_t>(handler));
+    handler_list.push_back(GUI::create_error_handler<Exception_t>(handler));
 }
 
 
