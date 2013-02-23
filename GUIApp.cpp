@@ -136,7 +136,6 @@ void GUIApp::run(GUIWindow* window_) {
                             
                             bool handled;
                             
-                            cout << "event.button.button -- " << (int)event.button.button << endl;
                             if (event.button.button == SDL_BUTTON_X1) {
                                 cout << "SIDEWAYS SCROLL!" << endl;
                             }

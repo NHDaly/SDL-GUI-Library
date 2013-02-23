@@ -82,7 +82,6 @@ protected:
     virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion) { 
         // Only perform event on mouse release.
 
-        std::cout << "HANDLING MOUSE MOTION BIZITCH " << std::endl;
         if (is_pressed && !is_hovered && rel_point_is_on_me(coord)) {
             draw_onto_self(clicked_image, DispPoint());
             is_hovered = true;
