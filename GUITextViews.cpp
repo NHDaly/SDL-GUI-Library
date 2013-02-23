@@ -84,6 +84,7 @@ void GUITextView::update(){
 }
 void GUITextView::clear_text(){
 	letters.clear();
+    update();
 }
 
 void GUITextView::set_text(const string& text) {
@@ -93,9 +94,10 @@ void GUITextView::set_text(const string& text) {
 }
 void GUITextView::append_text(const string& text) {
     
-    for (size_t i = 0; i < text.length(); ++i) {
-        add_letter(text[i], i);
+    for (int i = 0; i < (int)text.length(); ++i) {
+        add_letter_no_redraw(text[i], i);
     };
+    update();
 }
 string GUITextView::get_text() const {
 	string text;
@@ -131,23 +133,32 @@ SDL_Color GUITextView::get_text_color() {
 
 void GUITextView::add_letter(char ltr, int index){
     	
-	try{
-		letters.insert(letters.begin()+index, NewLetter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
-//        cout << "letter: '" << letters[index].get_ltr() << "'\n";
-//        cout << "width: " << letters[index].get_width() << "\n";
-	}
-	catch(const GUIError& e){
-		cout << e.msg << endl;
-	}
+	add_letter_no_redraw(ltr, index);
 	update();
 }
 void GUITextView::remove_letter(int index){
 
+    remove_letter_no_redraw(index);
+	update();
+}
+
+void GUITextView::add_letter_no_redraw(char ltr, int index){
+    
+	try{
+		letters.insert(letters.begin()+index, NewLetter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
+        //        cout << "letter: '" << letters[index].get_ltr() << "'\n";
+        //        cout << "width: " << letters[index].get_width() << "\n";
+	}
+	catch(const GUIError& e){
+		cout << e.msg << endl;
+	}
+}
+void GUITextView::remove_letter_no_redraw(int index){
+    
 	if (index < 0) return;
 	if (index >= (int)letters.size()) return;
 	
 	letters.erase(letters.begin()+index);
-	update();
 }
 
 
@@ -401,8 +412,7 @@ void GUITextField::Cursor::move_to(int index_) {
 	
 	position = text_box_ptr->pos_at_index(index);
 
-    text_box_ptr->move_subview(this, position);
-}
+    text_box_ptr->move_subview(this, position);}
 
 void GUITextField::Cursor::display(int text_size) {
     flicker = !flicker;
@@ -410,13 +420,15 @@ void GUITextField::Cursor::display(int text_size) {
     const SDL_Color colors[2] = {{0,0,0}, cursor_clear_c};
 
     resize(1, text_size+2);
-    cout << "Width: "<< get_w() << endl;
-    cout << "Height: "<< get_h() << endl;
-    SDL_Color color = colors[flicker];
-    fill_with_color(color); // bool will be 0 or 1 index
 
-//    const SDL_Color black = {0,0,0};
-//    fill_with_color(black);
+    SDL_Color color;
+//    if (flicker) { 
+        color = colors[0];
+//    }
+//    else {
+//        color = colors[1];
+//    }
+    fill_with_color(color); // bool will be 0 or 1 index
 
 //    if (!flicker) {
 //        text_box_ptr->remove_subview(this);
@@ -424,16 +436,6 @@ void GUITextField::Cursor::display(int text_size) {
 //    if (!flicker) {
 //        text_box_ptr->attach_subview(this, get_rel_pos());
 //    }
-    
-    
-    cout << "pos.x" << get_pos().x << endl;
-    cout << "pos.y" << get_pos().y	 << endl;
-    
-//    SDL_Color color = (flicker ? black : white);
-    
-    cout << "flicker: " << flicker << endl;
-    cout << "color: " << (int)color.r <<" "<< (int)color.g <<" "<< (int)color.b << endl;
-    
 }
 
 

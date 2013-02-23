@@ -54,7 +54,10 @@ protected:
     
     virtual void add_letter(char ltr, int index);
 	virtual void remove_letter(int index);
-    
+
+    void add_letter_no_redraw(char ltr, int index);
+	void remove_letter_no_redraw(int index);
+
     DispPoint pos_at_index(size_t i);
 	int index_at_pos(DispPoint pos_);
 
