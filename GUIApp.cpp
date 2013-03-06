@@ -66,16 +66,7 @@ GUIApp::GUIApp()
 :window(0), fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
 { }
 
-void GUIApp::cancel_timer_op(GUITimer_command* op) {
-    std::vector<GUITimer_command*>::iterator it
-    = std::find(timer_commands.begin(), timer_commands.end(), op);
-    if (it != timer_commands.end()) {
-        timer_commands.erase(it);
-    }
-    else {
-        throw GUIError("command not found!");
-    }
-}
+
 
 DispPoint GUIApp::get_screen_size() { return window->get_dim(); }
 
@@ -302,6 +293,19 @@ void GUIApp::cycle_timer_commands() {
     
 }
 
+void GUIApp::cancel_timer_op(GUITimer_command* op) {
+    std::vector<GUITimer_command*>::iterator it
+    = std::find(timer_commands.begin(), timer_commands.end(), op);
+    if (it != timer_commands.end()) {
+        delete *it;
+        timer_commands.erase(it);
+    }
+    else {
+        throw GUIError("command not found!");
+    }
+    
+    next_timer_cmd = timer_commands.begin();
+}
 
 
 
