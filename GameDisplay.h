@@ -37,7 +37,7 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
 // create a Display with the following properties.
 
 
-void displayToScreen (SDL_Surface *src, int x, int y, bool update, SDL_Rect rect = def_rect_c);
+void displayToScreen (const SDL_Surface *src, int x, int y, bool update, SDL_Rect rect = def_rect_c);
 // Displays an image right onto the screen.
 
 void displayTextToScreen (const std::string &a, int x, int y, int size, bool update);
@@ -51,7 +51,7 @@ SDL_Surface* createText (const std::string &a);
 SDL_Surface* create_SDL_Surface(int w, int h);
 
 
-Uint32 getpixel(SDL_Surface *surface, int x, int y);
+Uint32 getpixel(const SDL_Surface *surface, int x, int y);
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
 

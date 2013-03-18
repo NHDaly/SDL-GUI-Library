@@ -129,7 +129,7 @@ void display_image (const SDL_Surface *src, SDL_Surface *dest, int x, int y, boo
 	if (update) SDL_UpdateRects(dest, 1, &dest_rect);
 }
 
-void displayToScreen (SDL_Surface *src, int x, int y, bool update, SDL_Rect rect) {
+void displayToScreen (const SDL_Surface *src, int x, int y, bool update, SDL_Rect rect) {
 	
 	display_image(src, SDL_GetVideoSurface(), x, y, update, rect);
 }
@@ -250,7 +250,7 @@ SDL_Surface* create_SDL_Surface(int w, int h){
 	return updatedimage;
 }
 
-Uint32 getpixel(SDL_Surface *surface, int x, int y)
+Uint32 getpixel(const SDL_Surface *surface, int x, int y)
 {
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
