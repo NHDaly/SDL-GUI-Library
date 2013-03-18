@@ -80,7 +80,11 @@ public:
     DispPoint get_abs_pos() const; // Pos on screen
     DispPoint get_rel_pos() const; // Pos on parent
     
+    // returns true if coord is within this view's rectangle.
+    bool rel_point_is_on_me(DispPoint coord);
+    bool abs_point_is_on_me(DispPoint coord);
     
+
     int get_w() const { return w; }
     int get_h() const { return h; }
     
@@ -146,10 +150,6 @@ protected:
     DispPoint abs_from_rel(DispPoint coord) const;
     DispPoint adjust_to_parent(DispPoint coord) const;    
     DispPoint adjust_to_rel(DispPoint coord) const;    
-
-    // returns true if coord is within this view's rectangle.
-    bool rel_point_is_on_me(DispPoint coord);
-    bool abs_point_is_on_me(DispPoint coord);
 
     const SDL_Surface* get_image_ptr() const { return image; }
     

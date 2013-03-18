@@ -23,7 +23,7 @@ public:
     
     void set_msg(const std::string msg_);
     
-    void pop_up(int timeout = -1); // ms until window disappears.
+    void pop_up(int timeout = -1); // ms until window disappears. (-1 waits til click)
         
 };
 
