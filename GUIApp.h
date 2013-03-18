@@ -73,6 +73,8 @@ public:
     
 
     DispPoint get_screen_size();    
+    GUIWindow* get_window() { return window; }  
+
 private:
     
     GUIWindow* window;

@@ -74,15 +74,14 @@ public:
 
 
     // Returns the deepest subview (could be this) on which coord lies.
-    GUIView* get_view_from_point(DispPoint coord);
-    
+    GUIView* get_view_from_point(DispPoint coord) const;
 
     DispPoint get_abs_pos() const; // Pos on screen
     DispPoint get_rel_pos() const; // Pos on parent
     
     // returns true if coord is within this view's rectangle.
-    bool rel_point_is_on_me(DispPoint coord);
-    bool abs_point_is_on_me(DispPoint coord);
+    bool rel_point_is_on_me(DispPoint coord) const;
+    bool abs_point_is_on_me(DispPoint coord) const;
     
 
     int get_w() const { return w; }

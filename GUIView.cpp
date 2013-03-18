@@ -265,7 +265,7 @@ void GUIView::key_up(SDL_keysym key) {
 }
 
 
-GUIView* GUIView::get_view_from_point(DispPoint coord) {
+GUIView* GUIView::get_view_from_point(DispPoint coord) const {
     
     // Can we cache this? Would that be faster?
     
@@ -273,10 +273,10 @@ GUIView* GUIView::get_view_from_point(DispPoint coord) {
     if (!rel_point_is_on_me(coord)) return 0;
         
     // At worst, we know the point is on this view.
-    GUIView* result = this;
+    const GUIView* result = this;
     
     // Check if any children have a deeper subview:
-    Subview_list_t::iterator child;
+    Subview_list_t::const_iterator child;
     for (child = children.begin(); child != children.end(); ++child) {
         
         // Can assume that Views are sorted, so any new best will be above old best.
@@ -286,10 +286,10 @@ GUIView* GUIView::get_view_from_point(DispPoint coord) {
         }
     }
     
-    return result;
+    return const_cast<GUIView*>(result);
 }
 
-bool GUIView::rel_point_is_on_me(DispPoint coord) {
+bool GUIView::rel_point_is_on_me(DispPoint coord) const {
     
     return (coord.x >= 0 && coord.y >= 0
             && coord.x < w && coord.y < h);
@@ -299,7 +299,7 @@ bool GUIView::rel_point_is_on_me(DispPoint coord) {
 //    return (coord.x >= pos.x && coord.y >= pos.y
 //            && coord.x < pos.x + w && coord.y < pos.y + h);
 //}
-bool GUIView::abs_point_is_on_me(DispPoint coord) {
+bool GUIView::abs_point_is_on_me(DispPoint coord) const {
     
     DispPoint abs_pos = get_abs_pos();
     return (coord.x >= abs_pos.x && coord.y >= abs_pos.y
