@@ -15,6 +15,7 @@
 #include <vector>
 
 class GUIButton;
+class GUITextView;
 
 class GUIMsgNew : public GUIView {
 public:
@@ -30,7 +31,9 @@ public:
     virtual void pop_up(int timeout = -1) = 0; // ms until window disappears.
     
 private:
-    int num_buttons;
+    
+    std::vector<GUIButton*> buttons;
+    GUITextView *msg_text;
 };
 
 class GUIMsgNew_Scroll_In : public GUIMsgNew {

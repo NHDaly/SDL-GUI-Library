@@ -136,8 +136,9 @@ template <typename Oper = NoAction>
 class GUIActionButton : public GUITextButton {
 public:
 
-    GUIActionButton(Oper oper = Oper())
-	:oper(oper) { }
+    GUIActionButton(Oper oper = Oper(), const std::string &button_text_ = "")
+	:GUITextButton(button_text_), oper(oper) 
+    { }
 
     virtual void operation() {
         oper();
@@ -149,9 +150,9 @@ private:
 };
 
 template <typename Oper>
-GUITextButton* GUI_create_button(Oper oper) {
+GUITextButton* GUI_create_button(Oper oper, const std::string &button_text_ = "") {
     
-    return new GUIActionButton<Oper>(oper);
+    return new GUIActionButton<Oper>(oper, button_text_);
 }
 
 #endif

@@ -10,6 +10,7 @@
 #include "GUITimer.h"
 #include "GameDisplay.h"
 #include "GUIButton.h"
+#include "GUITextViews.h"
 #include "GUIApp.h"
 
 #include <iostream>
@@ -18,11 +19,15 @@ using std::cout; using std::endl;
 const SDL_Color color = {0xbb, 0xbb, 0xbb, 0};
 
 GUIMsgNew::GUIMsgNew(int w_, int h_, const std::string& msg_, Button_ctrs_t buttons_)
-:GUIView(w_,h_), num_buttons(0)
+:GUIView(w_,h_), msg_text(new GUITextView(w_-10, h_-10)), buttons(buttons_)
 {    
+    attach_subview(msg_text, DispPoint(get_w()/2 - msg_text->get_w()/2, 5));
+   
+    fill_with_color(color);
     set_msg(msg_);
+    msg_text->set_text_size(20);
     
-    for (int i = 0; i < buttons_.size(); i++) {
+    for (size_t i = 0; i < buttons_.size(); i++) {
         add_button(buttons_[i]);
     }
     
@@ -30,19 +35,13 @@ GUIMsgNew::GUIMsgNew(int w_, int h_, const std::string& msg_, Button_ctrs_t butt
 
 void GUIMsgNew::set_msg(const std::string msg_) {
     
-    SDL_Color text_color = {0,0,0,0};
-    GUIImage msg_text(createText2(msg_, 16, text_color));
+    msg_text->set_text(msg_);
 
-    GUIImage bg = GUIImage::create_filled(get_w(), get_h(), color);
-    draw_onto_self(bg, DispPoint());
-    
-    draw_onto_self(msg_text, DispPoint(get_w()/2 - msg_text.getw()/2, 
-                                       get_h()/2 - msg_text.geth()/2));
 }
 void GUIMsgNew::add_button(GUIButton* button) {
     
-    attach_subview(button, DispPoint(30, 30 + num_buttons*20));
-    num_buttons++;
+    attach_subview(button, DispPoint(get_w() - 180 - (int)buttons.size()*180, get_h()- 30));
+    buttons.push_back(button);
 }
 
 

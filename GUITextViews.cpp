@@ -21,6 +21,7 @@ using std::string;
 using std::clock;
 using std::vector;
 using std::for_each;
+using std::min;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
@@ -35,7 +36,7 @@ const SDL_Color default_color_c = {0,0,0,0};
 GUITextView::GUITextView(int w_, int h_,
                                bool resizeable_down_, bool resizeable_right_)
 :GUIView(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
-w_init(w_), h_init(h_), text_size(30), color(default_color_c)
+w_init(w_), h_init(h_), text_size(min(30, h_-2)), color(default_color_c)
 {
     set_clear_color(bg_color_c);
             
