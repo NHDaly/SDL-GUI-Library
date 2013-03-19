@@ -57,11 +57,12 @@ private:
 class GUIValue_Slider : public GUIValue_Box {
 public:
   
-    GUIValue_Slider(int w_, int h_, int max_ = 1, int min_ = 0, int initial = -1)
+    GUIValue_Slider(int w_, int h_, double max_ = 1, double min_ = 0, int initial = -1)
     : GUIValue_Box(w_,h_), value(0), clicked(false),
     min(min_), max(max_)
     {
         set_clear_color(default_color_key_c);
+        fill_with_color(default_color_key_c);
         if (initial == -1) set_value((max-min)/2);
         else set_value(initial);
     }
@@ -94,10 +95,10 @@ public:
 
 protected:
     bool get_clicked() const { return clicked; }
-    void set_value(double value_) { value = value_; display(); }
+    void set_value(double value_) { value = value_; display(); } // (in percent)
     
 private:
-    double value;
+    double value; // stored as percent between 0 and 1.
     bool clicked;
     
     double min, max;
@@ -108,7 +109,7 @@ public:
     GUIValue_Horiz_Slider(int w_)
     : GUIValue_Slider(w_, 20),
     left_edge(0), right_edge(0)
-    { }
+    { display(); }
         
     virtual void display();
     
@@ -124,7 +125,7 @@ public:
     GUIValue_Vert_Slider(int h_)
     : GUIValue_Slider(20, h_),
     bottom_edge(0), top_edge(0)
-    { }
+    { display(); }
     
     virtual void display();
     
@@ -133,6 +134,27 @@ public:
     
 private:
     int bottom_edge, top_edge;    
+};
+class GUIValue_Joystick_Slider : public GUIValue_Slider {
+public:
+    GUIValue_Joystick_Slider(int radius_ = 10)
+    : GUIValue_Slider(15+2*radius_,15+2*radius_, radius_, 0, 0), edge(0)
+    { display(); }
+    
+    // Get angle in degrees.
+    double get_angle() {
+        return angle * 360;
+    }
+    
+    virtual void display();
+    
+	virtual bool handle_mouse_down(DispPoint coord);
+	virtual bool handle_mouse_up(DispPoint coord);
+	virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion);
+    
+private:
+    double angle;
+    double edge;    
 };
 
 
