@@ -51,7 +51,7 @@ void unhandled_click(const Unhandled_Click &e);
 void print_msg(const GUIError &e) {
     cout << e.msg << endl;
 }
-void unhandled_click(const Unhandled_Click &e) {
+void unhandled_click(const Unhandled_Click&) {
     cout << "unhandled click" << endl;
 }
 

@@ -12,6 +12,7 @@
 
 #include "SDL/SDL_video.h"
 
+#include "GameDisplay.h" // For pixel manip.
 #include "GUIWindow.h" // For Unhandled Click.
 #include "GUIApp.h"  // For capture focus
 
@@ -112,6 +113,18 @@ void GUIView::clear_alpha() {
     SDL_SetColorKey(display, 0, 0); // reset alpha
 }
 
+bool GUIView::point_is_clear(DispPoint coord) const {
+    
+    if (!rel_point_is_on_me(coord) || !has_alpha_color()) {
+        return true;
+    }
+    Uint32 pixel = getpixel(image, coord.x, coord.y);
+    if (pixel == SDL_MapRGB(image->format, clear_color.r, clear_color.g, clear_color.b)) {
+        return true;
+    }
+    return false;
+}
+
 
 bool x_then_y_view_less_than(const GUIView* a, const GUIView* b) {
     if (a->pos.x < b->pos.x) return true;
@@ -191,7 +204,7 @@ void GUIView::remove_last_subview() {
     
     mark_changed();
 }
-bool GUIView::is_subview(GUIView* view) {
+bool GUIView::is_subview(GUIView* view) const {
     
     return (find(children.begin(), children.end(), view) != children.end());
 }

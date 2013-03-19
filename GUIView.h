@@ -45,7 +45,7 @@ public:
     void remove_subview(GUIView* view);
     void remove_last_subview(); // Remove subview last added
 
-    bool is_subview(GUIView* view);
+    bool is_subview(GUIView* view) const;
 
     void move_subview(GUIView* view, DispPoint pos);
         
@@ -93,11 +93,14 @@ public:
     void set_clear_color(SDL_Color clear_color);
     void clear_alpha();
 
-    bool has_alpha_color() { return is_alpha; }
+    bool has_alpha_color() const { return is_alpha; }
     // Only valid if has_alpha_color.
-    SDL_Color get_clear_color() { return clear_color; }
+    SDL_Color get_clear_color() const { return clear_color; }
 
-
+    // returns true if pixel at coord is of clear color.
+    // If coord is not on view, or alhpa not set, will return false.
+    bool point_is_clear(DispPoint coord) const;
+    
     
 //    // *** The following two functions will call got_focus() and lost_focus(). 
 //    // *** Derived behavior may be specified by overriding those two functions.
