@@ -46,7 +46,12 @@ public:
 	
 	void set_alpha(Uint32);
 	Uint32 get_Alpha() const;
-	
+	SDL_Color get_clear_color() const;
+
+    // returns true if pixel at coord is color. 
+    // False if out of bounds or not that color.
+	bool point_is_color(int x, int y, SDL_Color color) const;
+    
 private:
 	SDL_Surface* sdl_impl;
 	

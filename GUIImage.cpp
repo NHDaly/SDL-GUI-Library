@@ -56,10 +56,7 @@ GUIImage::GUIImage(string filename, bool alpha, const SDL_Color& color_key){
 		//Map the color key
 		alpha_color = SDL_MapRGB(sdl_impl->format,
                                      color_key.r, color_key.g, color_key.b);
-		//Set all pixels of color R 0xFF, G 0, B 0xFF to be transparent
-		SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, alpha_color );
-        is_alpha = true;
-        
+        set_alpha(alpha_color);
 	}
 }
 
@@ -117,6 +114,8 @@ GUIImage* GUIImage::get_image(std::string filename, bool alpha, const SDL_Color&
 void GUIImage::set_alpha(Uint32 alpha) {
     
     alpha_color = alpha;
+    //Set all pixels of color R 0xFF, G 0, B 0xFF to be transparent
+    SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, alpha_color );
     is_alpha = true;
 }
 
@@ -124,8 +123,24 @@ void GUIImage::set_alpha(Uint32 alpha) {
 Uint32 GUIImage::get_Alpha() const{
     
 	return SDL_MapRGBA( sdl_impl->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
-	
 }
+SDL_Color GUIImage::get_clear_color() const {
+        
+	return clear_color;
+}
+
+bool GUIImage::point_is_color(int x, int y, SDL_Color color) const {
+    
+    if (x < 0 || y < 0 || x >= getw() || y >= geth()) 
+        return false;
+    
+    Uint32 pixel = getpixel(sdl_impl, x, y);
+    if (pixel == SDL_MapRGB(sdl_impl->format, color.r, color.g, color.b)) {
+        return true;
+    }
+    return false;
+}
+
 
 GUIImage GUIImage::create_blank(int w, int h){
 	
