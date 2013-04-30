@@ -18,10 +18,6 @@ GUIImageView::GUIImageView(const GUIImage &image_src)
 }
 
 GUIImage GUIImageView::get_image() {
-    
-    GUIImage temp(get_w(),get_h());
-    
-    display_image(GUIImage::create_copy(get_image_ptr()), temp, DispPoint(), 0);
-    
-    return temp;
+        
+    return GUIImage::create_copy(get_image_ptr());
 }

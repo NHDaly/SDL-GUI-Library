@@ -363,6 +363,7 @@ void GUIView::resize(int w_, int h_) {
     
     if (is_alpha) {
         set_clear_color(clear_color);
+        fill_with_color(clear_color);
     }
     
     SDL_Rect dest_rect = {0, 0, w, h};
