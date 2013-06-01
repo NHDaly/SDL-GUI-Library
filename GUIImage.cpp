@@ -6,7 +6,9 @@
 #include "GUIImageCache.h"
 
 #include <iostream>
+#include <algorithm>
 using std::cout; using std::endl;
+using std::max;
 
 using std::string;
 
@@ -182,7 +184,9 @@ GUIImage GUIImage::create_outline(int w, int h, int width, SDL_Color color){
 	GUIImage dispBox(w, h);
 	SDL_FillRect(dispBox, 0, SDL_MapRGB(dispBox->format, color.r, color.g, color.b));
 	
-	GUIImage hollow (w - width*2, h - width*2);
+    int inner_w = max(w - width*2, 0);
+    int inner_h = max(h - width*2, 0);
+	GUIImage hollow (inner_w, inner_h);
 	
 	Uint32 colorkey = SDL_MapRGBA( dispBox->format, clear_color.r, clear_color.g, clear_color.b, clear_color.unused);
 	SDL_FillRect(hollow, 0, colorkey);

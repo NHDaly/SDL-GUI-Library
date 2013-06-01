@@ -16,11 +16,13 @@
 #include <algorithm>
 using namespace std;
 
-bool GUIWindow::WINDOW_ALREADY_CREATED = false;
+namespace GUI {
+
+bool Window::WINDOW_ALREADY_CREATED = false;
 
 SDL_Color bg_color = {208, 208, 208};
 
-GUIWindow::GUIWindow(int w, int h, const string& name_, 
+Window::Window(int w, int h, const string& name_, 
                            int numColors, const Uint32 flags)
 :main_view(0), name(name_), num_colors(numColors), flags(flags)
 {    
@@ -51,26 +53,26 @@ GUIWindow::GUIWindow(int w, int h, const string& name_,
     
 }
 
-DispPoint GUIWindow::get_dim() { return DispPoint(window->w, window->h); }
+DispPoint Window::get_dim() { return DispPoint(window->w, window->h); }
 
 
-void GUIWindow::crop(int w, int h) {
+void Window::crop(int w, int h) {
     
-    GUIWindow temp(w,h, name, num_colors, flags);
+    Window temp(w,h, name, num_colors, flags);
     
     std::swap(temp.window, window);    
     main_view->mark_changed();
 }
-void GUIWindow::stretch(int w, int h) {
+void Window::stretch(int w, int h) {
     
 }
 
-void GUIWindow::rename(const string& name_) {
+void Window::rename(const string& name_) {
     name = name_;
 }
 
 #include <cassert>
-void GUIWindow::refresh() {
+void Window::refresh() {
     
     if (main_view->need_to_refresh()) {
         
@@ -114,17 +116,17 @@ void GUIWindow::refresh() {
 }
 
 
-void GUIWindow::attach_subview(GUIView* view, DispPoint pos) {
+void Window::attach_subview(GUIView* view, DispPoint pos) {
     main_view->attach_subview(view, pos);
 }
-void GUIWindow::move_subview(GUIView* view, DispPoint pos) {
+void Window::move_subview(GUIView* view, DispPoint pos) {
     main_view->move_subview(view, pos);
 }
-void GUIWindow::remove_subview(GUIView* view) {
+void Window::remove_subview(GUIView* view) {
     main_view->remove_subview(view); 
 }
-void GUIWindow::remove_last_subview() {
+void Window::remove_last_subview() {
     main_view->remove_last_subview();
 }
 
-
+} // namespace GUI

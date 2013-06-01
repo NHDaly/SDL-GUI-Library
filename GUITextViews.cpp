@@ -25,6 +25,7 @@ using std::min;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
+using GUI::App;
 
 static char SDL_to_a(SDLKey key);
 static char symbol_to_upper(char ltr);
@@ -224,8 +225,8 @@ key_is_held(false), modifiers_held(KMOD_NONE), cursor(new Cursor(this)), flicker
 {        
     attach_subview(cursor, DispPoint(-1,0)); // start it out off screen.
     
-    GUIApp::get()->repeat_on_timer(bind(&GUITextField::handle_key_held, this), 0.05);
-//    GUIApp::get()->repeat_on_timer(bind(&GUITextField::blink_cursor, this), 0.5);
+    App::get()->repeat_on_timer(bind(&GUITextField::handle_key_held, this), 0.05);
+//    App::get()->repeat_on_timer(bind(&GUITextField::blink_cursor, this), 0.5);
 
 }
 
@@ -375,7 +376,7 @@ text_box_ptr(tb_ptr), flicker(true)
     fill_with_color(black);
 
     set_clear_color(cursor_clear_c);
-    GUIApp::get()->repeat_on_timer(bind(&Cursor::display, this,
+    App::get()->repeat_on_timer(bind(&Cursor::display, this,
                                         bind(&GUITextField::get_text_size, text_box_ptr)), 0.5);
 }
 

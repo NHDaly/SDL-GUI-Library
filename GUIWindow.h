@@ -30,13 +30,15 @@ struct Unhandled_Key {
 class GUIView;
 class SDL_Surface;
 
+namespace GUI {
+
 // This class maintains information about the Window. 
 // (i.e name, size, etc.) Has one View instance that shows what is displayed in
 // the window.
-class GUIWindow {
+class Window {
 public:
 
-    GUIWindow(int w, int h, const std::string& name_ = "",
+    Window(int w, int h, const std::string& name_ = "",
                  int numColors = 256, const Uint32 flags = SDL_SWSURFACE);
     
     void crop(int w, int h);
@@ -68,5 +70,7 @@ private:
     
     static bool WINDOW_ALREADY_CREATED;
 };
+
+} // namespace GUI
 
 #endif /* GUIWINDOW_H */

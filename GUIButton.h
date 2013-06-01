@@ -10,6 +10,12 @@
 #define Deep_GUIButton_h
 
 #include "GUIImageView.h"
+#include "GUITextViews.h"
+
+#include <iostream>
+
+namespace GUI {
+
 
 class QuitAction {
 public:
@@ -18,12 +24,11 @@ public:
     }
 };
 
-#include <iostream>
 
-class GUIButton : public GUIImageView { 
+class Button : public GUIImageView { 
 public:
     
-    GUIButton()
+    Button()
     : GUIImageView(GUIImage("GUIImages/button.bmp")), 
     is_pressed(false), is_hovered(false),
     image(GUIImage("GUIImages/button.bmp")), hovered_image(GUIImage("GUIImages/button2.bmp")), 
@@ -107,11 +112,10 @@ private:
     GUIImage image, hovered_image, clicked_image;
 };
 
-#include "GUITextViews.h"
 
-class GUITextButton : public GUIButton { 
+class TextButton : public Button { 
 public:
-    GUITextButton(const std::string &button_text_ = "")
+    TextButton(const std::string &button_text_ = "")
     {
         button_text = new GUITextView(get_w()-30, get_h());
         button_text->set_text(button_text_);
@@ -132,11 +136,11 @@ public:
     void operator()() { }
 };
 template <typename Oper = NoAction>
-class GUIActionButton : public GUITextButton {
+class ActionButton : public TextButton {
 public:
 
-    GUIActionButton(Oper oper = Oper(), const std::string &button_text_ = "")
-	:GUITextButton(button_text_), oper(oper) 
+    ActionButton(Oper oper = Oper(), const std::string &button_text_ = "")
+	:TextButton(button_text_), oper(oper) 
     { }
 
     virtual void operation() {
@@ -149,9 +153,11 @@ private:
 };
 
 template <typename Oper>
-GUITextButton* GUI_create_button(Oper oper, const std::string &button_text_ = "") {
+TextButton* create_button(Oper oper, const std::string &button_text_ = "") {
     
-    return new GUIActionButton<Oper>(oper, button_text_);
+    return new ActionButton<Oper>(oper, button_text_);
 }
+    
+} // namespace GUI
 
 #endif

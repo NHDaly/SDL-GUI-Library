@@ -15,6 +15,8 @@
 
 #include <iostream>
 using std::cout; using std::endl;
+using GUI::App;
+using GUI::Button;
 
 const SDL_Color color = {0xbb, 0xbb, 0xbb, 0};
 
@@ -38,7 +40,7 @@ void GUIMsgNew::set_msg(const std::string msg_) {
     msg_text->set_text(msg_);
 
 }
-void GUIMsgNew::add_button(GUIButton* button) {
+void GUIMsgNew::add_button(Button* button) {
     
     attach_subview(button, DispPoint(get_w() - 180 - (int)buttons.size()*180, get_h()- 30));
     buttons.push_back(button);
@@ -55,7 +57,7 @@ void GUIMsgNew_Scroll_In::pop_up(int timeout)
 {
     // Store a copy of the screen for the scroll away.
     GUIImage temp_screen(get_w(), get_h());
-    int SCREEN_WIDTH = GUIApp::get()->get_screen_size().x;
+    int SCREEN_WIDTH = App::get()->get_screen_size().x;
     SDL_Rect screen_rect = {SCREEN_WIDTH/2 - get_w()/2, 0,
                             get_w(), get_h()};
     SDL_Rect dest_rect = {0, 0, get_w(), get_h()};
@@ -106,4 +108,9 @@ void GUIMsgNew_Scroll_In::pop_up(int timeout)
 
 
 
+void GUIMsgNew::pop_up_modal() 
+{
+    pop_up();
+    
+}
 

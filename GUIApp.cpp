@@ -25,20 +25,22 @@ using namespace std::tr1::placeholders;
 
 using GUI::call_error_handlers;
 
+namespace GUI {
+
 // SINGLETON MEMBERS
 
-GUIApp* GUIApp::singleton_ptr = 0;
-GUIApp::GUIApp_destroyer GUIApp::the_GUIApp_destroyer;
+App* App::singleton_ptr = 0;
+App::App_destroyer App::the_App_destroyer;
 
-GUIApp* GUIApp::get(){
+App* App::get(){
 	
 	if (!singleton_ptr)
-		singleton_ptr = new GUIApp;
+		singleton_ptr = new App;
 	return singleton_ptr;
 }
 
-GUIApp::GUIApp_destroyer::~GUIApp_destroyer(){
-	delete GUIApp::singleton_ptr;
+App::App_destroyer::~App_destroyer(){
+	delete App::singleton_ptr;
 }
 
 // Forward Declarations
@@ -46,7 +48,7 @@ void print_msg(const GUIError &e);
 void unhandled_click(const Unhandled_Click &e);
 
 
-// GUIApp Implementation:
+// App Implementation:
 
 void print_msg(const GUIError &e) {
     cout << e.msg << endl;
@@ -55,23 +57,23 @@ void unhandled_click(const Unhandled_Click&) {
     cout << "unhandled click" << endl;
 }
 
-struct GUIApp_Quitter {
-    GUIApp_Quitter(bool &running_) : running(running_) {}
+struct App_Quitter {
+    App_Quitter(bool &running_) : running(running_) {}
     void operator()(GUIQuit) { running = false; }
     bool &running;
 };
 
 
-GUIApp::GUIApp()
+App::App()
 :window(0), fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
 { }
 
 
 
-DispPoint GUIApp::get_screen_size() { return window->get_dim(); }
+DispPoint App::get_screen_size() { return window->get_dim(); }
 
 
-void GUIApp::run(GUIWindow* window_) {
+void App::run(Window* window_) {
     
     window = window_;
     
@@ -79,7 +81,7 @@ void GUIApp::run(GUIWindow* window_) {
 
     bool running = true;
 
-    register_exception_handler<GUIQuit>(GUIApp_Quitter(running));
+    register_exception_handler<GUIQuit>(App_Quitter(running));
     
     window->refresh();
     
@@ -278,7 +280,7 @@ void GUIApp::run(GUIWindow* window_) {
     }
 }
 
-void GUIApp::cycle_timer_commands() {
+void App::cycle_timer_commands() {
     
     for (size_t i = 0; i < timer_commands.size(); i++) {
         
@@ -293,7 +295,7 @@ void GUIApp::cycle_timer_commands() {
     
 }
 
-void GUIApp::cancel_timer_op(GUITimer_command* op) {
+void App::cancel_timer_op(GUITimer_command* op) {
     std::vector<GUITimer_command*>::iterator it
     = std::find(timer_commands.begin(), timer_commands.end(), op);
     if (it != timer_commands.end()) {
@@ -307,5 +309,6 @@ void GUIApp::cancel_timer_op(GUITimer_command* op) {
     next_timer_cmd = timer_commands.begin();
 }
 
+} // namespace GUI
 
 

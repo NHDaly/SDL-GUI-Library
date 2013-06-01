@@ -262,11 +262,12 @@ bool GUIValue_Joystick_Slider::handle_mouse_motion(DispPoint coord, DispPoint re
 #include "GUIApp.h"
 #include <tr1/functional>
 using std::tr1::bind;
+using GUI::App;
 
 GUIValue_Display::GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box)
 : GUIView(w_,h_), value_box(linked_box)
 {
-    GUIApp::get()->repeat_on_timer(bind(&GUIValue_Display::display, this), -1);
+    App::get()->repeat_on_timer(bind(&GUIValue_Display::display, this), -1);
 }
 
 void GUIValue_Display::display() {

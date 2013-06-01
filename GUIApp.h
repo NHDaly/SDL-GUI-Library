@@ -23,7 +23,6 @@
 // Throw an instance of GUIQuit to safely tell the application to exit.
 // (This is the same as calling GUIApp::quit())
 class GUIQuit {};
-class GUIWindow;
 
 class GUIController;
 
@@ -36,15 +35,18 @@ struct GUITimer_command {
     virtual void execute_command(){}
 };
 
+namespace GUI {
 
-class GUIApp {
+class Window;
+
+class App {
 public:
-  	static GUIApp* get();
+  	static App* get();
     
     void set_framerate_cap(int fps_cap_) { fps_cap = fps_cap_; cap_frame_rate = true;}
     void disable_framerate_cap() { cap_frame_rate = false; }
     
-    void run(GUIWindow* window);
+    void run(Window* window);
     
 //    struct GUITimer_command;
 
@@ -73,11 +75,11 @@ public:
     
 
     DispPoint get_screen_size();    
-    GUIWindow* get_window() { return window; }  
+    Window* get_window() { return window; }  
 
 private:
     
-    GUIWindow* window;
+    Window* window;
     
     int fps_cap;
     bool cap_frame_rate;
@@ -127,27 +129,27 @@ private:
     void cycle_timer_commands();
 
 //SINGLETON MEMBERS:
-	static GUIApp * singleton_ptr; 
+	static App * singleton_ptr; 
 	
 	friend class GUIApp_destroyer;
 	
 	// no public creation/deletion
-	GUIApp();
+	App();
 	
 	// no copy or assignment allowed
-	GUIApp(const GUIApp&);
-	GUIApp& operator= (const GUIApp&);
+	App(const App&);
+	App& operator= (const App&);
 	
     
-    struct GUIApp_destroyer {
-        ~GUIApp_destroyer();
+    struct App_destroyer {
+        ~App_destroyer();
     };
-    static GUIApp_destroyer the_GUIApp_destroyer;
+    static App_destroyer the_App_destroyer;
 };
 
 // Perform op after interval seconds. Repeat if repeat == true.
 template <typename Operation>
-GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool repeat) {
+GUITimer_command* App::repeat_on_timer(Operation op, double interval, bool repeat) {
     
     GUITimer_command* command = create_timer_command(op,interval, repeat);
     timer_commands.push_back(command);
@@ -161,12 +163,12 @@ GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool re
 
 
 template <typename Exception_t, typename Handler_t>
-void GUIApp::register_exception_handler(const Handler_t &handler) {
+void App::register_exception_handler(const Handler_t &handler) {
     handler_list.push_back(GUI::create_error_handler<Exception_t>(handler));
 }
 
 
-
+} // namespace GUI
 
 
 #endif

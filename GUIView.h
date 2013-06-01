@@ -15,11 +15,15 @@
 #include "GUIController.h"
 
 class SDL_Surface;
-class GUIWindow;
 class GUIImage;
 /// @todo Hack
 #include "GUIImage.h"
 #include <iostream>
+
+namespace GUI {
+    class Window;
+    class App;
+}
 
 class GUIView : public GUIController {
 public:
@@ -111,8 +115,8 @@ public:
 //    void lose_focus();
     
     
-    friend class GUIWindow;
-    friend class GUIApp;
+    friend class GUI::Window;
+    friend class GUI::App;
     
 protected:
     
