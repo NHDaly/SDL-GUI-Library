@@ -16,6 +16,7 @@
 #include <algorithm>
 using namespace std;
 
+
 namespace GUI {
 
 bool Window::WINDOW_ALREADY_CREATED = false;
@@ -40,7 +41,7 @@ Window::Window(int w, int h, const string& name_,
         SDL_WM_SetCaption( name.c_str(), 0 );
     }
     
-    main_view = new GUIView(w,h);
+    main_view = new View(w,h);
     main_view->mark_changed();
     
    	Uint32 color = SDL_MapRGB(main_view->image->format, bg_color.r, 
@@ -116,13 +117,13 @@ void Window::refresh() {
 }
 
 
-void Window::attach_subview(GUIView* view, DispPoint pos) {
+void Window::attach_subview(View* view, DispPoint pos) {
     main_view->attach_subview(view, pos);
 }
-void Window::move_subview(GUIView* view, DispPoint pos) {
+void Window::move_subview(View* view, DispPoint pos) {
     main_view->move_subview(view, pos);
 }
-void Window::remove_subview(GUIView* view) {
+void Window::remove_subview(View* view) {
     main_view->remove_subview(view); 
 }
 void Window::remove_last_subview() {

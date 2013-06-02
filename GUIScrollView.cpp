@@ -18,8 +18,10 @@ using namespace std::tr1;
 const int SCROLL_BAR_W = 15;
 const int scroll_amount_c = 5;
 
-GUIScrollView::GUIScrollView(int w_, int h_, GUIView *display_view_)
-:GUIView(w_,h_), 
+namespace GUI {
+    
+GUIScrollView::GUIScrollView(int w_, int h_, View *display_view_)
+:View(w_,h_), 
 scroll_bar(SCROLL_BAR_W, h_ * h_/display_view_->get_h(), this),
 scroll_bar_bg(SCROLL_BAR_W, h_, this), 
 arrow_up(true, GUIImage("GUIImages/scroll_bar_vert2.bmp")),
@@ -310,3 +312,4 @@ void GUIScrollView::move_scroll_bar_to(DispPoint pos) {
     
 }
 
+} // namespace GUI

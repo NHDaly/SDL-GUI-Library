@@ -19,11 +19,11 @@
 #ifndef GUI_VALUE_BOX_H
 #define GUI_VALUE_BOX_H
 
-class GUIValue_Box: public GUIView {
+class GUIValue_Box: public GUI::View {
 public:
     
     GUIValue_Box(int w_, int h_)
-    : GUIView(w_,h_)
+    : GUI::View(w_,h_)
     {}
 
     virtual double get_value() const = 0;
@@ -159,7 +159,7 @@ private:
 
 
 // Can either be hooked up to a value_box or can have values entered manually.
-class GUIValue_Display : public GUIView {
+class GUIValue_Display : public GUI::View {
 public:
     GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box = 0);
     

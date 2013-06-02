@@ -14,10 +14,12 @@
 
 struct GUITimer_command;
 
-class GUIScrollView : public GUIView  {
+namespace GUI {
+
+class GUIScrollView : public View  {
 public:
     
-    GUIScrollView(int w_, int h_, GUIView *display_view_);
+    GUIScrollView(int w_, int h_, View *display_view_);
     ~GUIScrollView();
     
     void update();
@@ -32,10 +34,10 @@ private:
     
     GUITimer_command *repeater;
     
-    class ScrollBarBg : public GUIView {
+    class ScrollBarBg : public View {
     public:
         ScrollBarBg(int w_, int h_, GUIScrollView *view_) 
-        : GUIView(w_,h_), view(view_) { }
+        : View(w_,h_), view(view_) { }
         
         void display();
         
@@ -44,10 +46,10 @@ private:
     private:
         GUIScrollView *view;
     };
-    class ScrollBar : public GUIView {
+    class ScrollBar : public View {
     public:
         ScrollBar(int w_, int h_, GUIScrollView *view_) 
-        : GUIView(w_,h_), view(view_), clicked(false) { }
+        : View(w_,h_), view(view_), clicked(false) { }
         
         void display();
         
@@ -79,7 +81,7 @@ private:
     ScrollBar scroll_bar;
     ScrollBarBg scroll_bar_bg;
     ScrollArrow arrow_up, arrow_down;
-    GUIView *display_view;
+    View *display_view;
     
     int w_init, h_init;
     
@@ -95,6 +97,6 @@ private:
     int scroll_bar_bottom;
 };
 
-
+} // namespace GUI
 
 #endif

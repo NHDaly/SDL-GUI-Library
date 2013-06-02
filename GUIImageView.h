@@ -12,7 +12,7 @@
 #include "GUIView.h"
 
 class GUIImage;
-class GUIImageView : public GUIView {
+class GUIImageView : public GUI::View {
 public:
     
     GUIImageView(const GUIImage &image_src);    

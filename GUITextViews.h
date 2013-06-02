@@ -21,7 +21,7 @@ class NewLetter_Disp_Obj;
 class GUILetter;
 
 // A View that displays text atop a clear background.
-class GUITextView : public GUIView {
+class GUITextView : public GUI::View {
 public:	
 
 	GUITextView(int w_ = 200, int h_ = 200, 
@@ -109,7 +109,7 @@ private:
     void handle_modifier(SDLMod key);
 
     
-	class Cursor : public GUIView {
+	class Cursor : public GUI::View {
 	public:
 		Cursor(GUITextField* tb_ptr);
 
@@ -141,7 +141,7 @@ private:
 
 
 // Wraps a TextField with a white background and bevelled corners.
-class GUITextBox : public GUIView {
+class GUITextBox : public GUI::View {
 public:	
 	
 	GUITextBox(int w_, int h_);
@@ -166,7 +166,7 @@ class NewLetter_Disp_Obj{
 public:
 	NewLetter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Color color);
 	
-	void drawself(GUIView *dest) const;
+	void drawself(GUI::View *dest) const;
 	int get_width() const;
 	DispPoint get_pos() const
     { return position; }

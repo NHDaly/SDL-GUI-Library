@@ -11,8 +11,10 @@
 #include "GUIImage.h"
 #include "GameDisplay.h"
 
+using GUI::View;
+
 GUIImageView::GUIImageView(const GUIImage &image_src)
-: GUIView(image_src.getw(), image_src.geth()) 
+: View(image_src.getw(), image_src.geth()) 
 { 
     draw_onto_self(image_src, DispPoint(0,0));
 }

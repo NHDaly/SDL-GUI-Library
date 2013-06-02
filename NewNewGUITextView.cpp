@@ -15,6 +15,9 @@ using std::string;
 using std::map;
 using std::make_pair;
 
+
+using GUI::View;
+
 //---------------
 
 class LetterCache {
@@ -32,7 +35,7 @@ const SDL_Color white_color_c = {0xFF, 0xFF, 0xFF};
 
 
 NewGUITextView::NewGUITextView(int w, int h, int size, SDL_Color color)
-:GUIView(w,h), prev('a', size, color)
+:View(w,h), prev('a', size, color)
 {
     draw_onto_self(GUIImage::create_filled(w, h, clear_color_c), DispPoint());
     set_clear_color(clear_color_c);    

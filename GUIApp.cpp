@@ -122,7 +122,7 @@ void App::run(Window* window_) {
                             DispPoint new_pos(click_pos);
 
                             // If the Controller is a view, adjust pos for view.
-                            if (GUIView *view = dynamic_cast<GUIView*>(captured)) {
+                            if (View *view = dynamic_cast<View*>(captured)) {
                                 new_pos.x -= view->get_abs_pos().x; 
                                 new_pos.y -= view->get_abs_pos().y; 
                             }
@@ -165,7 +165,7 @@ void App::run(Window* window_) {
 //                            }
                         }
                         
-                        GUIView* hovered_view =
+                        View* hovered_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
 

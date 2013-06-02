@@ -17,11 +17,12 @@
 using std::cout; using std::endl;
 using GUI::App;
 using GUI::Button;
+using GUI::View;
 
 const SDL_Color color = {0xbb, 0xbb, 0xbb, 0};
 
 GUIMsgNew::GUIMsgNew(int w_, int h_, const std::string& msg_, Button_ctrs_t buttons_)
-:GUIView(w_,h_), msg_text(new GUITextView(w_-10, h_-10)), buttons(buttons_)
+:View(w_,h_), msg_text(new GUITextView(w_-10, h_-10)), buttons(buttons_)
 {    
     attach_subview(msg_text, DispPoint(get_w()/2 - msg_text->get_w()/2, 5));
    

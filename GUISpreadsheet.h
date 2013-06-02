@@ -14,7 +14,7 @@
 namespace GUI {
     
 class GUICellsView;
-class Spreadsheet : public GUIView {
+class Spreadsheet : public View {
 public:
     Spreadsheet(int w, int h);
     

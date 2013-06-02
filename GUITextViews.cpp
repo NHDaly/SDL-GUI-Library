@@ -26,6 +26,7 @@ using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
 using GUI::App;
+using GUI::View;
 
 static char SDL_to_a(SDLKey key);
 static char symbol_to_upper(char ltr);
@@ -36,7 +37,7 @@ const SDL_Color default_color_c = {0,0,0,0};
 
 GUITextView::GUITextView(int w_, int h_,
                                bool resizeable_down_, bool resizeable_right_)
-:GUIView(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
+:View(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
 w_init(w_), h_init(h_), text_size(min(30, h_-2)), color(default_color_c)
 {
     set_clear_color(bg_color_c);
@@ -368,7 +369,7 @@ void GUITextField::lost_focus() {
 const SDL_Color cursor_clear_c = {0, 0xff, 0};
 
 GUITextField::Cursor::Cursor(GUITextField* tb_ptr) 
-: GUIView(1,1), position(0,0), index(0),
+: View(1,1), position(0,0), index(0),
 text_box_ptr(tb_ptr), flicker(true)
 { 
 
@@ -442,7 +443,7 @@ void GUITextField::Cursor::display(int text_size) {
 
 
 GUITextBox::GUITextBox(int w_, int h_)
-:GUIView(w_,h_), field(new GUITextField(w_-4,h_-4))
+:View(w_,h_), field(new GUITextField(w_-4,h_-4))
 {
     const SDL_Color clear = {0xff, 0, 0xff};
     fill_with_color(clear);
@@ -462,7 +463,7 @@ GUITextBox::GUITextBox(int w_, int h_)
     // Should ideally use a mask layer instead so that bg color could be changed,
     // but right now the problem is it receives the mouse clicks instead of field.
 //    const SDL_Color mask_clear = {0, 0xff, 0xff};
-//    GUIView *mask = new GUIView(w_,h_);
+//    View *mask = new View(w_,h_);
 //    mask->fill_with_color(mask_clear);
 //    mask->set_clear_color(mask_clear);
 //    
@@ -499,7 +500,7 @@ int NewLetter_Disp_Obj::get_width() const{
 	return letter->get_width();
 }
 
-void NewLetter_Disp_Obj::drawself(GUIView *dest) const{
+void NewLetter_Disp_Obj::drawself(View *dest) const{
 	
 	letter->drawself(dest, position.x, position.y); //+ height-letter->get_height());
 }

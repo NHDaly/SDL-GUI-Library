@@ -16,7 +16,7 @@
 
 namespace GUI {
 
-class Msg : GUIView {
+class Msg : View {
 public:
     
     // Size of button_texts must == num_buttons

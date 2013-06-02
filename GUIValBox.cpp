@@ -18,6 +18,8 @@ using std::string;
 using std::stringstream;
 using std::cout; using std::endl;
 
+using GUI::View;
+
 const int MIN_TEXT_BOX_WIDTH = 10;
 const int MIN_TEXT_BOX_HEIGHT = 10;
 
@@ -265,7 +267,7 @@ using std::tr1::bind;
 using GUI::App;
 
 GUIValue_Display::GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box)
-: GUIView(w_,h_), value_box(linked_box)
+: View(w_,h_), value_box(linked_box)
 {
     App::get()->repeat_on_timer(bind(&GUIValue_Display::display, this), -1);
 }

@@ -31,7 +31,7 @@ struct LetterData {
 
 extern const SDL_Color text_color_black_c;
 
-class NewGUITextView : public GUIView {
+class NewGUITextView : public GUI::View {
 public:
     NewGUITextView(int w, int h, int size = 30, SDL_Color color = text_color_black_c);
     

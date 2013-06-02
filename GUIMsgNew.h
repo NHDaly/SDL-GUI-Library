@@ -20,7 +20,7 @@ namespace GUI {
 class Button;
 }
 
-class GUIMsgNew : public GUIView {
+class GUIMsgNew : public GUI::View {
 public:
     typedef std::vector<GUI::Button*> Button_ctrs_t;
     

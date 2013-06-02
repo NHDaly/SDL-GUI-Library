@@ -85,7 +85,8 @@ private:
 
 
 class GUICell;
-class GUICellsView : public GUIView {
+class GUICellsView : public View {
+
 public:
     GUICellsView(int w_, int h_);
     
@@ -94,7 +95,7 @@ private:
 };
 
 GUICellsView::GUICellsView(int w_, int h_)
-:GUIView(w_,h_), cells(1,1)
+:View(w_,h_), cells(1,1)
 {
     
 }

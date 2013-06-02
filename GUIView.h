@@ -23,13 +23,12 @@ class GUIImage;
 namespace GUI {
     class Window;
     class App;
-}
 
-class GUIView : public GUIController {
+class View : public GUIController {
 public:
     
-    GUIView(int w_, int h_);
-    virtual ~GUIView();
+    View(int w_, int h_);
+    virtual ~View();
         
     // Redraw any children that have changed onto self. Return true if changed.
     void refresh();
@@ -44,14 +43,14 @@ public:
     // NOTE: once attached, a subview "belongs" to this view. If this view is
     //   deleted, all subviews are deleted as well.
     // NOTE: Currently it is okay to attach a view completely out of bounds.
-    void attach_subview(GUIView* view, DispPoint pos);
+    void attach_subview(View* view, DispPoint pos);
     // NOTE: Does not delete the view, only remove it from list!
-    void remove_subview(GUIView* view);
+    void remove_subview(View* view);
     void remove_last_subview(); // Remove subview last added
 
-    bool is_subview(GUIView* view) const;
+    bool is_subview(View* view) const;
 
-    void move_subview(GUIView* view, DispPoint pos);
+    void move_subview(View* view, DispPoint pos);
         
     // Will be true if a subview has been changed.
     bool need_to_refresh() const { return changed; }
@@ -78,7 +77,7 @@ public:
 
 
     // Returns the deepest subview (could be this) on which coord lies.
-    GUIView* get_view_from_point(DispPoint coord) const;
+    View* get_view_from_point(DispPoint coord) const;
 
     DispPoint get_abs_pos() const; // Pos on screen
     DispPoint get_rel_pos() const; // Pos on parent
@@ -149,7 +148,7 @@ protected:
 //    virtual void lost_focus() { }
 
     // Hierarchy
-    GUIView* get_parent() { return parent; }
+    View* get_parent() { return parent; }
 //    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
 
     // Convert a point to abs, or coordinates relative to this view or parent view.
@@ -175,18 +174,19 @@ private:
     
 
     // Hierarchy
-    GUIView* parent;
-    typedef std::list<GUIView*> Subview_list_t;
+    View* parent;
+    typedef std::list<View*> Subview_list_t;
     Subview_list_t children;
                 
     
     // returns the deepest view that lies under coord, and its depth.
     // (0 is THIS, 1 is a child, 2 is grandchild, etc.)
-    typedef std::pair<GUIView*, int> View_Depth_t;
+    typedef std::pair<View*, int> View_Depth_t;
     View_Depth_t deepest_view_from_point(DispPoint coord, int depth);
     
-    friend bool x_then_y_view_less_than(const GUIView* a, const GUIView* b);
+    friend bool x_then_y_view_less_than(const View* a, const View* b);
 };
 
+} // namespace GUI
 
 #endif
