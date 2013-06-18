@@ -442,7 +442,7 @@ void TextField::Cursor::display(int text_size) {
 }
 
 
-GUITextBox::GUITextBox(int w_, int h_)
+TextBox::TextBox(int w_, int h_)
 :View(w_,h_), field(new TextField(w_-4,h_-4))
 {
     const SDL_Color clear = {0xff, 0, 0xff};
