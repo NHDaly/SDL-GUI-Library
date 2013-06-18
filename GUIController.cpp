@@ -14,7 +14,7 @@
 
 using GUI::App;
 
-void GUIController::capture_focus() {
+void GUI::Controller::capture_focus() {
     
     if (App::get()->has_focus(this)) return;
     
@@ -22,7 +22,7 @@ void GUIController::capture_focus() {
     
     got_focus();
 }
-void GUIController::lose_focus() {
+void GUI::Controller::lose_focus() {
     if (!App::get()->has_focus(this)) return; //throw GUIError("Can't lose_focus if didn't already have it.");
     
     App::get()->release_focus(this);

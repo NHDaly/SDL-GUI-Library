@@ -85,16 +85,16 @@ private:
 
 
 class GUICell;
-class GUICellsView : public View {
+class CellsView : public View {
 
 public:
-    GUICellsView(int w_, int h_);
+    CellsView(int w_, int h_);
     
 private:
     Matrix2D<GUICell*> cells;
 };
 
-GUICellsView::GUICellsView(int w_, int h_)
+CellsView::CellsView(int w_, int h_)
 :View(w_,h_), cells(1,1)
 {
     

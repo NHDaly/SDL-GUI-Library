@@ -17,6 +17,8 @@ using std::string;
 using std::map; using std::pair;
 using std::cout; using std::endl;
 
+namespace GUI {
+    
 const char* const letters_file_path = "fonts/black/";
 
 
@@ -90,4 +92,6 @@ void Letter::Print_Letter::operator() (const Letter* letter){
 	letter->drawself(surface, x, y);
 	x+= width;
 }
+
+} // namespace GUI
 

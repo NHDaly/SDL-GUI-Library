@@ -25,11 +25,11 @@ public:
 };
 
 
-class Button : public GUIImageView { 
+class Button : public ImageView { 
 public:
     
     Button()
-    : GUIImageView(GUIImage("GUIImages/button.bmp")), 
+    : ImageView(GUIImage("GUIImages/button.bmp")), 
     is_pressed(false), is_hovered(false),
     image(GUIImage("GUIImages/button.bmp")), hovered_image(GUIImage("GUIImages/button2.bmp")), 
     clicked_image(GUIImage("GUIImages/button3.bmp"))
@@ -117,17 +117,17 @@ class TextButton : public Button {
 public:
     TextButton(const std::string &button_text_ = "")
     {
-        button_text = new GUITextView(get_w()-30, get_h());
+        button_text = new TextView(get_w()-30, get_h());
         button_text->set_text(button_text_);
         button_text->set_text_size(16);
         attach_subview(button_text, DispPoint(get_w()-button_text->get_w(), 0));
     }
     
-    GUITextView* get_text_view() { return button_text; }
+    TextView* get_text_view() { return button_text; }
     void set_text(const std::string &button_text_) { button_text->set_text(button_text_); }
     
 public:
-    GUITextView *button_text;
+    TextView *button_text;
 };
 
 

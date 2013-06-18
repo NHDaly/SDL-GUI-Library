@@ -20,11 +20,12 @@
 #include <SDL/SDL.h> // To ensure it is #included by main.
 
 
+namespace GUI {
+
 // Throw an instance of GUIQuit to safely tell the application to exit.
 // (This is the same as calling GUIApp::quit())
 class GUIQuit {};
 
-class GUIController;
 
 struct GUITimer_command {
     GUITimer_command(double interval_) : interval(interval_) {
@@ -35,9 +36,9 @@ struct GUITimer_command {
     virtual void execute_command(){}
 };
 
-namespace GUI {
 
 class Window;
+class Controller;
 
 class App {
 public:
@@ -65,9 +66,9 @@ public:
 
     // Provides a Controller with the ability to receive mouse/keyboard input.
     //  (Views receive mouse input by defualt when hovered over.)
-    void give_focus(GUIController* view) { captured_focus.insert(view); }
-    bool has_focus(GUIController* view) { return captured_focus.count(view) != 0; }
-    void release_focus(GUIController* view) { captured_focus.erase(view); }
+    void give_focus(Controller* view) { captured_focus.insert(view); }
+    bool has_focus(Controller* view) { return captured_focus.count(view) != 0; }
+    void release_focus(Controller* view) { captured_focus.erase(view); }
     
     
     // Equivalent to a user clicking the "x" or pressing cmd-q.
@@ -84,7 +85,7 @@ private:
     int fps_cap;
     bool cap_frame_rate;
     
-    typedef std::set<GUIController*> view_list_t;
+    typedef std::set<Controller*> view_list_t;
     view_list_t captured_focus;
 
     

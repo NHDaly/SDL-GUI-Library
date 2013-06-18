@@ -12,10 +12,13 @@
 #include "GUIView.h"
 
 class GUIImage;
-class GUIImageView : public GUI::View {
+
+namespace GUI {
+
+class ImageView : public GUI::View {
 public:
     
-    GUIImageView(const GUIImage &image_src);    
+    ImageView(const GUIImage &image_src);    
     
     GUIImage get_image();
     
@@ -23,5 +26,6 @@ public:
 //    void attach_subview(GUIView* view, DispPoint pos);
 };
 
+} // namespace GUI
 
 #endif /* GUIIMAGEVIEW_H */

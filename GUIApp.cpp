@@ -112,12 +112,12 @@ void App::run(Window* window_) {
                         DispPoint click_pos(event.button.x, event.button.y);
                         DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
                         
-                        list<GUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
+                        list<Controller*> focus_copy(captured_focus.begin(), captured_focus.end());
                         
-                        for (list<GUIController*>::iterator it = focus_copy.begin();
+                        for (list<Controller*>::iterator it = focus_copy.begin();
                                             it != focus_copy.end(); ++it) {
                             
-                            GUIController *captured = *it;
+                            Controller *captured = *it;
                             
                             DispPoint new_pos(click_pos);
 
@@ -214,7 +214,7 @@ void App::run(Window* window_) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            GUIController *captured = *it;
+                            Controller *captured = *it;
                             
                             bool handled = captured->handle_key_down(event.key.keysym);
                             if (!handled) {}
@@ -247,7 +247,7 @@ void App::run(Window* window_) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            GUIController *captured = *it;
+                            Controller *captured = *it;
                         
                             bool handled = captured->handle_key_up(event.key.keysym);
                             if (!handled) {}

@@ -8,6 +8,8 @@
 #include "SDL/SDL_timer.h"
 #endif
 
+namespace GUI {
+
 class GUITimer {
 public:
 	
@@ -44,6 +46,7 @@ private:
 	bool capping;
 };
 
+} // namespace GUI
 
 
 #endif /* TIMER_H */

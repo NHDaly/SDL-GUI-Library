@@ -16,15 +16,17 @@
 #include <vector>
 #include <map>
 
-
-class NewLetter_Disp_Obj;
 class GUILetter;
 
+namespace GUI {
+    
+class NewLetter_Disp_Obj;
+    
 // A View that displays text atop a clear background.
-class GUITextView : public GUI::View {
+class TextView : public GUI::View {
 public:	
 
-	GUITextView(int w_ = 200, int h_ = 200, 
+	TextView(int w_ = 200, int h_ = 200, 
                    bool resizeable_down = false, bool resizable_right = false);
 	
     // Text functions
@@ -76,10 +78,10 @@ private:
 
 
 // A TextView that allows for text entry (including mouse motion, deletion, etc.)
-class GUITextField : public GUITextView {
+class TextField : public TextView {
 public:	
 	
-	GUITextField(int w_ = 200, int h_ = 200, 
+	TextField(int w_ = 200, int h_ = 200, 
                   bool resizeable_down = false, bool resizable_right = false);
 	
 	
@@ -111,7 +113,7 @@ private:
     
 	class Cursor : public GUI::View {
 	public:
-		Cursor(GUITextField* tb_ptr);
+		Cursor(TextField* tb_ptr);
 
 		void display(int text_size);
 		
@@ -130,7 +132,7 @@ private:
 	private:
 		DispPoint position;
 		int index; 
-		GUITextField* text_box_ptr;
+		TextField* text_box_ptr;
 		
 		bool flicker;
 	};
@@ -156,7 +158,7 @@ public:
     SDL_Color get_text_color() { return field->get_text_color(); }
 
 private:
-    GUITextField *field;
+    TextField *field;
 
 };
 
@@ -187,6 +189,8 @@ private:
     static int line_height;
 
 };
+
+} // namespace GUI
 
 #endif /* NEW_GUI_TEXT_BOX_H */
 

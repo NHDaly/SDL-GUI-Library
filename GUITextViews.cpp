@@ -25,17 +25,17 @@ using std::min;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
-using GUI::App;
-using GUI::View;
-
-static char SDL_to_a(SDLKey key);
-static char symbol_to_upper(char ltr);
 
 const SDL_Color bg_color_c = {255,0,255,0};
 const SDL_Color default_color_c = {0,0,0,0};
 
+namespace GUI {
+    
+static char SDL_to_a(SDLKey key);
+static char symbol_to_upper(char ltr);    
 
-GUITextView::GUITextView(int w_, int h_,
+    
+TextView::TextView(int w_, int h_,
                                bool resizeable_down_, bool resizeable_right_)
 :View(w_,h_), resizeable_down(resizeable_down_), resizeable_right(resizeable_right_), 
 w_init(w_), h_init(h_), text_size(min(30, h_-2)), color(default_color_c)
@@ -46,7 +46,7 @@ w_init(w_), h_init(h_), text_size(min(30, h_-2)), color(default_color_c)
     
 }
 
-void GUITextView::update(){
+void TextView::update(){
 //    resize(200, get_h());
     
     if (!letters.empty()) {
@@ -85,24 +85,24 @@ void GUITextView::update(){
     
 	mark_changed();
 }
-void GUITextView::clear_text(){
+void TextView::clear_text(){
 	letters.clear();
     update();
 }
 
-void GUITextView::set_text(const string& text) {
+void TextView::set_text(const string& text) {
     clear_text();
     
     append_text(text);
 }
-void GUITextView::append_text(const string& text) {
+void TextView::append_text(const string& text) {
     
     for (int i = 0; i < (int)text.length(); ++i) {
         add_letter_no_redraw(text[i], i);
     };
     update();
 }
-string GUITextView::get_text() const {
+string TextView::get_text() const {
 	string text;
 	for (letters_ctr_t::const_iterator it = letters.begin(); it != letters.end(); ++it){
 		text += it->get_ltr();
@@ -110,42 +110,42 @@ string GUITextView::get_text() const {
 	return text;	
 }
 
-void GUITextView::set_text_size(int size) {
+void TextView::set_text_size(int size) {
     text_size = size;
     set_text(get_text());
 }
-void GUITextView::set_text_color(SDL_Color color_) {
+void TextView::set_text_color(SDL_Color color_) {
     color = color_;
     set_text(get_text());
 }
-int GUITextView::get_text_size() {
+int TextView::get_text_size() {
     return text_size;
 }
-SDL_Color GUITextView::get_text_color() {
+SDL_Color TextView::get_text_color() {
     return color;
 }
 
-//void GUITextView::did_resize(int w, int h)
+//void TextView::did_resize(int w, int h)
 //{
-////    if (GUITextField* tb = dynamic_cast<GUITextField*>(get_parent())) {
+////    if (TextField* tb = dynamic_cast<TextField*>(get_parent())) {
 ////        tb->resize(w,h);
 ////    }
 //}
 
 
 
-void GUITextView::add_letter(char ltr, int index){
+void TextView::add_letter(char ltr, int index){
     	
 	add_letter_no_redraw(ltr, index);
 	update();
 }
-void GUITextView::remove_letter(int index){
+void TextView::remove_letter(int index){
 
     remove_letter_no_redraw(index);
 	update();
 }
 
-void GUITextView::add_letter_no_redraw(char ltr, int index){
+void TextView::add_letter_no_redraw(char ltr, int index){
     
 	try{
 		letters.insert(letters.begin()+index, NewLetter_Disp_Obj(ltr, text_size, pos_at_index(index), color));
@@ -156,7 +156,7 @@ void GUITextView::add_letter_no_redraw(char ltr, int index){
 		cout << e.msg << endl;
 	}
 }
-void GUITextView::remove_letter_no_redraw(int index){
+void TextView::remove_letter_no_redraw(int index){
     
 	if (index < 0) return;
 	if (index >= (int)letters.size()) return;
@@ -166,14 +166,14 @@ void GUITextView::remove_letter_no_redraw(int index){
 
 
 
-DispPoint GUITextView::pos_at_index(size_t i){
+DispPoint TextView::pos_at_index(size_t i){
 	
 	DispPoint position;
 	if (i == 0){
 		position = DispPoint(3,0);
 	}
 	else {
-//        if (i >= letters.size()) throw GUIError("GUITextView: Couldn't get position -- index out of range");
+//        if (i >= letters.size()) throw GUIError("TextView: Couldn't get position -- index out of range");
         
 		const NewLetter_Disp_Obj& letter = letters[i-1];
 		int width = letter.get_width();
@@ -188,7 +188,7 @@ DispPoint GUITextView::pos_at_index(size_t i){
 	}
 	return position;
 }
-int GUITextView::index_at_pos(DispPoint pos_){
+int TextView::index_at_pos(DispPoint pos_){
 	if (letters.empty()){
 		return 0;
 	}
@@ -219,19 +219,19 @@ int GUITextView::index_at_pos(DispPoint pos_){
 
 
 
-GUITextField::GUITextField(int w_, int h_,
+TextField::TextField(int w_, int h_,
                              bool resizeable_down_, bool resizeable_right_)
-:GUITextView(w_,h_, resizeable_down_, resizeable_right_),
+:TextView(w_,h_, resizeable_down_, resizeable_right_),
 key_is_held(false), modifiers_held(KMOD_NONE), cursor(new Cursor(this)), flicker(false)
 {        
     attach_subview(cursor, DispPoint(-1,0)); // start it out off screen.
     
-    App::get()->repeat_on_timer(bind(&GUITextField::handle_key_held, this), 0.05);
-//    App::get()->repeat_on_timer(bind(&GUITextField::blink_cursor, this), 0.5);
+    App::get()->repeat_on_timer(bind(&TextField::handle_key_held, this), 0.05);
+//    App::get()->repeat_on_timer(bind(&TextField::blink_cursor, this), 0.5);
 
 }
 
-void GUITextField::blink_cursor() {
+void TextField::blink_cursor() {
     cursor->display(get_text_size());
     if (flicker) {
         attach_subview(cursor, cursor->get_rel_pos());
@@ -243,7 +243,7 @@ void GUITextField::blink_cursor() {
 }
 
 #include "GUIApp.h"
-bool GUITextField::handle_key_down(SDL_keysym key_in) {
+bool TextField::handle_key_down(SDL_keysym key_in) {
     
     cout << "text box key down: '" << key_in.sym << "'" << endl;
     
@@ -257,7 +257,7 @@ bool GUITextField::handle_key_down(SDL_keysym key_in) {
     return true;
 }
 
-bool GUITextField::handle_key_up(SDL_keysym key_in) {
+bool TextField::handle_key_up(SDL_keysym key_in) {
     
     cout << "text box key up" << endl;
 
@@ -267,7 +267,7 @@ bool GUITextField::handle_key_up(SDL_keysym key_in) {
     
     return false;
 }
-void GUITextField::handle_key_held() {
+void TextField::handle_key_held() {
     
     if (!key_is_held) return;
     if (!(time_key_held.get_time() > 500)) return; 
@@ -275,7 +275,7 @@ void GUITextField::handle_key_held() {
     handle_key();
 }
 
-void GUITextField::handle_key() {
+void TextField::handle_key() {
  	
     SDLKey key = key_held;
 
@@ -309,7 +309,7 @@ void GUITextField::handle_key() {
 
 
 
-void GUITextField::handle_alpha_num(char ltr){
+void TextField::handle_alpha_num(char ltr){
     
     if (!isprint(ltr)) return;
 
@@ -328,14 +328,14 @@ void GUITextField::handle_alpha_num(char ltr){
 	cursor->move_right();
 }
 
-void GUITextField::handle_modifier(SDLMod mod){
+void TextField::handle_modifier(SDLMod mod){
     
     modifiers_held = mod;
 
 }
 
 
-bool GUITextField::handle_mouse_down(DispPoint pos_){
+bool TextField::handle_mouse_down(DispPoint pos_){
 	
     if (!rel_point_is_on_me(pos_)) {
         lose_focus();
@@ -360,7 +360,7 @@ static char SDL_to_a(SDLKey key){
 	return static_cast<char>(key);
 }
 
-void GUITextField::lost_focus() {
+void TextField::lost_focus() {
     cout << "LOSTTTTT FOCUSSSSS" << endl;
     move_subview(cursor, DispPoint(-100,-100));
     update();
@@ -368,7 +368,7 @@ void GUITextField::lost_focus() {
 
 const SDL_Color cursor_clear_c = {0, 0xff, 0};
 
-GUITextField::Cursor::Cursor(GUITextField* tb_ptr) 
+TextField::Cursor::Cursor(TextField* tb_ptr) 
 : View(1,1), position(0,0), index(0),
 text_box_ptr(tb_ptr), flicker(true)
 { 
@@ -378,18 +378,18 @@ text_box_ptr(tb_ptr), flicker(true)
 
     set_clear_color(cursor_clear_c);
     App::get()->repeat_on_timer(bind(&Cursor::display, this,
-                                        bind(&GUITextField::get_text_size, text_box_ptr)), 0.5);
+                                        bind(&TextField::get_text_size, text_box_ptr)), 0.5);
 }
 
-void GUITextField::Cursor::move_right(){
+void TextField::Cursor::move_right(){
 	if (index == (int)text_box_ptr->get_letters().size()) return;
 	move_to(index + 1);
 }
-void GUITextField::Cursor::move_left(){
+void TextField::Cursor::move_left(){
 	if (index == 0) return;
 	move_to(index - 1);
 }
-void GUITextField::Cursor::move_up(){
+void TextField::Cursor::move_up(){
 	
 	DispPoint new_pos = position;
 	new_pos.y -= NewLetter_Disp_Obj::get_line_height();
@@ -398,7 +398,7 @@ void GUITextField::Cursor::move_up(){
 	
 	move_to(new_index);
 }
-void GUITextField::Cursor::move_down(){
+void TextField::Cursor::move_down(){
 	DispPoint new_pos = position;
 	new_pos.y += NewLetter_Disp_Obj::get_line_height();
 	
@@ -407,7 +407,7 @@ void GUITextField::Cursor::move_down(){
 	move_to(new_index);
 }
 
-void GUITextField::Cursor::move_to(int index_) {
+void TextField::Cursor::move_to(int index_) {
 	
 	if (index_ < 0 || index_ > (int)text_box_ptr->get_letters().size()) return;
 	
@@ -417,7 +417,7 @@ void GUITextField::Cursor::move_to(int index_) {
 
     text_box_ptr->move_subview(this, position);}
 
-void GUITextField::Cursor::display(int text_size) {
+void TextField::Cursor::display(int text_size) {
     flicker = !flicker;
     
     const SDL_Color colors[2] = {{0,0,0}, cursor_clear_c};
@@ -443,7 +443,7 @@ void GUITextField::Cursor::display(int text_size) {
 
 
 GUITextBox::GUITextBox(int w_, int h_)
-:View(w_,h_), field(new GUITextField(w_-4,h_-4))
+:View(w_,h_), field(new TextField(w_-4,h_-4))
 {
     const SDL_Color clear = {0xff, 0, 0xff};
     fill_with_color(clear);
@@ -556,3 +556,5 @@ static char symbol_to_upper(char ltr) {
             return ltr;
     }
 }
+    
+} // namespace GUI

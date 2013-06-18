@@ -13,13 +13,13 @@
 
 namespace GUI {
     
-class GUICellsView;
+class CellsView;
 class Spreadsheet : public View {
 public:
     Spreadsheet(int w, int h);
     
 private:
-    GUICellsView *cells_view;
+    CellsView *cells_view;
 };
 
 } // namespace GUI

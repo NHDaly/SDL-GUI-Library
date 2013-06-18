@@ -15,14 +15,14 @@
 
 #include <iostream>
 using std::cout; using std::endl;
-using GUI::App;
-using GUI::Button;
-using GUI::View;
 
 const SDL_Color color = {0xbb, 0xbb, 0xbb, 0};
 
-GUIMsgNew::GUIMsgNew(int w_, int h_, const std::string& msg_, Button_ctrs_t buttons_)
-:View(w_,h_), msg_text(new GUITextView(w_-10, h_-10)), buttons(buttons_)
+
+namespace GUI {
+    
+MsgNew::MsgNew(int w_, int h_, const std::string& msg_, Button_ctrs_t buttons_)
+:View(w_,h_), msg_text(new TextView(w_-10, h_-10)), buttons(buttons_)
 {    
     attach_subview(msg_text, DispPoint(get_w()/2 - msg_text->get_w()/2, 5));
    
@@ -36,12 +36,12 @@ GUIMsgNew::GUIMsgNew(int w_, int h_, const std::string& msg_, Button_ctrs_t butt
     
 }
 
-void GUIMsgNew::set_msg(const std::string msg_) {
+void MsgNew::set_msg(const std::string msg_) {
     
     msg_text->set_text(msg_);
 
 }
-void GUIMsgNew::add_button(Button* button) {
+void MsgNew::add_button(Button* button) {
     
     attach_subview(button, DispPoint(get_w() - 180 - (int)buttons.size()*180, get_h()- 30));
     buttons.push_back(button);
@@ -49,12 +49,12 @@ void GUIMsgNew::add_button(Button* button) {
 
 
 
-GUIMsgNew_Scroll_In::GUIMsgNew_Scroll_In(int w_, int h_, const std::string& msg_, Button_ctrs_t buttons_)
-:GUIMsgNew(w_,h_, msg_, buttons_)
+MsgNew_Scroll_In::MsgNew_Scroll_In(int w_, int h_, const std::string& msg_, Button_ctrs_t buttons_)
+:MsgNew(w_,h_, msg_, buttons_)
 { }
 
 
-void GUIMsgNew_Scroll_In::pop_up(int timeout) 
+void MsgNew_Scroll_In::pop_up(int timeout) 
 {
     // Store a copy of the screen for the scroll away.
     GUIImage temp_screen(get_w(), get_h());
@@ -109,9 +109,10 @@ void GUIMsgNew_Scroll_In::pop_up(int timeout)
 
 
 
-void GUIMsgNew::pop_up_modal() 
-{
-    pop_up();
-    
-}
+//void MsgNew_Scroll_In::pop_up_modal() 
+//{
+//    pop_up();
+//}
+
+} // namespace GUI
 

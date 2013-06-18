@@ -24,7 +24,7 @@ namespace GUI {
     class Window;
     class App;
 
-class View : public GUIController {
+    class View : public GUI::Controller {
 public:
     
     View(int w_, int h_);

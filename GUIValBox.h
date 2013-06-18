@@ -6,6 +6,9 @@
 //  Copyright 2012 Lions Entertainment. All rights reserved.
 //
 
+#ifndef GUI_VALUE_BOX_H
+#define GUI_VALUE_BOX_H
+
 #include "GUIView.h"
 
 #include "GUITextViews.h"
@@ -14,15 +17,13 @@
 #include <sstream>
 #include <string>
 
-
-
-#ifndef GUI_VALUE_BOX_H
-#define GUI_VALUE_BOX_H
-
-class GUIValue_Box: public GUI::View {
+namespace GUI { 
+    
+    
+class Value_Box: public GUI::View {
 public:
     
-    GUIValue_Box(int w_, int h_)
+    Value_Box(int w_, int h_)
     : GUI::View(w_,h_)
     {}
 
@@ -30,35 +31,35 @@ public:
 };
 
 
-class GUIInteger_Text_Box : public GUITextField {
+class Integer_Text_Box : public TextField {
 public:
     
-    GUIInteger_Text_Box(int w_, int h_)
-    : GUITextField(w_,h_) { }
+    Integer_Text_Box(int w_, int h_)
+    : TextField(w_,h_) { }
     
 	virtual void add_letter(char ltr, int index) {
-        if (isdigit(ltr)) GUITextField::add_letter(ltr, index);
+        if (isdigit(ltr)) TextField::add_letter(ltr, index);
     }
 };
 
 
-class GUIValue_Text_Box : public GUIValue_Box {
+class Value_Text_Box : public Value_Box {
 public:
     
-    GUIValue_Text_Box(int w_, int h_, std::string bg_image = "GUIImages/bg.bmp");    
+    Value_Text_Box(int w_, int h_, std::string bg_image = "GUIImages/bg.bmp");    
     
     virtual double get_value() const;
 
 private:
     
-    GUIInteger_Text_Box text_box;
+    Integer_Text_Box text_box;
 };
 
-class GUIValue_Slider : public GUIValue_Box {
+class Value_Slider : public Value_Box {
 public:
   
-    GUIValue_Slider(int w_, int h_, double max_ = 1, double min_ = 0, int initial = -1)
-    : GUIValue_Box(w_,h_), value(0), clicked(false),
+    Value_Slider(int w_, int h_, double max_ = 1, double min_ = 0, int initial = -1)
+    : Value_Box(w_,h_), value(0), clicked(false),
     min(min_), max(max_)
     {
         set_clear_color(default_color_key_c);
@@ -67,7 +68,7 @@ public:
         else set_value(initial);
     }
     
-    virtual ~GUIValue_Slider() = 0;
+    virtual ~Value_Slider() = 0;
 
     virtual void display() {}
 
@@ -104,10 +105,10 @@ private:
     double min, max;
 };
 
-class GUIValue_Horiz_Slider : public GUIValue_Slider {
+class Value_Horiz_Slider : public Value_Slider {
 public:
-    GUIValue_Horiz_Slider(int w_)
-    : GUIValue_Slider(w_, 20),
+    Value_Horiz_Slider(int w_)
+    : Value_Slider(w_, 20),
     left_edge(0), right_edge(0)
     { display(); }
         
@@ -120,10 +121,10 @@ private:
     int left_edge, right_edge;    
 };
 
-class GUIValue_Vert_Slider : public GUIValue_Slider {
+class Value_Vert_Slider : public Value_Slider {
 public:
-    GUIValue_Vert_Slider(int h_)
-    : GUIValue_Slider(20, h_),
+    Value_Vert_Slider(int h_)
+    : Value_Slider(20, h_),
     bottom_edge(0), top_edge(0)
     { display(); }
     
@@ -135,10 +136,10 @@ public:
 private:
     int bottom_edge, top_edge;    
 };
-class GUIValue_Joystick_Slider : public GUIValue_Slider {
+class Value_Joystick_Slider : public Value_Slider {
 public:
-    GUIValue_Joystick_Slider(int radius_ = 10)
-    : GUIValue_Slider(15+2*radius_,15+2*radius_, radius_, 0, 0), edge(0)
+    Value_Joystick_Slider(int radius_ = 10)
+    : Value_Slider(15+2*radius_,15+2*radius_, radius_, 0, 0), edge(0)
     { display(); }
     
     // Get angle in degrees.
@@ -159,20 +160,20 @@ private:
 
 
 // Can either be hooked up to a value_box or can have values entered manually.
-class GUIValue_Display : public GUI::View {
+class Value_Display : public GUI::View {
 public:
-    GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box = 0);
+    Value_Display(int w_, int h_, const Value_Box* linked_box = 0);
     
     virtual void display();
     
-    void link_value_box(const GUIValue_Box* value_box_)
+    void link_value_box(const Value_Box* value_box_)
 	    { value_box = value_box_; }
     
     const std::string& get_text() { return text; }
     void set_value(double value_) { set_text(value_); }
     
 private:
-    const GUIValue_Box* value_box;
+    const Value_Box* value_box;
     
     std::string text;
     
@@ -183,6 +184,7 @@ private:
     }
 };
 
+} // namespace GUI
 
 #endif /* NEW_GUI_VALUE_BOX_H */
 

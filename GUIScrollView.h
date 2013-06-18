@@ -62,10 +62,10 @@ private:
         bool clicked;
         DispPoint click;
     };
-    class ScrollArrow : public GUIImageView {
+    class ScrollArrow : public ImageView {
     public:
         ScrollArrow(bool up_down_, const GUIImage& image)
-        : GUIImageView(image), up_down(up_down_) { }
+        : ImageView(image), up_down(up_down_) { }
         
         virtual bool handle_mouse_down(DispPoint coord);
         virtual bool handle_mouse_up(DispPoint coord);
