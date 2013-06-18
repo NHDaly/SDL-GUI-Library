@@ -38,8 +38,8 @@ public:
     // Display features
     void set_text_size(int size);
     void set_text_color(SDL_Color color);
-    int get_text_size();
-    SDL_Color get_text_color();
+    int get_text_size() const;
+    SDL_Color get_text_color() const;
     
     /// @todo 
     // Justification

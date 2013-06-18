@@ -118,10 +118,10 @@ void TextView::set_text_color(SDL_Color color_) {
     color = color_;
     set_text(get_text());
 }
-int TextView::get_text_size() {
+int TextView::get_text_size() const {
     return text_size;
 }
-SDL_Color TextView::get_text_color() {
+SDL_Color TextView::get_text_color() const {
     return color;
 }
 
@@ -453,26 +453,32 @@ TextBox::TextBox(int w_, int h_)
 
     fill_with_color(field_bg_color);
 
-    attach_subview(field, DispPoint(2,2));
+//    attach_subview(field, DispPoint(2,2));
    
-    draw_onto_self(GUIImage("GUIImages/corner0.bmp"), DispPoint(0,    0));
-    draw_onto_self(GUIImage("GUIImages/corner1.bmp"), DispPoint(w_-5, 0));
-    draw_onto_self(GUIImage("GUIImages/corner2.bmp"), DispPoint(w_-5, h_-5));
-    draw_onto_self(GUIImage("GUIImages/corner3.bmp"), DispPoint(0,    h_-5));
+//    draw_onto_self(GUIImage("GUIImages/corner0.bmp"), DispPoint(0,    0));
+//    draw_onto_self(GUIImage("GUIImages/corner1.bmp"), DispPoint(w_-5, 0));
+//    draw_onto_self(GUIImage("GUIImages/corner2.bmp"), DispPoint(w_-5, h_-5));
+//    draw_onto_self(GUIImage("GUIImages/corner3.bmp"), DispPoint(0,    h_-5));
 
+    // *** OUT OF DATE: Mask works, just need to save it and expose color changing! :)
     // Should ideally use a mask layer instead so that bg color could be changed,
     // but right now the problem is it receives the mouse clicks instead of field.
-//    const SDL_Color mask_clear = {0, 0xff, 0xff};
-//    View *mask = new View(w_,h_);
-//    mask->fill_with_color(mask_clear);
-//    mask->set_clear_color(mask_clear);
-//    
-//    mask->draw_onto_self(GUIImage("GUIImages/corner0.bmp"), DispPoint(0,    0));
-//    mask->draw_onto_self(GUIImage("GUIImages/corner1.bmp"), DispPoint(w_-5, 0));
-//    mask->draw_onto_self(GUIImage("GUIImages/corner2.bmp"), DispPoint(w_-5, h_-5));
-//    mask->draw_onto_self(GUIImage("GUIImages/corner3.bmp"), DispPoint(0,    h_-5));
-// 
-//    attach_subview(mask, DispPoint(0,0));
+    // *** Literally, I just had to switch the order so the field comes after..
+    const SDL_Color mask_clear = {0, 0xff, 0xff};
+    View *mask = new View(w_,h_);
+    mask->fill_with_color(mask_clear);
+    mask->set_clear_color(mask_clear);
+    
+    mask->draw_onto_self(GUIImage("GUIImages/corner0.bmp"), DispPoint(0,    0));
+    mask->draw_onto_self(GUIImage("GUIImages/corner1.bmp"), DispPoint(w_-5, 0));
+    mask->draw_onto_self(GUIImage("GUIImages/corner2.bmp"), DispPoint(w_-5, h_-5));
+    mask->draw_onto_self(GUIImage("GUIImages/corner3.bmp"), DispPoint(0,    h_-5));
+ 
+    attach_subview(mask, DispPoint(0,0));
+
+    
+    // .. jokes.
+    attach_subview(field, DispPoint(2,2));
 
 }
 

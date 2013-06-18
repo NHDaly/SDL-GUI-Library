@@ -34,8 +34,9 @@ App::App_destroyer App::the_App_destroyer;
 
 App* App::get(){
 	
-	if (!singleton_ptr)
+	if (!singleton_ptr) {
 		singleton_ptr = new App;
+    }
 	return singleton_ptr;
 }
 
