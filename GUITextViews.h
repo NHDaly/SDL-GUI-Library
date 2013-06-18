@@ -143,10 +143,10 @@ private:
 
 
 // Wraps a TextField with a white background and bevelled corners.
-class GUITextBox : public GUI::View {
+class TextBox : public GUI::View {
 public:	
 	
-	GUITextBox(int w_, int h_);
+	TextBox(int w_, int h_);
 
     void set_text(const std::string& text) { field->set_text(text); }
 	std::string get_text() const { return field->get_text(); }
