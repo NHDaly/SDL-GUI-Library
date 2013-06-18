@@ -1,13 +1,13 @@
 //
-//  GUIScrollView.h
+//  ScrollView.h
 //  Deep
 //
 //  Created by Nathan Daly on 1/2/13.
 //  Copyright (c) 2013 Lions Entertainment. All rights reserved.
 //
 
-#ifndef Deep_GUIScrollView_h
-#define Deep_GUIScrollView_h
+#ifndef Deep_ScrollView_h
+#define Deep_ScrollView_h
 
 #include "GUIView.h"
 #include "GUIImageView.h"
@@ -16,11 +16,11 @@ struct GUITimer_command;
 
 namespace GUI {
 
-class GUIScrollView : public View  {
+class ScrollView : public View  {
 public:
     
-    GUIScrollView(int w_, int h_, View *display_view_);
-    ~GUIScrollView();
+    ScrollView(int w_, int h_, View *display_view_);
+    ~ScrollView();
     
     void update();
     
@@ -36,7 +36,7 @@ private:
     
     class ScrollBarBg : public View {
     public:
-        ScrollBarBg(int w_, int h_, GUIScrollView *view_) 
+        ScrollBarBg(int w_, int h_, ScrollView *view_) 
         : View(w_,h_), view(view_) { }
         
         void display();
@@ -44,11 +44,11 @@ private:
         virtual bool handle_mouse_down(DispPoint coord);
         
     private:
-        GUIScrollView *view;
+        ScrollView *view;
     };
     class ScrollBar : public View {
     public:
-        ScrollBar(int w_, int h_, GUIScrollView *view_) 
+        ScrollBar(int w_, int h_, ScrollView *view_) 
         : View(w_,h_), view(view_), clicked(false) { }
         
         void display();
@@ -58,7 +58,7 @@ private:
         virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion);
         
     private:
-        GUIScrollView *view;
+        ScrollView *view;
         bool clicked;
         DispPoint click;
     };
