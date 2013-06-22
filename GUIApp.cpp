@@ -60,7 +60,7 @@ void unhandled_click(const Unhandled_Click&) {
 
 struct App_Quitter {
     App_Quitter(bool &running_) : running(running_) {}
-    void operator()(GUIQuit) { running = false; }
+    void operator()(Quit) { running = false; }
     bool &running;
 };
 
@@ -87,7 +87,7 @@ void App::run(Window* window_) {
 
     running = true;
 
-    register_exception_handler<GUIQuit>(App_Quitter(running));
+    register_exception_handler<Quit>(App_Quitter(running));
     
     window->refresh();
     
@@ -239,13 +239,13 @@ void App::run(Window* window_) {
                             if (event.key.keysym.mod == KMOD_LCTRL
 								|| event.key.keysym.mod == KMOD_RCTRL
 								|| event.key.keysym.mod == KMOD_CTRL){
-                                throw GUIQuit();
+                                throw Quit();
 							}
 #else           // Mac
 							if (event.key.keysym.mod == KMOD_LMETA
 								|| event.key.keysym.mod == KMOD_RMETA
 								|| event.key.keysym.mod == KMOD_META){
-                                throw GUIQuit();
+                                throw Quit();
 							}
 #endif
 						}
@@ -263,7 +263,7 @@ void App::run(Window* window_) {
                     }
    
                     case SDL_QUIT:
-						throw GUIQuit();
+						throw Quit();
 						break;
                         
 					default:

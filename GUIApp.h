@@ -22,9 +22,9 @@
 
 namespace GUI {
 
-// Throw an instance of GUIQuit to safely tell the application to exit.
-// (This is the same as calling GUIApp::quit())
-class GUIQuit {};
+// Throw an instance of GUI::Quit to safely tell the application to exit.
+// (This is the same as calling GUI::App::quit())
+class Quit {};
 
 
 struct GUITimer_command {
