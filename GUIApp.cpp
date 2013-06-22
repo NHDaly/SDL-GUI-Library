@@ -25,20 +25,23 @@ using namespace std::tr1::placeholders;
 
 using GUI::call_error_handlers;
 
+namespace GUI {
+
 // SINGLETON MEMBERS
 
-GUIApp* GUIApp::singleton_ptr = 0;
-GUIApp::GUIApp_destroyer GUIApp::the_GUIApp_destroyer;
+App* App::singleton_ptr = 0;
+App::App_destroyer App::the_App_destroyer;
 
-GUIApp* GUIApp::get(){
+App* App::get(){
 	
-	if (!singleton_ptr)
-		singleton_ptr = new GUIApp;
+	if (!singleton_ptr) {
+		singleton_ptr = new App;
+    }
 	return singleton_ptr;
 }
 
-GUIApp::GUIApp_destroyer::~GUIApp_destroyer(){
-	delete GUIApp::singleton_ptr;
+App::App_destroyer::~App_destroyer(){
+	delete App::singleton_ptr;
 }
 
 // Forward Declarations
@@ -46,36 +49,37 @@ void print_msg(const GUIError &e);
 void unhandled_click(const Unhandled_Click &e);
 
 
-// GUIApp Implementation:
+// App Implementation:
 
 void print_msg(const GUIError &e) {
     cout << e.msg << endl;
 }
-void unhandled_click(const Unhandled_Click &e) {
+void unhandled_click(const Unhandled_Click&) {
     cout << "unhandled click" << endl;
 }
 
-struct GUIApp_Quitter {
-    GUIApp_Quitter(bool &running_) : running(running_) {}
+struct App_Quitter {
+    App_Quitter(bool &running_) : running(running_) {}
     void operator()(GUIQuit) { running = false; }
     bool &running;
 };
 
 
-GUIApp::GUIApp()
+App::App()
 :window(0), fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true), running(false)
 { }
 
 
 
-DispPoint GUIApp::get_screen_size() { return window->get_dim(); }
+DispPoint App::get_screen_size() { return window->get_dim(); }
 
 
-void GUIApp::quit() {
+void App::quit() {
     running = false;
 }
 
-void GUIApp::run(GUIWindow* window_) {
+
+void App::run(Window* window_) {
     
     window = window_;
     
@@ -83,7 +87,7 @@ void GUIApp::run(GUIWindow* window_) {
 
     running = true;
 
-    register_exception_handler<GUIQuit>(GUIApp_Quitter(running));
+    register_exception_handler<GUIQuit>(App_Quitter(running));
     
     window->refresh();
     
@@ -114,17 +118,17 @@ void GUIApp::run(GUIWindow* window_) {
                         DispPoint click_pos(event.button.x, event.button.y);
                         DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
                         
-                        list<GUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
+                        list<Controller*> focus_copy(captured_focus.begin(), captured_focus.end());
                         
-                        for (list<GUIController*>::iterator it = focus_copy.begin();
+                        for (list<Controller*>::iterator it = focus_copy.begin();
                                             it != focus_copy.end(); ++it) {
                             
-                            GUIController *captured = *it;
+                            Controller *captured = *it;
                             
                             DispPoint new_pos(click_pos);
 
                             // If the Controller is a view, adjust pos for view.
-                            if (GUIView *view = dynamic_cast<GUIView*>(captured)) {
+                            if (View *view = dynamic_cast<View*>(captured)) {
                                 new_pos.x -= view->get_abs_pos().x; 
                                 new_pos.y -= view->get_abs_pos().y; 
                             }
@@ -167,7 +171,7 @@ void GUIApp::run(GUIWindow* window_) {
 //                            }
                         }
                         
-                        GUIView* hovered_view =
+                        View* hovered_view =
                         window->get_main_view()->get_view_from_point(click_pos);
                         
 
@@ -216,7 +220,7 @@ void GUIApp::run(GUIWindow* window_) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            GUIController *captured = *it;
+                            Controller *captured = *it;
                             
                             bool handled = captured->handle_key_down(event.key.keysym);
                             if (!handled) {}
@@ -249,7 +253,7 @@ void GUIApp::run(GUIWindow* window_) {
                         for (view_list_t::iterator it = captured_focus.begin();
                              it != captured_focus.end(); ++it) {
                             
-                            GUIController *captured = *it;
+                            Controller *captured = *it;
                         
                             bool handled = captured->handle_key_up(event.key.keysym);
                             if (!handled) {}
@@ -282,7 +286,7 @@ void GUIApp::run(GUIWindow* window_) {
     }
 }
 
-void GUIApp::cycle_timer_commands() {
+void App::cycle_timer_commands() {
     
     for (size_t i = 0; i < timer_commands.size(); i++) {
         
@@ -297,7 +301,7 @@ void GUIApp::cycle_timer_commands() {
     
 }
 
-void GUIApp::cancel_timer_op(GUITimer_command* op) {
+void App::cancel_timer_op(GUITimer_command* op) {
     std::vector<GUITimer_command*>::iterator it
     = std::find(timer_commands.begin(), timer_commands.end(), op);
     if (it != timer_commands.end()) {
@@ -311,5 +315,6 @@ void GUIApp::cancel_timer_op(GUITimer_command* op) {
     next_timer_cmd = timer_commands.begin();
 }
 
+} // namespace GUI
 
 

@@ -13,7 +13,7 @@
 #include "GUIButton.h"
 #include "GUIImage.h"
 #include "GUIScrollView.h"
-#include "GUITextBox.h"
+#include "GUITextViews.h"
 #include "GUIUtility.h"
 #include "GUIValBox.h"
 #include "GUIView.h"

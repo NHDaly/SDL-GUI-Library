@@ -15,7 +15,7 @@ void initSDL(unsigned int flags){
     }
 
 	if(flags & SDL_INIT_AUDIO){
-		initAudio(flags);
+        GUI::initAudio(flags);
 	}
 
 	TTF_Init();

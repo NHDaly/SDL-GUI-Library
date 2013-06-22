@@ -10,6 +10,12 @@
 #define Deep_GUIButton_h
 
 #include "GUIImageView.h"
+#include "GUITextViews.h"
+
+#include <iostream>
+
+namespace GUI {
+
 
 class QuitAction {
 public:
@@ -18,13 +24,12 @@ public:
     }
 };
 
-#include <iostream>
 
-class GUIButton : public GUIImageView { 
+class Button : public ImageView { 
 public:
     
-    GUIButton()
-    : GUIImageView(GUIImage("GUIImages/button.bmp")), 
+    Button()
+    : ImageView(GUIImage("GUIImages/button.bmp")), 
     is_pressed(false), is_hovered(false),
     image(GUIImage("GUIImages/button.bmp")), hovered_image(GUIImage("GUIImages/button2.bmp")), 
     clicked_image(GUIImage("GUIImages/button3.bmp"))
@@ -82,7 +87,6 @@ protected:
     virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion) { 
         // Only perform event on mouse release.
 
-        std::cout << "HANDLING MOUSE MOTION BIZITCH " << std::endl;
         if (is_pressed && !is_hovered && rel_point_is_on_me(coord)) {
             draw_onto_self(clicked_image, DispPoint());
             is_hovered = true;
@@ -108,23 +112,22 @@ private:
     GUIImage image, hovered_image, clicked_image;
 };
 
-#include "GUITextViews.h"
 
-class GUITextButton : public GUIButton { 
+class TextButton : public Button { 
 public:
-    GUITextButton(const std::string &button_text_ = "")
+    TextButton(const std::string &button_text_ = "")
     {
-        button_text = new GUITextView(get_w()-30, get_h());
+        button_text = new TextView(get_w()-30, get_h());
         button_text->set_text(button_text_);
         button_text->set_text_size(16);
         attach_subview(button_text, DispPoint(get_w()-button_text->get_w(), 0));
     }
     
-    GUITextView* get_text_view() { return button_text; }
+    TextView* get_text_view() { return button_text; }
     void set_text(const std::string &button_text_) { button_text->set_text(button_text_); }
     
 public:
-    GUITextView *button_text;
+    TextView *button_text;
 };
 
 
@@ -133,11 +136,12 @@ public:
     void operator()() { }
 };
 template <typename Oper = NoAction>
-class GUIActionButton : public GUITextButton {
+class ActionButton : public TextButton {
 public:
 
-    GUIActionButton(Oper oper = Oper())
-	:oper(oper) { }
+    ActionButton(Oper oper = Oper(), const std::string &button_text_ = "")
+	:TextButton(button_text_), oper(oper) 
+    { }
 
     virtual void operation() {
         oper();
@@ -149,9 +153,11 @@ private:
 };
 
 template <typename Oper>
-GUITextButton* GUI_create_button(Oper oper) {
+TextButton* create_button(Oper oper, const std::string &button_text_ = "") {
     
-    return new GUIActionButton<Oper>(oper);
+    return new ActionButton<Oper>(oper, button_text_);
 }
+    
+} // namespace GUI
 
 #endif

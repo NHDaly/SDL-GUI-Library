@@ -14,18 +14,21 @@
 #include <string>
 #include <vector>
 
-class GUIMsg : GUIView {
+namespace GUI {
+
+class Msg : View {
 public:
     
     // Size of button_texts must == num_buttons
-    GUIMsg(int w_, int h_, const std::string& msg = "", int num_buttons = 0, 
+    Msg(int w_, int h_, const std::string& msg = "", int num_buttons = 0, 
            std::vector<std::string> button_texts = std::vector<std::string>()); 
     
     void set_msg(const std::string msg_);
     
-    void pop_up(int timeout = -1); // ms until window disappears.
+    void pop_up(int timeout = -1); // ms until window disappears. (-1 waits til click)
         
 };
 
+} // namespace GUI
 
 #endif

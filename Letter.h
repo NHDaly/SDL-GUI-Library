@@ -18,6 +18,7 @@
 
 class SDL_Surface; // display image
 
+namespace GUI {
 
 class Letter {
 	
@@ -61,7 +62,7 @@ private:
 };
 
 
-
+} // namespace GUI
 
 
 

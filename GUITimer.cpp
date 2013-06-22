@@ -5,6 +5,7 @@
 
 
 
+namespace GUI {
 
 void GUITimer::start() { 
 	if(!running){ 
@@ -57,4 +58,6 @@ FrameRateCapper::~FrameRateCapper(){
 	}
 }
 
+    
+} // namespace GUI
 

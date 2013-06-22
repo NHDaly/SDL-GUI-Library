@@ -10,6 +10,8 @@
 #include <iostream>
 #include <algorithm>
 
+namespace GUI {
+
 template <typename T>
 class Matrix2D {
 public:
@@ -83,16 +85,19 @@ private:
 
 
 class GUICell;
-class GUICellsView : public GUIView {
+class CellsView : public View {
+
 public:
-    GUICellsView(int w_, int h_);
+    CellsView(int w_, int h_);
     
 private:
     Matrix2D<GUICell*> cells;
 };
 
-GUICellsView::GUICellsView(int w_, int h_)
-:GUIView(w_,h_), cells(1,1)
+CellsView::CellsView(int w_, int h_)
+:View(w_,h_), cells(1,1)
 {
     
 }
+
+} // namespace GUI

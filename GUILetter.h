@@ -17,17 +17,20 @@
 #include <map>
 
 class SDL_Surface; // display image
-class GUIView; // display image
 class SDL_Color; // display image
 class _TTF_Font_;
 //typedef _TTF_Font_ TTF_Font;
+
+namespace GUI {
+    class View; // display image
+}
 
 class GUILetter {
 	
 public:
 	
 	void drawself(SDL_Surface *dest, int x, int y) const;
-	void drawself(GUIView *dest, int x, int y) const;
+	void drawself(GUI::View *dest, int x, int y) const;
 	int get_height() const;
 	int get_width() const;
 	

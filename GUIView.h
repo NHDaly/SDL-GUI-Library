@@ -15,17 +15,20 @@
 #include "GUIController.h"
 
 class SDL_Surface;
-class GUIWindow;
 class GUIImage;
 /// @todo Hack
 #include "GUIImage.h"
 #include <iostream>
 
-class GUIView : public GUIController {
+namespace GUI {
+    class Window;
+    class App;
+
+    class View : public GUI::Controller {
 public:
     
-    GUIView(int w_, int h_);
-    virtual ~GUIView();
+    View(int w_, int h_);
+    virtual ~View();
         
     // Redraw any children that have changed onto self. Return true if changed.
     void refresh();
@@ -40,14 +43,14 @@ public:
     // NOTE: once attached, a subview "belongs" to this view. If this view is
     //   deleted, all subviews are deleted as well.
     // NOTE: Currently it is okay to attach a view completely out of bounds.
-    void attach_subview(GUIView* view, DispPoint pos);
+    void attach_subview(View* view, DispPoint pos);
     // NOTE: Does not delete the view, only remove it from list!
-    void remove_subview(GUIView* view);
+    void remove_subview(View* view);
     void remove_last_subview(); // Remove subview last added
 
-    bool is_subview(GUIView* view);
+    bool is_subview(View* view) const;
 
-    void move_subview(GUIView* view, DispPoint pos);
+    void move_subview(View* view, DispPoint pos);
         
     // Will be true if a subview has been changed.
     bool need_to_refresh() const { return changed; }
@@ -74,13 +77,16 @@ public:
 
 
     // Returns the deepest subview (could be this) on which coord lies.
-    GUIView* get_view_from_point(DispPoint coord);
-    
+    View* get_view_from_point(DispPoint coord) const;
 
     DispPoint get_abs_pos() const; // Pos on screen
     DispPoint get_rel_pos() const; // Pos on parent
     
+    // returns true if coord is within this view's rectangle.
+    bool rel_point_is_on_me(DispPoint coord) const;
+    bool abs_point_is_on_me(DispPoint coord) const;
     
+
     int get_w() const { return w; }
     int get_h() const { return h; }
     
@@ -90,11 +96,14 @@ public:
     void set_clear_color(SDL_Color clear_color);
     void clear_alpha();
 
-    bool has_alpha_color() { return is_alpha; }
+    bool has_alpha_color() const { return is_alpha; }
     // Only valid if has_alpha_color.
-    SDL_Color get_clear_color() { return clear_color; }
+    SDL_Color get_clear_color() const { return clear_color; }
 
-
+    // returns true if pixel at coord is of clear color.
+    // If coord is not on view, or alhpa not set, will return false.
+    bool point_is_clear(DispPoint coord) const;
+    
     
 //    // *** The following two functions will call got_focus() and lost_focus(). 
 //    // *** Derived behavior may be specified by overriding those two functions.
@@ -105,8 +114,8 @@ public:
 //    void lose_focus();
     
     
-    friend class GUIWindow;
-    friend class GUIApp;
+    friend class GUI::Window;
+    friend class GUI::App;
     
 protected:
     
@@ -139,17 +148,13 @@ protected:
 //    virtual void lost_focus() { }
 
     // Hierarchy
-    GUIView* get_parent() { return parent; }
+    View* get_parent() { return parent; }
 //    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
 
     // Convert a point to abs, or coordinates relative to this view or parent view.
     DispPoint abs_from_rel(DispPoint coord) const;
     DispPoint adjust_to_parent(DispPoint coord) const;    
     DispPoint adjust_to_rel(DispPoint coord) const;    
-
-    // returns true if coord is within this view's rectangle.
-    bool rel_point_is_on_me(DispPoint coord);
-    bool abs_point_is_on_me(DispPoint coord);
 
     const SDL_Surface* get_image_ptr() const { return image; }
     
@@ -169,18 +174,19 @@ private:
     
 
     // Hierarchy
-    GUIView* parent;
-    typedef std::list<GUIView*> Subview_list_t;
+    View* parent;
+    typedef std::list<View*> Subview_list_t;
     Subview_list_t children;
                 
     
     // returns the deepest view that lies under coord, and its depth.
     // (0 is THIS, 1 is a child, 2 is grandchild, etc.)
-    typedef std::pair<GUIView*, int> View_Depth_t;
+    typedef std::pair<View*, int> View_Depth_t;
     View_Depth_t deepest_view_from_point(DispPoint coord, int depth);
     
-    friend bool x_then_y_view_less_than(const GUIView* a, const GUIView* b);
+    friend bool x_then_y_view_less_than(const View* a, const View* b);
 };
 
+} // namespace GUI
 
 #endif

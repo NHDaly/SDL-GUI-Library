@@ -12,12 +12,14 @@
 #include "Compatibility.h"
 #include "GUIUtility.h"
 
+namespace GUI {
+    
 // This class is seperated out from GUIView to allow creation of a class to 
 // receive mouse/key events without having to associate it with a displayed view.
-class GUIController {
+class Controller {
 	
 public:	
-	virtual ~GUIController() {}
+	virtual ~Controller() {}
 
     // Mouse Events. Following three functions all work the same:
     //  Return true if the mouse-event is finished being handled, false otherwise.
@@ -52,5 +54,6 @@ public:
     void lose_focus();
 };
 
+} // namespace GUI
 
 #endif

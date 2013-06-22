@@ -129,7 +129,7 @@ void display_image (const SDL_Surface *src, SDL_Surface *dest, int x, int y, boo
 	if (update) SDL_UpdateRects(dest, 1, &dest_rect);
 }
 
-void displayToScreen (SDL_Surface *src, int x, int y, bool update, SDL_Rect rect) {
+void displayToScreen (const SDL_Surface *src, int x, int y, bool update, SDL_Rect rect) {
 	
 	display_image(src, SDL_GetVideoSurface(), x, y, update, rect);
 }
@@ -250,8 +250,11 @@ SDL_Surface* create_SDL_Surface(int w, int h){
 	return updatedimage;
 }
 
-Uint32 getpixel(SDL_Surface *surface, int x, int y)
+Uint32 getpixel(const SDL_Surface *surface, int x, int y)
 {
+    if (x < 0 || y <0 || x >= surface->w || y >= surface->h) {
+		throw GUIError("Trying to read out-of-bounds pixel!");
+    }
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
@@ -283,6 +286,9 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
+    if (x < 0 || y <0 || x >= surface->w || y >= surface->h) {
+        return;
+    }
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;

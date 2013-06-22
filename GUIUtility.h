@@ -19,21 +19,21 @@ struct GUIProgramming_Error {
 };
 
 
-template <typename In, typename Out, typename Pred>
-Out copy_if(In first, In last, Out res, Pred p) {
-	
-	while (first != last) {
-		if (p(*first)) {
-			*res++ = *first;
-		}
-		++first;
-	}
-	return res;
-}
-
-inline double square (double x){
-	return x*x;
-}
+//template <typename In, typename Out, typename Pred>
+//Out copy_if(In first, In last, Out res, Pred p) {
+//	
+//	while (first != last) {
+//		if (p(*first)) {
+//			*res++ = *first;
+//		}
+//		++first;
+//	}
+//	return res;
+//}
+//
+//inline double square (double x){
+//	return x*x;
+//}
 
 class Coord;
 struct DispPoint {

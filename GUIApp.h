@@ -20,12 +20,12 @@
 #include <SDL/SDL.h> // To ensure it is #included by main.
 
 
+namespace GUI {
+
 // Throw an instance of GUIQuit to safely tell the application to exit.
 // (This is the same as calling GUIApp::quit())
 class GUIQuit {};
-class GUIWindow;
 
-class GUIController;
 
 struct GUITimer_command {
     GUITimer_command(double interval_) : interval(interval_) {
@@ -37,14 +37,17 @@ struct GUITimer_command {
 };
 
 
-class GUIApp {
+class Window;
+class Controller;
+
+class App {
 public:
-  	static GUIApp* get();
+  	static App* get();
     
     void set_framerate_cap(int fps_cap_) { fps_cap = fps_cap_; cap_frame_rate = true;}
     void disable_framerate_cap() { cap_frame_rate = false; }
     
-    void run(GUIWindow* window);
+    void run(Window* window);
     
 //    struct GUITimer_command;
 
@@ -63,9 +66,9 @@ public:
 
     // Provides a Controller with the ability to receive mouse/keyboard input.
     //  (Views receive mouse input by defualt when hovered over.)
-    void give_focus(GUIController* view) { captured_focus.insert(view); }
-    bool has_focus(GUIController* view) { return captured_focus.count(view) != 0; }
-    void release_focus(GUIController* view) { captured_focus.erase(view); }
+    void give_focus(Controller* view) { captured_focus.insert(view); }
+    bool has_focus(Controller* view) { return captured_focus.count(view) != 0; }
+    void release_focus(Controller* view) { captured_focus.erase(view); }
     
     
     // Equivalent to a user clicking the "x" or pressing cmd-q.
@@ -73,15 +76,17 @@ public:
     
 
     DispPoint get_screen_size();    
+    Window* get_window() { return window; }  
+
 private:
     
-    GUIWindow* window;
+    Window* window;
     
     int fps_cap;
     bool cap_frame_rate;
     bool running;
     
-    typedef std::set<GUIController*> view_list_t;
+    typedef std::set<Controller*> view_list_t;
     view_list_t captured_focus;
 
     
@@ -126,27 +131,27 @@ private:
     void cycle_timer_commands();
 
 //SINGLETON MEMBERS:
-	static GUIApp * singleton_ptr; 
+	static App * singleton_ptr; 
 	
 	friend class GUIApp_destroyer;
 	
 	// no public creation/deletion
-	GUIApp();
+	App();
 	
 	// no copy or assignment allowed
-	GUIApp(const GUIApp&);
-	GUIApp& operator= (const GUIApp&);
+	App(const App&);
+	App& operator= (const App&);
 	
     
-    struct GUIApp_destroyer {
-        ~GUIApp_destroyer();
+    struct App_destroyer {
+        ~App_destroyer();
     };
-    static GUIApp_destroyer the_GUIApp_destroyer;
+    static App_destroyer the_App_destroyer;
 };
 
 // Perform op after interval seconds. Repeat if repeat == true.
 template <typename Operation>
-GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool repeat) {
+GUITimer_command* App::repeat_on_timer(Operation op, double interval, bool repeat) {
     
     GUITimer_command* command = create_timer_command(op,interval, repeat);
     timer_commands.push_back(command);
@@ -160,12 +165,12 @@ GUITimer_command* GUIApp::repeat_on_timer(Operation op, double interval, bool re
 
 
 template <typename Exception_t, typename Handler_t>
-void GUIApp::register_exception_handler(const Handler_t &handler) {
+void App::register_exception_handler(const Handler_t &handler) {
     handler_list.push_back(GUI::create_error_handler<Exception_t>(handler));
 }
 
 
-
+} // namespace GUI
 
 
 #endif
