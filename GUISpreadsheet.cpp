@@ -54,7 +54,7 @@ public:
     
     T& operator()(int i, int j) {
         if (i >= rows || j >= cols) {
-            throw GUIError("out of bounds Matrix access.");
+            throw Error("out of bounds Matrix access.");
         }
         return arr[i][j];
     }
@@ -64,7 +64,7 @@ public:
             return;
         }
         if (rows_ < rows || cols_ < cols) {
-            throw GUIError("new size smaller than current size.");
+            throw Error("new size smaller than current size.");
         }
         
         Matrix2D temp(rows_, cols_);

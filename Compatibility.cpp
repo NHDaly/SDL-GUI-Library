@@ -58,7 +58,7 @@ const char * STANDALONE_RESOURCES_FOLDER = "Resources";
 
 void initGUI(){
 	
-    initSDL(SDL_INIT_EVERYTHING);
+    GUI::initSDL(SDL_INIT_EVERYTHING);
     
     // Move the working directory to resources folder.
     nav_to_resources();

@@ -79,7 +79,7 @@ void Letter::set_image(const std::string& filename) {
 	image = loadBMP(filename); 
 	if (!image) {
 		string error_msg = "Couldn't load " + filename +": "+ SDL_GetError() +"\n";
-		throw GUIError(error_msg.c_str());
+		throw Error(error_msg.c_str());
 	}
 }
 

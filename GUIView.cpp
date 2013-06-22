@@ -56,11 +56,11 @@ SDL_Surface* prepare_SDL_surface(int w, int h) {
     SDL_Surface *temp = SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 32,
                                              rmask, gmask, bmask, amask);
     if(temp == NULL) {
-		throw GUIError("CreateRGBSurface failed: \n" + string(SDL_GetError()));
+		throw Error("CreateRGBSurface failed: \n" + string(SDL_GetError()));
     }
 	SDL_Surface* image = SDL_DisplayFormat(temp);
 	if(!image) {
-        throw GUIError("updateimage in CreateRGBSurface failed: \n" + string(SDL_GetError()));
+        throw Error("updateimage in CreateRGBSurface failed: \n" + string(SDL_GetError()));
     }
 	SDL_FreeSurface(temp);
     
@@ -172,10 +172,10 @@ void View::refresh() {
 
 void View::attach_subview(View* view, DispPoint pos) {
     if (view->parent)
-        throw GUIError("Candidate vew is already a subview of another view.");
+        throw Error("Candidate vew is already a subview of another view.");
     
     if (view == this) 
-        throw GUIError("Cannot attach a view to itself!");
+        throw Error("Cannot attach a view to itself!");
 
     /// @todo Check if out of bounds? Or maybe not..?
     
@@ -189,7 +189,7 @@ void View::attach_subview(View* view, DispPoint pos) {
 void View::remove_subview(View* view) {
     
     if (!is_subview(view))
-        throw GUIError("view is not a subview of this!");
+        throw Error("view is not a subview of this!");
     
     children.remove(view);
     view->parent = 0;
@@ -199,7 +199,7 @@ void View::remove_subview(View* view) {
 void View::remove_last_subview() {
     
     if (children.empty())
-        throw GUIError("view has not subviews!");
+        throw Error("view has not subviews!");
     
     View *view = children.back();
     children.pop_back();
@@ -215,7 +215,7 @@ bool View::is_subview(View* view) const {
 void View::move_subview(View* view, DispPoint pos) {
     
     if (!is_subview(view))
-        throw GUIError("view is not a subview of this!");
+        throw Error("view is not a subview of this!");
     
     if (view->pos == pos) return; // no need to mark change if already there!
     

@@ -17,6 +17,8 @@ using std::string;
 using std::map; using std::pair;
 using std::cout; using std::endl;
 
+using GUI::Error;
+
 const SDL_Color transparent = {0xFF, 0, 0xFF, 0};
 
 
@@ -54,7 +56,7 @@ void GUIImage_Cache::set_image(const std::string& filename) {
 	image = GUIImage(loadBMPAlpha(filename, transparent));
 	if (!image) {
 		string error_msg = "Couldn't load " + filename +": "+ SDL_GetError() +"\n";
-		throw GUIError(error_msg.c_str());
+		throw Error(error_msg.c_str());
 	}
 }
 

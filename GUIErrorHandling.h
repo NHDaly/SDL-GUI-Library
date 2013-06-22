@@ -1,5 +1,5 @@
 //
-//  GUIErrorHandling.h
+//  ErrorHandling.h
 //  GUI Widget Library
 //
 //  Created by Nathan Daly on 12/14/12.

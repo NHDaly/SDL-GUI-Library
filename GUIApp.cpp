@@ -44,13 +44,13 @@ App::App_destroyer::~App_destroyer(){
 }
 
 // Forward Declarations
-void print_msg(const GUIError &e);
+void print_msg(const Error &e);
 void unhandled_click(const Unhandled_Click &e);
 
 
 // App Implementation:
 
-void print_msg(const GUIError &e) {
+void print_msg(const Error &e) {
     cout << e.msg << endl;
 }
 void unhandled_click(const Unhandled_Click&) {
@@ -82,7 +82,7 @@ void App::run(Window* window_) {
     
     window = window_;
     
-    register_exception_handler<GUIError>(&print_msg);
+    register_exception_handler<Error>(&print_msg);
 
     running = true;
 
@@ -308,7 +308,7 @@ void App::cancel_timer_op(GUITimer_command* op) {
         timer_commands.erase(it);
     }
     else {
-        throw GUIError("command not found!");
+        throw Error("command not found!");
     }
     
     next_timer_cmd = timer_commands.begin();

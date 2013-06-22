@@ -1,13 +1,13 @@
 //
-//  GUIError_Handling_Impl.h
+//  Error_Handling_Impl.h
 //  GUI Widget Library
 //
 //  Created by Nathan Daly on 2/18/13.
 //  Copyright (c) 2013 Lions Entertainment. All rights reserved.
 //
 
-#ifndef GUIError_Handling_Impl_h
-#define GUIError_Handling_Impl_h
+#ifndef Error_Handling_Impl_h
+#define Error_Handling_Impl_h
 
 #include <vector>
 

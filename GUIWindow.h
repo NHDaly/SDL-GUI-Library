@@ -19,6 +19,10 @@
 #include SDL_SDLVIDEO_H
 #include SDL_SDLKEYBOARD_H
 
+class SDL_Surface;
+
+namespace GUI {
+
 struct Unhandled_Click {
     
     Unhandled_Click(DispPoint coord_) : coord(coord_) { }
@@ -30,9 +34,6 @@ struct Unhandled_Key {
     SDL_keysym key;
 };
 
-struct SDL_Surface;
-
-namespace GUI {
 
 class View;
 

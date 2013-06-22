@@ -5,10 +5,11 @@
 #include <string>
 #include "stdint.h"
 
+namespace GUI {
 
 // a simple class for error exceptions - msg points to a C-string error message
-struct GUIError {
-	GUIError(std::string in_msg) : msg(in_msg) { }
+struct Error {
+	Error(std::string in_msg) : msg(in_msg) { }
 	std::string msg;
 };
 
@@ -61,6 +62,8 @@ void initSDL(unsigned int flags);
 // initializes the SDL with the given flags. Returns -1 if fails and prints error. 0 otherwise.
 // also sets SDL to close at exit.
 
+    
+} // namespace GUI
 
 
 

@@ -104,7 +104,7 @@ void NewTextView::set_text(const std::string& text_){
 void NewTextView::add_text(const std::string& text_, int index){
 	
     if (index > (int)text.size()) {
-        throw GUIError("Cannot add text: Index is out of bounds.");
+        throw Error("Cannot add text: Index is out of bounds.");
     }
             
     letter_ctr_t new_text;

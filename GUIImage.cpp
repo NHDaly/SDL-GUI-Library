@@ -9,8 +9,9 @@
 #include <algorithm>
 using std::cout; using std::endl;
 using std::max;
-
 using std::string;
+
+using GUI::Error;
 
 const SDL_Color clear_color = {0xFF, 0, 0xFF, 0xFF};
 
@@ -20,12 +21,12 @@ GUIImage::GUIImage(int w, int h, bool alpha, const SDL_Color& color_key)
 	
 	SDL_Surface* temp = create_SDL_Surface(w, h);
 	if (!temp){
-		throw GUIError("Could not create GUIImage. Not enough memory.");
+		throw Error("Could not create GUIImage. Not enough memory.");
 	}	
 	sdl_impl = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
 	if (!sdl_impl){
-		throw GUIError("Could not create GUIImage. Not enough memory.");
+		throw Error("Could not create GUIImage. Not enough memory.");
 	}
     
     if (alpha){
@@ -42,7 +43,7 @@ GUIImage::GUIImage(SDL_Surface* surface)
 :is_alpha(false)
 {
 	
-    if (surface == 0) throw GUIError("Cannot form a GUIImage from NULL surface!");
+    if (surface == 0) throw Error("Cannot form a GUIImage from NULL surface!");
 	sdl_impl = surface;
 }
 
@@ -71,14 +72,14 @@ GUIImage::~GUIImage(){
 
 GUIImage::GUIImage(const GUIImage& image_){
 	
-    if (image_.sdl_impl == 0) throw GUIError("Cannot form a GUIImage from bad image");
+    if (image_.sdl_impl == 0) throw Error("Cannot form a GUIImage from bad image");
 	SDL_Surface* temp = create_SDL_Surface(image_.getw(), image_.geth());
 	if (!temp){
-		throw GUIError("Could not copy GUIImage. Not enough memory.");
+		throw Error("Could not copy GUIImage. Not enough memory.");
 	}	
 	sdl_impl = SDL_DisplayFormat(temp);
 	if (!sdl_impl){
-		throw GUIError("Could not copy GUIImage. Not enough memory.");
+		throw Error("Could not copy GUIImage. Not enough memory.");
 	}
 
 
@@ -150,7 +151,7 @@ GUIImage GUIImage::create_blank(int w, int h){
 	
 	result.sdl_impl = create_SDL_Surface(w, h);
 	if (!result.sdl_impl){
-		throw GUIError("Could not create blank GUIImage. Not enough memory.");
+		throw Error("Could not create blank GUIImage. Not enough memory.");
 	}	
 	return result;
 }

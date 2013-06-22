@@ -11,6 +11,10 @@ using std::list;
 using std::string;
 using std::cout; using std::endl;
 
+using GUI::Error;
+using GUI::DispPoint;
+
+
 const int c_char_image_length = 17;
 const int c_char_image_height = 19;
 
@@ -23,7 +27,7 @@ SDL_Surface* load_letter(char ch_, string text_image_file, string extension);
 void updateScreen(SDL_Surface *screen){
 	
 	if (SDL_Flip( screen ) == -1){
-		throw GUIError("Failed Screen Flip");
+		throw Error("Failed Screen Flip");
 	}
 }
 
@@ -32,7 +36,7 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
     /* Create a display surface with a grayscale palette */
     
 	if (width <= 0 || height <= 0 || bpp <= 0){
-		throw GUIError("non-positive values in createDisplay not allowed!");
+		throw Error("non-positive values in createDisplay not allowed!");
 	}
     
 //    /* Fill colors with color information */
@@ -45,12 +49,12 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
     /* Create display */
     screen=SDL_SetVideoMode(width, height, bpp, flags);
     if(!screen){
-        throw GUIError("Couldn't set video mode: \n" + string(SDL_GetError()));
+        throw Error("Couldn't set video mode: \n" + string(SDL_GetError()));
     }
     
 //    /* Set palette */
 //    if (!SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, colors, 0, numColors)) {
-//        throw GUIError("Couldn't set color palette: \n" + string(SDL_GetError()));
+//        throw Error("Couldn't set color palette: \n" + string(SDL_GetError()));
 //    }
 	
     return screen;
@@ -64,7 +68,7 @@ SDL_Surface * loadBMP(string file) {
     //If nothing went wrong in loading the image
     if( !loadedImage ) {
 		string error_msg = "Couldn't load " + file +": "+ SDL_GetError() +"\n";
-		throw GUIError(error_msg);
+		throw Error(error_msg);
 	}
 
 	//The optimized image that will be used
@@ -75,7 +79,7 @@ SDL_Surface * loadBMP(string file) {
     
 	if (!optimizedImage) {
 		string error_msg = "Couldn't optimize " + file +": "+ SDL_GetError() +"\n";
-		throw GUIError(error_msg);
+		throw Error(error_msg);
 	}
 	
     //Return the optimized image
@@ -138,7 +142,7 @@ void displayTextToScreen (const string &a, int x, int y, int size, bool update){
 	
 	static TTF_Font* font = TTF_OpenFont("GUIFonts/arial.ttf", size);
 	
-	if (!font) throw GUIError("Couldn't load font: arial.ttf");
+	if (!font) throw Error("Couldn't load font: arial.ttf");
 	
 	SDL_Color textColor = {255, 255, 255};
 	
@@ -153,7 +157,7 @@ SDL_Surface* createText2 (const string &a, int size, SDL_Color textColor){
 
 	TTF_Font* font = TTF_OpenFont("GUIFonts//arial.ttf", size);
 	
-	if (!font) throw GUIError("Couldn't load font: arial.ttf");
+	if (!font) throw Error("Couldn't load font: arial.ttf");
 		
 	SDL_Surface* message = TTF_RenderText_Solid(font, a.c_str(), textColor);
 
@@ -253,7 +257,7 @@ SDL_Surface* create_SDL_Surface(int w, int h){
 Uint32 getpixel(const SDL_Surface *surface, int x, int y)
 {
     if (x < 0 || y <0 || x >= surface->w || y >= surface->h) {
-		throw GUIError("Trying to read out-of-bounds pixel!");
+		throw Error("Trying to read out-of-bounds pixel!");
     }
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */

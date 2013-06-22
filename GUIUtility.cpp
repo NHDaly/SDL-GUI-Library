@@ -5,13 +5,16 @@
 
 #include "Compatibility.h"
 
+#include <iostream>
+
+namespace GUI {
 
 static void quit_SDL();
 
 
 void initSDL(unsigned int flags){
     if ( SDL_Init(flags) < 0 ) {
-        throw GUIError("Unable to init SDL: \n" + std::string(SDL_GetError()));
+        throw Error("Unable to init SDL: \n" + std::string(SDL_GetError()));
     }
 
 	if(flags & SDL_INIT_AUDIO){
@@ -24,9 +27,10 @@ void initSDL(unsigned int flags){
     atexit(quit_SDL);
 }
 
-#include <iostream>
 static void quit_SDL() {
     std::cout << "Thanks for playing!" << std::endl;
     
 //    SDL_Quit();   // Turned off for now because it causes an issue with screen flashing..
 }
+
+} // namespace GUI
