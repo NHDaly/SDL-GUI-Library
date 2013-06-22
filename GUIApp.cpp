@@ -63,7 +63,7 @@ struct GUIApp_Quitter {
 
 
 GUIApp::GUIApp()
-:window(0), fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true)
+:window(0), fps_cap(FPS_CAP_DEFAULT), cap_frame_rate(true), running(false)
 { }
 
 
@@ -71,13 +71,17 @@ GUIApp::GUIApp()
 DispPoint GUIApp::get_screen_size() { return window->get_dim(); }
 
 
+void GUIApp::quit() {
+    running = false;
+}
+
 void GUIApp::run(GUIWindow* window_) {
     
     window = window_;
     
     register_exception_handler<GUIError>(&print_msg);
 
-    bool running = true;
+    running = true;
 
     register_exception_handler<GUIQuit>(GUIApp_Quitter(running));
     

@@ -69,7 +69,7 @@ public:
     
     
     // Equivalent to a user clicking the "x" or pressing cmd-q.
-    void quit() { throw GUIQuit(); }
+    void quit();
     
 
     DispPoint get_screen_size();    
@@ -79,6 +79,7 @@ private:
     
     int fps_cap;
     bool cap_frame_rate;
+    bool running;
     
     typedef std::set<GUIController*> view_list_t;
     view_list_t captured_focus;
