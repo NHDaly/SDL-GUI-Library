@@ -27,16 +27,19 @@ struct Unhandled_Key {
     SDL_keysym key;
 };
 
-class GUIView;
 class SDL_Surface;
+
+namespace GUI {
+
+class View;
 
 // This class maintains information about the Window. 
 // (i.e name, size, etc.) Has one View instance that shows what is displayed in
 // the window.
-class GUIWindow {
+class Window {
 public:
 
-    GUIWindow(int w, int h, const std::string& name_ = "",
+    Window(int w, int h, const std::string& name_ = "",
                  int numColors = 256, const Uint32 flags = SDL_SWSURFACE);
     
     void crop(int w, int h);
@@ -44,14 +47,14 @@ public:
     
     void rename(const std::string& name_);
     
-    GUIView* get_main_view() { return main_view; }
+    View* get_main_view() { return main_view; }
 
     DispPoint get_dim();
         
     // Handle subviews to main_view:
-    void attach_subview(GUIView* view, DispPoint pos);
-    void move_subview(GUIView* view, DispPoint pos);
-    void remove_subview(GUIView* view);
+    void attach_subview(View* view, DispPoint pos);
+    void move_subview(View* view, DispPoint pos);
+    void remove_subview(View* view);
     void remove_last_subview(); // Remove subview last added
 
     
@@ -60,7 +63,7 @@ public:
     
 private:
     SDL_Surface* window;
-    GUIView* main_view;
+    View* main_view;
     std::string name;
     
     int num_colors;
@@ -68,5 +71,7 @@ private:
     
     static bool WINDOW_ALREADY_CREATED;
 };
+
+} // namespace GUI
 
 #endif /* GUIWINDOW_H */

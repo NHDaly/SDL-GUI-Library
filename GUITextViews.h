@@ -16,15 +16,17 @@
 #include <vector>
 #include <map>
 
-
-class NewLetter_Disp_Obj;
 class GUILetter;
 
+namespace GUI {
+    
+class NewLetter_Disp_Obj;
+    
 // A View that displays text atop a clear background.
-class GUITextView : public GUIView {
+class TextView : public GUI::View {
 public:	
 
-	GUITextView(int w_ = 200, int h_ = 200, 
+	TextView(int w_ = 200, int h_ = 200, 
                    bool resizeable_down = false, bool resizable_right = false);
 	
     // Text functions
@@ -36,8 +38,8 @@ public:
     // Display features
     void set_text_size(int size);
     void set_text_color(SDL_Color color);
-    int get_text_size();
-    SDL_Color get_text_color();
+    int get_text_size() const;
+    SDL_Color get_text_color() const;
     
     /// @todo 
     // Justification
@@ -76,10 +78,10 @@ private:
 
 
 // A TextView that allows for text entry (including mouse motion, deletion, etc.)
-class GUITextField : public GUITextView {
+class TextField : public TextView {
 public:	
 	
-	GUITextField(int w_ = 200, int h_ = 200, 
+	TextField(int w_ = 200, int h_ = 200, 
                   bool resizeable_down = false, bool resizable_right = false);
 	
 	
@@ -109,9 +111,9 @@ private:
     void handle_modifier(SDLMod key);
 
     
-	class Cursor : public GUIView {
+	class Cursor : public GUI::View {
 	public:
-		Cursor(GUITextField* tb_ptr);
+		Cursor(TextField* tb_ptr);
 
 		void display(int text_size);
 		
@@ -130,7 +132,7 @@ private:
 	private:
 		DispPoint position;
 		int index; 
-		GUITextField* text_box_ptr;
+		TextField* text_box_ptr;
 		
 		bool flicker;
 	};
@@ -141,10 +143,10 @@ private:
 
 
 // Wraps a TextField with a white background and bevelled corners.
-class GUITextBox : public GUIView {
+class TextBox : public GUI::View {
 public:	
 	
-	GUITextBox(int w_, int h_);
+	TextBox(int w_, int h_);
 
     void set_text(const std::string& text) { field->set_text(text); }
 	std::string get_text() const { return field->get_text(); }
@@ -156,7 +158,7 @@ public:
     SDL_Color get_text_color() { return field->get_text_color(); }
 
 private:
-    GUITextField *field;
+    TextField *field;
 
 };
 
@@ -166,7 +168,7 @@ class NewLetter_Disp_Obj{
 public:
 	NewLetter_Disp_Obj(char ltr, int size, DispPoint pos, SDL_Color color);
 	
-	void drawself(GUIView *dest) const;
+	void drawself(GUI::View *dest) const;
 	int get_width() const;
 	DispPoint get_pos() const
     { return position; }
@@ -187,6 +189,8 @@ private:
     static int line_height;
 
 };
+
+} // namespace GUI
 
 #endif /* NEW_GUI_TEXT_BOX_H */
 

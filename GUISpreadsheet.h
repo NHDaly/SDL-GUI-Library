@@ -11,15 +11,17 @@
 
 #include "GUIView.h"
 
-class GUICellsView;
-class GUISpreadsheet : public GUIView {
+namespace GUI {
+    
+class CellsView;
+class Spreadsheet : public View {
 public:
-    GUISpreadsheet(int w, int h);
+    Spreadsheet(int w, int h);
     
 private:
-    GUICellsView *cells_view;
+    CellsView *cells_view;
 };
 
-
+} // namespace GUI
 
 #endif

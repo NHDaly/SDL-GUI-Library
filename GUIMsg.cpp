@@ -13,11 +13,13 @@
 #include <iostream>
 using std::cout; using std::endl;
 
+namespace GUI {
+
 const SDL_Color color = {0xbb, 0xbb, 0xbb, 0};
 
-GUIMsg::GUIMsg(int w_, int h_, const std::string& msg_, int num_buttons, 
+Msg::Msg(int w_, int h_, const std::string& msg_, int num_buttons, 
                     std::vector<std::string> button_texts)
-:GUIView(w_,h_)
+:View(w_,h_)
 {
 //    GUIImage bg = GUIImage::create_filled(w_, h_, color);
 ////    draw_onto_view(bg, DispPoint());
@@ -27,7 +29,7 @@ GUIMsg::GUIMsg(int w_, int h_, const std::string& msg_, int num_buttons,
 //    set_msg(msg_);
 }
 
-void GUIMsg::set_msg(const std::string msg_) {
+void Msg::set_msg(const std::string msg_) {
     
     SDL_Color text_color = {0,0,0,0};
     GUIImage msg_text(createText2(msg_, 16, text_color));
@@ -38,7 +40,7 @@ void GUIMsg::set_msg(const std::string msg_) {
 //                                       get_h()/2 - msg_text.geth()/2));
 }
 
-void GUIMsg::pop_up(int timeout) 
+void Msg::pop_up(int timeout) 
 {
 //    // Store a copy of the screen for the scroll away.
 //    GUIImage temp_screen(get_w(), get_h());
@@ -89,3 +91,5 @@ void GUIMsg::pop_up(int timeout)
 //    displayToScreen(temp_screen, SCREEN_WIDTH/2 - get_w()/2, 0, 1);
 
 }
+
+} // namespace GUI

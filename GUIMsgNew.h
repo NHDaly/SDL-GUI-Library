@@ -14,38 +14,47 @@
 #include <string>
 #include <vector>
 
-class GUIButton;
-class GUITextView;
 
-class GUIMsgNew : public GUIView {
+namespace GUI {
+
+class Button;
+class TextView;
+
+class MsgNew : public View {
 public:
-    typedef std::vector<GUIButton*> Button_ctrs_t;
+    typedef std::vector<Button*> Button_ctrs_t;
     
     // Size of button_texts must == num_buttons
-    GUIMsgNew(int w_, int h_, const std::string& msg = "", Button_ctrs_t buttons = Button_ctrs_t()); 
+    MsgNew(int w_, int h_, const std::string& msg = "", Button_ctrs_t buttons = Button_ctrs_t()); 
     
     void set_msg(const std::string msg_);
 
-    void add_button(GUIButton* button);
+    void add_button(GUI::Button* button);
 
     virtual void pop_up(int timeout = -1) = 0; // ms until window disappears.
-    
+
+    // Note, this is not yet implemented.
+//    virtual void pop_up_modal(); // stop everything else.
+
 private:
     
-    std::vector<GUIButton*> buttons;
-    GUITextView *msg_text;
+    std::vector<Button*> buttons;
+    TextView *msg_text;
 };
 
-class GUIMsgNew_Scroll_In : public GUIMsgNew {
+class MsgNew_Scroll_In : public MsgNew {
 public:
-    typedef std::vector<GUIButton*> Button_ctrs_t;
+    typedef std::vector<Button*> Button_ctrs_t;
 
     // Size of button_texts must == num_buttons
-    GUIMsgNew_Scroll_In(int w_, int h_, const std::string& msg = "", Button_ctrs_t buttons = Button_ctrs_t()); 
+    MsgNew_Scroll_In(int w_, int h_, const std::string& msg = "", Button_ctrs_t buttons = Button_ctrs_t()); 
         
     virtual void pop_up(int timeout = -1) = 0; // ms until window disappears.
-    
+
+//    virtual void pop_up_modal(); // stop everything else.
+
 };
 
+} // namespace GUI
 
 #endif

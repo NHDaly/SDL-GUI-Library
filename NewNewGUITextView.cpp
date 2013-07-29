@@ -1,5 +1,5 @@
 //
-//  NewGUITextView.cpp
+//  NewTextView.cpp
 //  Deep
 //
 //  Created by Nathan Daly on 1/4/13.
@@ -15,6 +15,10 @@ using std::string;
 using std::map;
 using std::make_pair;
 
+
+namespace GUI {
+    
+    
 //---------------
 
 class LetterCache {
@@ -31,14 +35,14 @@ const SDL_Color clear_color_c = {0xFF, 0, 0xFF};
 const SDL_Color white_color_c = {0xFF, 0xFF, 0xFF};
 
 
-NewGUITextView::NewGUITextView(int w, int h, int size, SDL_Color color)
-:GUIView(w,h), prev('a', size, color)
+NewTextView::NewTextView(int w, int h, int size, SDL_Color color)
+:View(w,h), prev('a', size, color)
 {
     draw_onto_self(GUIImage::create_filled(w, h, clear_color_c), DispPoint());
     set_clear_color(clear_color_c);    
 }
 
-void NewGUITextView::draw() {
+void NewTextView::draw() {
     
     DispPoint pos(0,0);
 
@@ -75,7 +79,7 @@ bool LetterData::operator<(const LetterData& rhs) const {
 }
 
 
-void NewGUITextView::set_letter_data(const LetterData& data,
+void NewTextView::set_letter_data(const LetterData& data,
                      size_t startIdx, size_t endIdx) {
     
     prev = data;
@@ -92,12 +96,12 @@ void NewGUITextView::set_letter_data(const LetterData& data,
 }
 
 
-void NewGUITextView::set_text(const std::string& text_){
+void NewTextView::set_text(const std::string& text_){
 	
     text.clear();
     add_text(text_, 0);
 }
-void NewGUITextView::add_text(const std::string& text_, int index){
+void NewTextView::add_text(const std::string& text_, int index){
 	
     if (index > (int)text.size()) {
         throw GUIError("Cannot add text: Index is out of bounds.");
@@ -116,11 +120,11 @@ void NewGUITextView::add_text(const std::string& text_, int index){
     draw();
 }
 
-void NewGUITextView::append_text(const std::string& text_){
+void NewTextView::append_text(const std::string& text_){
 	add_text(text_, text.size());
 }
 
-std::string NewGUITextView::get_text() const {
+std::string NewTextView::get_text() const {
 	
     string result;
     
@@ -155,4 +159,4 @@ const GUIImage& LetterCache::get_image(const LetterData& data) {
     return (GUIImage&)letters[data]; // Avoid the copy constructor.
 }
 
-                                                 
+} // namespace GUI                                           

@@ -11,17 +11,17 @@
 #include "GUIImage.h"
 #include "GameDisplay.h"
 
-GUIImageView::GUIImageView(const GUIImage &image_src)
-: GUIView(image_src.getw(), image_src.geth()) 
+namespace GUI {
+
+ImageView::ImageView(const GUIImage &image_src)
+: View(image_src.getw(), image_src.geth()) 
 { 
     draw_onto_self(image_src, DispPoint(0,0));
 }
 
-GUIImage GUIImageView::get_image() {
-    
-    GUIImage temp(get_w(),get_h());
-    
-    display_image(GUIImage::create_copy(get_image_ptr()), temp, DispPoint(), 0);
-    
-    return temp;
+GUIImage ImageView::get_image() {
+        
+    return GUIImage::create_copy(get_image_ptr());
 }
+
+} // namespace GUI

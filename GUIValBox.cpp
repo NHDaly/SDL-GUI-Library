@@ -8,21 +8,26 @@
 
 #include "GUIValBox.h"
 #include "GameDisplay.h"
+#include "GUIApp.h"
 
 #include "SDL/SDL.h"
 
 #include <iostream>
 #include <cmath>
+#include <tr1/functional>
 
 using std::string;
 using std::stringstream;
 using std::cout; using std::endl;
+using std::tr1::bind;
 
+namespace GUI {
+    
 const int MIN_TEXT_BOX_WIDTH = 10;
 const int MIN_TEXT_BOX_HEIGHT = 10;
 
-GUIValue_Text_Box::GUIValue_Text_Box(int w_, int h_, string bg_image)
-: GUIValue_Box(w_,h_), 
+Value_Text_Box::Value_Text_Box(int w_, int h_, string bg_image)
+: Value_Box(w_,h_), 
 text_box(w_ - 5, h_ - 5)
 {
     GUIImage bg = GUIImage::create_blank(500,500);
@@ -33,7 +38,7 @@ text_box(w_ - 5, h_ - 5)
     attach_subview(&text_box, DispPoint(5,5));
 }
 
-double GUIValue_Text_Box::get_value() const {
+double Value_Text_Box::get_value() const {
     
     stringstream text_to_int;
     text_to_int << text_box.get_text();
@@ -44,14 +49,14 @@ double GUIValue_Text_Box::get_value() const {
     return result;
 }
 
-GUIValue_Slider::~GUIValue_Slider() { }
+Value_Slider::~Value_Slider() { }
 
 
-double GUIValue_Slider::get_value() const {
+double Value_Slider::get_value() const {
     
     return value * max - min;
 }
-double GUIValue_Slider::get_percent() const {
+double Value_Slider::get_percent() const {
     
     return value;
 }
@@ -59,7 +64,7 @@ double GUIValue_Slider::get_percent() const {
 const DispPoint HORIZ_SLIDER_DIM (1,5);
 const DispPoint HORIZ_SLIDER_CAP_DIM (3,5);
 
-void GUIValue_Horiz_Slider::display() {
+void Value_Horiz_Slider::display() {
 
     fill_with_color(default_color_key_c);
 
@@ -91,16 +96,16 @@ void GUIValue_Horiz_Slider::display() {
                                      position.y - bubble.geth()/2));
 }
 
-bool GUIValue_Horiz_Slider::handle_mouse_down(DispPoint coord) {
+bool Value_Horiz_Slider::handle_mouse_down(DispPoint coord) {
     
-    GUIValue_Slider::handle_mouse_down(coord);
+    Value_Slider::handle_mouse_down(coord);
     
     set_value(static_cast<double>(coord.x) / get_w());
 
     return true;
 }
 
-bool GUIValue_Horiz_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_motion) {
+bool Value_Horiz_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_motion) {
     
     if (!get_clicked()) return false;
     if (coord.x < left_edge && get_percent() == 0) return false;
@@ -118,7 +123,7 @@ bool GUIValue_Horiz_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_m
     return true;
 }
 
-void GUIValue_Vert_Slider::display() {
+void Value_Vert_Slider::display() {
     
     fill_with_color(default_color_key_c);
     
@@ -131,9 +136,9 @@ void GUIValue_Vert_Slider::display() {
 }
 
 
-bool GUIValue_Vert_Slider::handle_mouse_down(DispPoint coord) {
+bool Value_Vert_Slider::handle_mouse_down(DispPoint coord) {
     
-    GUIValue_Slider::handle_mouse_down(coord);
+    Value_Slider::handle_mouse_down(coord);
     
     set_value(static_cast<double>(coord.y) / get_w());
     
@@ -142,7 +147,7 @@ bool GUIValue_Vert_Slider::handle_mouse_down(DispPoint coord) {
     return true;
 }
 
-bool GUIValue_Vert_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_motion) {
+bool Value_Vert_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_motion) {
     
     if (!get_clicked()) return false;
     if (coord.y < bottom_edge && get_percent() == 0) return false;
@@ -162,7 +167,7 @@ bool GUIValue_Vert_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_mo
 }
 
 
-void GUIValue_Joystick_Slider::display() {
+void Value_Joystick_Slider::display() {
     
     fill_with_color(default_color_key_c);
 
@@ -200,9 +205,9 @@ void GUIValue_Joystick_Slider::display() {
 }
 
 
-bool GUIValue_Joystick_Slider::handle_mouse_down(DispPoint coord) {
+bool Value_Joystick_Slider::handle_mouse_down(DispPoint coord) {
     
-    GUIValue_Slider::handle_mouse_down(coord);
+    Value_Slider::handle_mouse_down(coord);
     
     DispPoint center(get_w()/2, get_h()/2);
     DispPoint offset = coord - center;
@@ -215,16 +220,16 @@ bool GUIValue_Joystick_Slider::handle_mouse_down(DispPoint coord) {
     return true;
 }
 
-bool GUIValue_Joystick_Slider::handle_mouse_up(DispPoint coord) {
+bool Value_Joystick_Slider::handle_mouse_up(DispPoint coord) {
     
-    GUIValue_Slider::handle_mouse_up(coord);
+    Value_Slider::handle_mouse_up(coord);
     
     set_value(0);
     
     return true;
 }
 
-bool GUIValue_Joystick_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_motion) {
+bool Value_Joystick_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_motion) {
     
     if (!get_clicked()) return false;
     
@@ -258,18 +263,13 @@ bool GUIValue_Joystick_Slider::handle_mouse_motion(DispPoint coord, DispPoint re
 
 
 
-
-#include "GUIApp.h"
-#include <tr1/functional>
-using std::tr1::bind;
-
-GUIValue_Display::GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box)
-: GUIView(w_,h_), value_box(linked_box)
+Value_Display::Value_Display(int w_, int h_, const Value_Box* linked_box)
+: View(w_,h_), value_box(linked_box)
 {
-    GUIApp::get()->repeat_on_timer(bind(&GUIValue_Display::display, this), -1);
+    App::get()->repeat_on_timer(bind(&Value_Display::display, this), -1);
 }
 
-void GUIValue_Display::display() {
+void Value_Display::display() {
     
     fill_with_color(default_color_key_c);
     set_clear_color(default_color_key_c);
@@ -286,5 +286,6 @@ void GUIValue_Display::display() {
     draw_onto_self(GUIImage(text_surf), DispPoint(2, 2));
 }
 
-
+    
+} // namespace GUI
 

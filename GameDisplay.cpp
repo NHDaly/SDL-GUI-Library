@@ -252,6 +252,9 @@ SDL_Surface* create_SDL_Surface(int w, int h){
 
 Uint32 getpixel(const SDL_Surface *surface, int x, int y)
 {
+    if (x < 0 || y <0 || x >= surface->w || y >= surface->h) {
+		throw GUIError("Trying to read out-of-bounds pixel!");
+    }
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
@@ -283,6 +286,9 @@ Uint32 getpixel(const SDL_Surface *surface, int x, int y)
 
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
+    if (x < 0 || y <0 || x >= surface->w || y >= surface->h) {
+        return;
+    }
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
