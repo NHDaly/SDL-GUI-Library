@@ -42,7 +42,7 @@ public:
     Window(int w, int h, const std::string& name_ = "",
                  int numColors = 256, const Uint32 flags = SDL_SWSURFACE);
     
-    void crop(int w, int h);
+    void resize(int w, int h);
     void stretch(int w, int h);
     
     void rename(const std::string& name_);

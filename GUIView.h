@@ -13,6 +13,7 @@
 
 #include "GUIUtility.h"
 #include "GUIController.h"
+#include "GUIColors.h"
 
 class SDL_Surface;
 class GUIImage;

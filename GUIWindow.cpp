@@ -57,7 +57,10 @@ Window::Window(int w, int h, const string& name_,
 DispPoint Window::get_dim() { return DispPoint(window->w, window->h); }
 
 
-void Window::crop(int w, int h) {
+void Window::resize(int w, int h) {
+    
+//    SDL_free(window);
+    WINDOW_ALREADY_CREATED = false;
     
     Window temp(w,h, name, num_colors, flags);
     
