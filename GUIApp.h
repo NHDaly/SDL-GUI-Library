@@ -22,6 +22,8 @@
 
 namespace GUI {
 
+const int FPS_CAP_DEFAULT = 40;
+
 // Throw an instance of GUI::Quit to safely tell the application to exit.
 // (This is the same as calling GUI::App::quit())
 class Quit {};

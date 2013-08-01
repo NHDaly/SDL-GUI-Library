@@ -65,7 +65,7 @@ void Window::resize(int w, int h) {
     Window temp(w,h, name, num_colors, flags);
     
     std::swap(temp.window, window);    
-    main_view->mark_changed();
+    main_view->resize(w, h);
 }
 void Window::stretch(int w, int h) {
     

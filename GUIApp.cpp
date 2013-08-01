@@ -21,7 +21,6 @@ using std::list;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
-#define FPS_CAP_DEFAULT 40
 
 using GUI::call_error_handlers;
 
