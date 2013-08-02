@@ -57,7 +57,7 @@ public:
     // returns a ptr to the timer command, so that it may be canceled later.
     template <typename Operation>
     GUITimer_command*  repeat_on_timer(Operation op, double interval, bool repeat = true);
-    // Perform op after interval seconds. Repeat if repeat == true.
+    // cancel a timer operation that was set to repeat.
 	void cancel_timer_op(GUITimer_command* op);
     
     // When any code executed within the run() loop throws an instance of 
