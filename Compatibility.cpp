@@ -1,16 +1,18 @@
 
 #include "Compatibility.h"
 #include <cassert>
+#include <iostream>
 
 #include "GUIUtility.h"
 
+using namespace std;
 
 void nav_to_resources();
 
 
 #ifdef _WIN32 // other possibilities are WIN32 _WIN32 or _WIN64
 
-const char * MY_RESOURCES_FOLDER = "\\code";
+const char * MY_RESOURCES_FOLDER = "Resources";
 
 void initGUI(){
 
@@ -18,13 +20,17 @@ void initGUI(){
 
 // Open the stdout as an output file. (By default, SDL on windows supresses stdout)
 	FILE* fileout;
-	freopen_s(&fileout, "output.txt", "w", stdout);
+	freopen_s(&fileout, "GUILog.txt", "w", stdout);
     
     // Move the working directory to the resources folder.
     nav_to_resources();
 }
 
 void nav_to_resources() {
+	char outbuf[100];
+	_getcwd(outbuf, 100);
+	cout << "current dir: " << outbuf << endl;
+
     int chdir_success = _chdir(MY_RESOURCES_FOLDER);
     assert(chdir_success == 0);
 }
