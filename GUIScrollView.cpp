@@ -9,8 +9,10 @@
 #include "GUIScrollView.h"
 #include "GUIApp.h"
 
+#include "Compatibility.h"
+
 #include <iostream>
-#include <tr1/functional>
+#include TR1_FUNCTIONAL_H
 
 using namespace std;
 using namespace std::tr1;

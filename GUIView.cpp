@@ -10,7 +10,8 @@
 #include "GUIApp.h"
 #include "GUIImage.h"
 
-#include "SDL/SDL_video.h"
+#include "Compatibility.h"
+#include SDL_SDLVIDEO_H
 
 #include "GameDisplay.h" // For pixel manip.
 #include "GUIWindow.h" // For Unhandled Click.

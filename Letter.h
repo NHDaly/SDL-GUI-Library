@@ -16,7 +16,7 @@
 #include <string>
 #include <map>
 
-class SDL_Surface; // display image
+struct SDL_Surface; // display image
 
 namespace GUI {
 

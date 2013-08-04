@@ -15,7 +15,7 @@
 #include "GUIController.h"
 #include "GUIColors.h"
 
-class SDL_Surface;
+struct SDL_Surface;
 class GUIImage;
 /// @todo Hack
 #include "GUIImage.h"

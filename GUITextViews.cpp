@@ -10,12 +10,15 @@
 
 #include "GUILetter.h"
 
+#include "Compatibility.h"
+
 #include <iostream>
 #include <ctime>
 #include <vector>
 #include <cctype>
 #include <algorithm>
-#include <tr1/functional>
+#include TR1_FUNCTIONAL_H
+
 using std::cout; using std::endl;
 using std::string;
 using std::clock;

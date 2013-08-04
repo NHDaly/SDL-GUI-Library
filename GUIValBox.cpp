@@ -6,15 +6,21 @@
 //  Copyright 2012 Lions Entertainment. All rights reserved.
 //
 
+#ifdef _MSC_VER // necessary to use M_PI and other non-standard c/c++ definitions
+# define _USE_MATH_DEFINES
+#endif
+
 #include "GUIValBox.h"
 #include "GameDisplay.h"
 #include "GUIApp.h"
 
-#include "SDL/SDL.h"
+#include "Compatibility.h"
+#include SDL_SDL_H
+
 
 #include <iostream>
 #include <cmath>
-#include <tr1/functional>
+#include TR1_FUNCTIONAL_H
 
 using std::string;
 using std::stringstream;

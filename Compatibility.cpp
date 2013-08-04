@@ -1,5 +1,6 @@
 
 #include "Compatibility.h"
+#include <cassert>
 
 #include "GUIUtility.h"
 
@@ -9,14 +10,15 @@ void nav_to_resources();
 
 #ifdef _WIN32 // other possibilities are WIN32 _WIN32 or _WIN64
 
-const char * MY_RESOURCES_FOLDER = "\code";
+const char * MY_RESOURCES_FOLDER = "\\code";
 
 void initGUI(){
 
     initSDL(SDL_INIT_EVERYTHING);
 
 // Open the stdout as an output file. (By default, SDL on windows supresses stdout)
-	freopen("output.txt", "w", stdout);
+	FILE* fileout;
+	freopen_s(&fileout, "output.txt", "w", stdout);
     
     // Move the working directory to the resources folder.
     nav_to_resources();
@@ -28,8 +30,9 @@ void nav_to_resources() {
 }
 
 const char* getResourcePath() {
-    char *str = new char[strlen(MY_RESOURCES_FOLDER)];
-    strcpy(str, MY_RESOURCES_FOLDER);
+	const size_t size = strlen(MY_RESOURCES_FOLDER);
+    char *str = new char[size];
+    strcpy_s(str, size, MY_RESOURCES_FOLDER);//(str, MY_RESOURCES_FOLDER);
     return (const char*)str;
 }
 
@@ -37,7 +40,6 @@ const char* getResourcePath() {
 #elif __APPLE__ // Mac OSX
 
 # include <CoreFoundation/CFBundle.h>
-# include <cassert>
 # include <string>
 
 # include <iostream>

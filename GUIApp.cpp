@@ -12,10 +12,10 @@
 
 #include "GUIUtility.h"
 
-#include "SDL/SDL.h"
+#include "Compatibility.h"
 
 #include <iostream>
-#include <tr1/functional>
+#include TR1_FUNCTIONAL_H
 using std::cout; using std::endl;
 using std::list;
 using std::tr1::bind;

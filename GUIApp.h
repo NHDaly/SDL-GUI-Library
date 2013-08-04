@@ -17,7 +17,7 @@
 #include <list>
 #include <set>
 
-#include <SDL/SDL.h> // To ensure it is #included by main.
+#include "Compatibility.h"	// to ensure "SDL.h" is included by main
 
 
 namespace GUI {

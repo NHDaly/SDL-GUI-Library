@@ -16,9 +16,9 @@
 #include <string>
 #include <map>
 
-class SDL_Surface; // display image
-class SDL_Color; // display image
-class _TTF_Font_;
+struct SDL_Surface; // display image
+struct SDL_Color; // display image
+struct _TTF_Font_;
 //typedef _TTF_Font_ TTF_Font;
 
 namespace GUI {

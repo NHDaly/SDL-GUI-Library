@@ -9,7 +9,7 @@
 #ifndef MultiComputer_Tester_GUIColors_h
 #define MultiComputer_Tester_GUIColors_h
 
-#include "SDL/SDL.h"
+#include "Compatibility.h"
 
 namespace GUI {
     

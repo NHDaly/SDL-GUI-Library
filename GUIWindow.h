@@ -13,8 +13,11 @@
 #include <string>
 
 #include "GUIUtility.h"
-#include "SDL/SDL_video.h"
-#include "SDL/SDL_keyboard.h"
+#include "Compatibility.h"
+		 			 
+
+#include SDL_SDLVIDEO_H
+#include SDL_SDLKEYBOARD_H
 
 struct Unhandled_Click {
     
@@ -27,7 +30,7 @@ struct Unhandled_Key {
     SDL_keysym key;
 };
 
-class SDL_Surface;
+struct SDL_Surface;
 
 namespace GUI {
 
