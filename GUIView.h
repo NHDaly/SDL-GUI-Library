@@ -22,10 +22,11 @@ class GUIImage;
 #include <iostream>
 
 namespace GUI {
-    class Window;
-    class App;
 
-    class View : public GUI::Controller {
+class Window;
+class App;
+
+class View : public GUI::Controller {
 public:
     
     View(int w_, int h_);
@@ -149,6 +150,8 @@ protected:
 //    virtual void lost_focus() { }
 
     // Hierarchy
+    typedef std::list<View*> Subview_list_t;
+    Subview_list_t get_children() { return children; }
     View* get_parent() { return parent; }
 //    void move_to_rel_pos(DispPoint pos_) { pos = pos_; parent->mark_changed(); }
 
@@ -176,7 +179,6 @@ private:
 
     // Hierarchy
     View* parent;
-    typedef std::list<View*> Subview_list_t;
     Subview_list_t children;
                 
     

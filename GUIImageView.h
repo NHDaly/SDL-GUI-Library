@@ -23,7 +23,7 @@ public:
     GUIImage get_image();
     
 //private:
-//    void attach_subview(GUIView* view, DispPoint pos);
+//    void attach_subview(GUI::View* view, DispPoint pos);
 };
 
 } // namespace GUI
