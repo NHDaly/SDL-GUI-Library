@@ -13,21 +13,21 @@
 
 namespace GUI {
     
-    const SDL_Color Black_Color = { 0, 0, 0, 0 };
+    const SDL_Color black_color_c = { 0, 0, 0, 0 };
 
-    const SDL_Color White_Color = { 0xff, 0xff, 0xff, 0 };
+    const SDL_Color white_color_c = { 0xff, 0xff, 0xff, 0 };
 
-    const SDL_Color Gray_Color = { 0x88, 0x88, 0x88, 0 };
+    const SDL_Color gray_color_c = { 0x88, 0x88, 0x88, 0 };
 
-    const SDL_Color Light_Gray_Color = { 0xbb, 0xbb, 0xbb, 0 };
+    const SDL_Color light_gray_color_c = { 0xbb, 0xbb, 0xbb, 0 };
 
-    const SDL_Color Dark_Gray_Color = { 0x44, 0x44, 0x44, 0 };
+    const SDL_Color dark_gray_color_c = { 0x44, 0x44, 0x44, 0 };
 
-    const SDL_Color Red_Color = { 0xff, 0, 0, 0 };
+    const SDL_Color red_color_c = { 0xff, 0, 0, 0 };
 
-    const SDL_Color Green_Color = { 0, 0xff, 0, 0 };
+    const SDL_Color green_color_c = { 0, 0xff, 0, 0 };
 
-    const SDL_Color Blue_Color = { 0, 0, 0xff, 0 };
+    const SDL_Color blue_color_c = { 0, 0, 0xff, 0 };
 
 }
 

@@ -32,7 +32,6 @@ public:
 const SDL_Color text_color_black_c = {0,0,0,0};
 
 const SDL_Color clear_color_c = {0xFF, 0, 0xFF};
-const SDL_Color white_color_c = {0xFF, 0xFF, 0xFF};
 
 
 NewTextView::NewTextView(int w, int h, int size, SDL_Color color)
