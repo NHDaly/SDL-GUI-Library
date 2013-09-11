@@ -13,7 +13,7 @@
 
 namespace GUI {
 
-// Exception_t : The type of errors that will be caught by handler
+// Exception_t : The type of the exceptions that will be caught by handler
 // Handler_t : a function or object that overrides operator()(Exception_t);
 // NOTE: handler will be copied.
 template <typename Exception_t, typename Handler_t>

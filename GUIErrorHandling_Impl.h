@@ -11,16 +11,29 @@
 
 #include <vector>
 
+template <typename Exception_t, typename Handler_t>
+class ExceptionCatcher_Impl;
+
 namespace GUI {
     
 // Abstract ExceptionCatcher Base Class.
 // Derived class will be templated for Error type and Handler type.
 class ExceptionCatcher {
-public:
+private:
+    
     typedef std::vector<ExceptionCatcher*>::iterator ExceptionCatcherIter_t;
     
+    // Recursive function call to iterate through list and try-catch on
+    // currently thrown exception.
     virtual void try_catch(ExceptionCatcherIter_t begin,
                            ExceptionCatcherIter_t end, bool &handled) = 0;
+    
+    template <typename InputIterator>
+    friend void call_error_handlers_helper(InputIterator begin,
+                                           InputIterator end, bool handled);
+
+    template <typename Exception_t, typename Handler_t>
+    friend class ExceptionCatcher_Impl;
 };
 
 
@@ -32,7 +45,7 @@ public:
 // Handler_t : a function or object that overrides operator()(Exception_t);
 template <typename Exception_t, typename Handler_t>
 class ExceptionCatcher_Impl : public ExceptionCatcher {
-public:
+private:
     
     // handler_ should be able to call handler_(Exception_t)
     // NOTE: handler_ will be copied.
@@ -61,6 +74,9 @@ public:
             throw;          // continue up the chain.
         }
     }
+    
+    template <typename Exc_t, typename Han_t>
+    friend ExceptionCatcher* create_error_handler(const Han_t &handler);
     
 private:
     Handler_t handler;
