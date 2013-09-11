@@ -22,8 +22,6 @@ using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
 
-using GUI::call_error_handlers;
-
 namespace GUI {
 
 // SINGLETON MEMBERS
@@ -276,7 +274,7 @@ void App::run(Window* window_) {
         
         catch(...) {
             
-            call_error_handlers(handler_list.begin(), handler_list.end());
+            call_exception_handlers(handler_list.begin(), handler_list.end());
             
         }
        

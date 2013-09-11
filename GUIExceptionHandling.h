@@ -17,7 +17,7 @@ namespace GUI {
 // Handler_t : a function or object that overrides operator()(Exception_t);
 // NOTE: handler will be copied.
 template <typename Exception_t, typename Handler_t>
-ExceptionCatcher* create_error_handler(const Handler_t &handler) {
+ExceptionCatcher* create_exception_handler(const Handler_t &handler) {
     return new ExceptionCatcher_Impl<Exception_t, Handler_t>(handler);
 }
 
@@ -25,13 +25,13 @@ ExceptionCatcher* create_error_handler(const Handler_t &handler) {
 // Loop through error handlers and handle any errors. If no handler matches
 //  the error, it will be rethrown out of the function.
 template <typename InputIterator>
-void call_error_handlers(InputIterator begin, InputIterator end) {
-    call_error_handlers_helper(begin, end, false);
+void call_exception_handlers(InputIterator begin, InputIterator end) {
+    call_exception_handlers_helper(begin, end, false);
 }
 
 template <typename InputIterator>
-void call_error_handlers_helper(InputIterator begin,
-                                 InputIterator end, bool handled) {
+void call_exception_handlers_helper(InputIterator begin,
+                                    InputIterator end, bool handled) {
     
     try {
         // Create a vector of handlers

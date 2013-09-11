@@ -29,8 +29,8 @@ private:
                            ExceptionCatcherIter_t end, bool &handled) = 0;
     
     template <typename InputIterator>
-    friend void call_error_handlers_helper(InputIterator begin,
-                                           InputIterator end, bool handled);
+    friend void call_exception_handlers_helper(InputIterator begin,
+                                               InputIterator end, bool handled);
 
     template <typename Exception_t, typename Handler_t>
     friend class ExceptionCatcher_Impl;
@@ -76,7 +76,7 @@ private:
     }
     
     template <typename Exc_t, typename Han_t>
-    friend ExceptionCatcher* create_error_handler(const Han_t &handler);
+    friend ExceptionCatcher* create_exception_handler(const Han_t &handler);
     
 private:
     Handler_t handler;

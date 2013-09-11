@@ -93,7 +93,7 @@ private:
 
     
     // vector because it's fast to iterate through!
-    typedef std::vector<GUI::ExceptionCatcher*> error_handler_list_t;
+    typedef std::vector<ExceptionCatcher*> error_handler_list_t;
     error_handler_list_t handler_list;
     
     
@@ -168,7 +168,7 @@ GUITimer_command* App::repeat_on_timer(Operation op, double interval, bool repea
 
 template <typename Exception_t, typename Handler_t>
 void App::register_exception_handler(const Handler_t &handler) {
-    handler_list.push_back(GUI::create_error_handler<Exception_t>(handler));
+    handler_list.push_back(create_exception_handler<Exception_t>(handler));
 }
 
 
