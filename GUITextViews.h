@@ -11,6 +11,7 @@
 #include "GUIUtility.h"
 #include "Ptr_config.h"
 #include "GUITimer.h"
+#include "GUIColors.h"
 
 #include <list>
 #include <vector>
@@ -76,7 +77,10 @@ private:
 //    Justification_e justification;
 };
 
+TextView* createTextView(std::string text, int size = 14,
+                            SDL_Color color = black_color_c);
 
+    
 // A TextView that allows for text entry (including mouse motion, deletion, etc.)
 class TextField : public TextView {
 public:	

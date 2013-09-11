@@ -73,7 +73,7 @@ void TextView::update(){
 //            resize(last_letter.get_pos().x + last_letter.get_width(), get_h());
 //            return update();    // start over!
         }
-        if (resizeable_down && last_letter.get_pos().y >= get_h()) {
+        if (resizeable_down && last_letter.get_pos().y + last_letter.get_line_height() > get_h()) {
             const NewLetter_Disp_Obj &last_letter = letters[letters.size()-1];
             resize(get_w(), last_letter.get_pos().y + last_letter.get_line_height());
             return update();    // start over!
@@ -220,8 +220,20 @@ int TextView::index_at_pos(DispPoint pos_){
 	return i;
 }
 
+TextView* createTextView(string text, int size, SDL_Color color) {
+    
+    TextView *result = new TextView(1,1, true, true);
+    result->set_text(text);
+    result->set_text_size(size);
+    result->set_text_color(color);
+    
+    return result;
+}
 
 
+
+// ----------- TextField
+    
 TextField::TextField(int w_, int h_,
                              bool resizeable_down_, bool resizeable_right_)
 :TextView(w_,h_, resizeable_down_, resizeable_right_),

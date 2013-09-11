@@ -14,7 +14,7 @@
 
 namespace GUI {
     
-// This class is seperated out from GUIView to allow creation of a class to 
+// This class is seperated out from GUI::View to allow creation of a class to 
 // receive mouse/key events without having to associate it with a displayed view.
 class Controller {
 	
