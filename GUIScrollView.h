@@ -12,6 +12,8 @@
 #include "GUIView.h"
 #include "GUIImageView.h"
 
+struct GUITimer_command;
+
 class GUIScrollView : public GUIView  {
 public:
     
@@ -25,8 +27,10 @@ public:
     
     // Overrided to add or remove the scrollbars.
     virtual void did_resize(int w_, int h_);
-
+    
 private:
+    
+    GUITimer_command *repeater;
     
     class ScrollBarBg : public GUIView {
     public:
@@ -36,7 +40,7 @@ private:
         void display();
         
         virtual bool handle_mouse_down(DispPoint coord);
-
+        
     private:
         GUIScrollView *view;
     };
@@ -46,11 +50,11 @@ private:
         : GUIView(w_,h_), view(view_), clicked(false) { }
         
         void display();
-
+        
         virtual bool handle_mouse_down(DispPoint coord);
         virtual bool handle_mouse_up(DispPoint coord);
         virtual bool handle_mouse_motion(DispPoint coord, DispPoint rel_motion);
-
+        
     private:
         GUIScrollView *view;
         bool clicked;
@@ -60,10 +64,10 @@ private:
     public:
         ScrollArrow(bool up_down_, const GUIImage& image)
         : GUIImageView(image), up_down(up_down_) { }
- 
+        
         virtual bool handle_mouse_down(DispPoint coord);
         virtual bool handle_mouse_up(DispPoint coord);
-
+        
     private:
         bool up_down;
     };
@@ -76,15 +80,15 @@ private:
     ScrollBarBg scroll_bar_bg;
     ScrollArrow arrow_up, arrow_down;
     GUIView *display_view;
-
+    
     int w_init, h_init;
     
     double scroll_y;
     double scroll_y_vel;
-
+    
     bool scrollable; // false if this view is larger than display_view
     bool scrolling; // true if currently holding down scroll wheel/gesture
-        
+    
     int scroll_bar_x;
     // Where the scroll bar should stop (set after sizes are determined)
     int scroll_bar_top;

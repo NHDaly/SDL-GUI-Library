@@ -32,7 +32,7 @@ scroll_y(0), scroll_y_vel(0), scrolling(false)
     GUIImage bg = GUIImage::create_filled(w_, h_, clear);
     draw_onto_self(bg, DispPoint());
     set_clear_color(clear);
-
+    
     attach_subview(display_view_, DispPoint());
     
     if (display_view->get_h() <= get_h()) {
@@ -40,11 +40,11 @@ scroll_y(0), scroll_y_vel(0), scrolling(false)
         
         resize(min(display_view->get_w(), w_),
                min(display_view->get_h(), h_));
-                
+        
         return; // todo Remove to so you can resize later.
     }
     scrollable = true;    
-        
+    
     scroll_bar_bg.display();
     scroll_bar.display();
     
@@ -52,10 +52,9 @@ scroll_y(0), scroll_y_vel(0), scrolling(false)
     attach_subview(&scroll_bar_bg, DispPoint(scroll_bar_x, 0));
     attach_subview(&arrow_up, DispPoint(scroll_bar_x, scroll_bar_bottom-7)); // HACK!!
     attach_subview(&arrow_down, DispPoint(scroll_bar_x, scroll_bar_bottom-7+arrow_up.get_h())); // HACK!!
-
+    
     attach_subview(&scroll_bar, DispPoint(scroll_bar_x, scroll_bar_top));
-
-    GUIApp::get()->repeat_on_timer(bind(&GUIScrollView::update, this), -1);
+    
 }
 GUIScrollView::~GUIScrollView()
 {
@@ -66,30 +65,30 @@ GUIScrollView::~GUIScrollView()
 }
 
 void GUIScrollView::update() {
-
+    
     if ((display_view->get_w() < w_init && display_view->get_w() > get_w()) || 
         (display_view->get_h() < h_init && display_view->get_h() > get_h())) {
-
+        
         resize(min(display_view->get_w(), w_init),
                min(display_view->get_h(), h_init));
         
     }
-        
+    
     
     if (scroll_y_vel == 0) {
         return;
     }
-
+    
     if (!scrolling) {
         if (scroll_y_vel != 0) {
             scroll_y_vel -= 0.5 * (scroll_y_vel < 0 ? -1 : 1);
         }
-
+        
     }
     
-//    const double display_scroll_range = display_view->get_h() - get_h();
-//    const double scroll_bar_range = scroll_bar_bottom - scroll_bar_top - scroll_bar.get_h();
-
+    //    const double display_scroll_range = display_view->get_h() - get_h();
+    //    const double scroll_bar_range = scroll_bar_bottom - scroll_bar_top - scroll_bar.get_h();
+    
     scroll_y += scroll_y_vel;
     move_display_to(DispPoint(0,scroll_y));
 }
@@ -103,15 +102,15 @@ void GUIScrollView::did_resize(int w_, int h_) {
         scrollable = true;
     }
     
-//    scroll_bar_bg.display();
-//    scroll_bar.display();
-//    
-//    scroll_bar_x = get_w()-scroll_bar_bg.get_w();
-//    attach_subview(&scroll_bar_bg, DispPoint(scroll_bar_x, 0));
-//    attach_subview(&arrow_up, DispPoint(scroll_bar_x, scroll_bar_bottom-7)); // HACK!!
-//    attach_subview(&arrow_down, DispPoint(scroll_bar_x, scroll_bar_bottom-7+arrow_up.get_h())); // HACK!!
-//    
-//    attach_subview(&scroll_bar, DispPoint(scroll_bar_x, scroll_bar_top));
+    //    scroll_bar_bg.display();
+    //    scroll_bar.display();
+    //    
+    //    scroll_bar_x = get_w()-scroll_bar_bg.get_w();
+    //    attach_subview(&scroll_bar_bg, DispPoint(scroll_bar_x, 0));
+    //    attach_subview(&arrow_up, DispPoint(scroll_bar_x, scroll_bar_bottom-7)); // HACK!!
+    //    attach_subview(&arrow_down, DispPoint(scroll_bar_x, scroll_bar_bottom-7+arrow_up.get_h())); // HACK!!
+    //    
+    //    attach_subview(&scroll_bar, DispPoint(scroll_bar_x, scroll_bar_top));
 }
 
 bool GUIScrollView::handle_mouse_scroll_start(bool up_down) {
@@ -124,6 +123,8 @@ bool GUIScrollView::handle_mouse_scroll_start(bool up_down) {
     
     cout << "scroll:  " << scroll_y << endl;
     
+    repeater = GUIApp::get()->repeat_on_timer(bind(&GUIScrollView::update, this), -1);
+    
     return true;
 }
 bool GUIScrollView::handle_mouse_scroll_stop(bool up_down) {
@@ -132,17 +133,20 @@ bool GUIScrollView::handle_mouse_scroll_stop(bool up_down) {
     
     scrolling = false;
     
+    GUIApp::get()->cancel_timer_op(repeater);
+    repeater = 0;
+    
     return true;
 }
 
 bool GUIScrollView::ScrollBarBg::handle_mouse_down(DispPoint coord) {
     
     const double scroll_bar_range = view->scroll_bar_bottom - view->scroll_bar_top;
-
+    
     int new_y = (coord.y / scroll_bar_range) * (view->display_view->get_h() - (double)get_h());
     view->move_display_to(DispPoint(0,new_y));
     view->scroll_y_vel = 0;
-  
+    
     
     return true;
 }
@@ -152,7 +156,7 @@ void GUIScrollView::ScrollBarBg::display() {
     static GUIImage top("GUIImages/scroll_bar_vert0.bmp");
     static GUIImage mid("GUIImages/scroll_bar_vert4.bmp");
     static GUIImage bottom("GUIImages/scroll_bar_vert1.bmp");
-
+    
     draw_onto_self(top, DispPoint());
     
     view->scroll_bar_top = top.geth() - 13; // HACK!!
@@ -164,7 +168,7 @@ void GUIScrollView::ScrollBarBg::display() {
         draw_onto_self(mid, DispPoint(0,i));
     }    
     draw_onto_self(bottom, DispPoint(0, bottom_of_drawing));
-
+    
 }
 void GUIScrollView::ScrollBar::display() {
     
@@ -185,7 +189,7 @@ void GUIScrollView::ScrollBar::display() {
 }
 
 bool GUIScrollView::ScrollBar::handle_mouse_down(DispPoint coord) {
-
+    
     clicked = true;
     click = coord;
     view->scrolling = true;
@@ -206,34 +210,34 @@ bool GUIScrollView::ScrollBar::handle_mouse_motion(DispPoint coord, DispPoint re
     
     if (!clicked) return false;
     
-//    const double scroll_bar_range = view->scroll_bar_bottom - view->scroll_bar_top;
-//    
-//    double offset = coord.y / scroll_bar_range;
-//    double display_range = view->display_view->get_h() - (double)view->get_h();
-//    
-//    int new_y = offset * display_range;
-//    view->scroll_y = new_y;
-//    view->scroll_y_vel = 0;
+    //    const double scroll_bar_range = view->scroll_bar_bottom - view->scroll_bar_top;
+    //    
+    //    double offset = coord.y / scroll_bar_range;
+    //    double display_range = view->display_view->get_h() - (double)view->get_h();
+    //    
+    //    int new_y = offset * display_range;
+    //    view->scroll_y = new_y;
+    //    view->scroll_y_vel = 0;
     
     
-//    const double display_scroll_range = view->display_view->get_h() - view->get_h();
-//    const double scroll_bar_range = view->scroll_bar_bottom - view->scroll_bar_top;
-//    
-//    const double ratio = display_scroll_range / scroll_bar_range;
-//    
-//    int old_pos = get_rel_pos().y;
-//    
-//    int new_pos = old_pos + rel_motion.y;
-//    
-//    
-//    view->scroll_y += rel_motion.y ;
-//    view->scroll_y_vel = 0;
-
+    //    const double display_scroll_range = view->display_view->get_h() - view->get_h();
+    //    const double scroll_bar_range = view->scroll_bar_bottom - view->scroll_bar_top;
+    //    
+    //    const double ratio = display_scroll_range / scroll_bar_range;
+    //    
+    //    int old_pos = get_rel_pos().y;
+    //    
+    //    int new_pos = old_pos + rel_motion.y;
+    //    
+    //    
+    //    view->scroll_y += rel_motion.y ;
+    //    view->scroll_y_vel = 0;
+    
     int old_pos = get_rel_pos().y;
     int new_pos = old_pos + rel_motion.y;
-
+    
     cout << "MOTION: " << rel_motion.y << " " << new_pos << endl;
-
+    
     
     DispPoint new_coord = adjust_to_parent(coord - click);
     
@@ -253,7 +257,7 @@ bool GUIScrollView::ScrollArrow::handle_mouse_down(DispPoint coord) {
     return true;
 }
 bool GUIScrollView::ScrollArrow::handle_mouse_up(DispPoint coord) {
-
+    
     // stop the effect of holding the button.    
     return true;
 }
@@ -264,7 +268,7 @@ void GUIScrollView::move_display_to(DispPoint pos) {
     
     const double display_scroll_range = display_view->get_h() - get_h();
     const double scroll_bar_range = scroll_bar_bottom - scroll_bar_top - scroll_bar.get_h();
-
+    
     scroll_y = pos.y;
     
     if (scroll_y < 0) {
@@ -280,10 +284,10 @@ void GUIScrollView::move_display_to(DispPoint pos) {
     int scroll_bar_pos = scroll_bar_top + (scroll_y / display_scroll_range * scroll_bar_range);
     
     move_subview(&scroll_bar, DispPoint(scroll_bar_x, scroll_bar_pos));
-
+    
 }
 void GUIScrollView::move_scroll_bar_to(DispPoint pos) {
- 
+    
     
     const double display_scroll_range = display_view->get_h() - get_h();
     const double scroll_bar_range = scroll_bar_bottom + 7 - scroll_bar_top - scroll_bar.get_h();
@@ -295,12 +299,12 @@ void GUIScrollView::move_scroll_bar_to(DispPoint pos) {
         pos.y = scroll_bar_range;
     }
     move_subview(&scroll_bar, pos);
-
+    
     const double ratio = display_scroll_range / scroll_bar_range;
-
+    
     scroll_y = pos.y * ratio;
-
+    
     move_subview(display_view, DispPoint(0, -scroll_y));
-
+    
 }
 
