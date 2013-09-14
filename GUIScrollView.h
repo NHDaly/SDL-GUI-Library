@@ -81,6 +81,7 @@ private:
     ScrollBar scroll_bar;
     ScrollBarBg scroll_bar_bg;
     ScrollArrow arrow_up, arrow_down;
+
     View *display_view;
     
     int w_init, h_init;

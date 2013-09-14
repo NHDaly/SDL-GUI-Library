@@ -260,7 +260,7 @@ void TextField::blink_cursor() {
 #include "GUIApp.h"
 bool TextField::handle_key_down(SDL_keysym key_in) {
     
-    cout << "text box key down: '" << key_in.sym << "'" << endl;
+//    cout << "text box key down: '" << key_in.sym << "'" << endl;
     
     key_is_held = true;
     key_held = key_in.sym;
@@ -274,7 +274,7 @@ bool TextField::handle_key_down(SDL_keysym key_in) {
 
 bool TextField::handle_key_up(SDL_keysym key_in) {
     
-    cout << "text box key up" << endl;
+//    cout << "text box key up" << endl;
 
     key_is_held = false;
     time_key_held.stop();
