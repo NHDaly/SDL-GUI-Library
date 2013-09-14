@@ -55,8 +55,8 @@ void nav_to_resources() {
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     CFURLRef url = CFBundleCopyBundleURL(mainBundle);
     UInt8 bundlePath[PATH_MAX];
-    int chdir_success = (CFURLGetFileSystemRepresentation(url, true, bundlePath, sizeof(bundlePath)));
-    assert(chdir_success != 0);
+    int success = (CFURLGetFileSystemRepresentation(url, true, bundlePath, sizeof(bundlePath)));
+    assert(success != 0);
     
     cout << "BUNDLE PATH: " << (const char*)bundlePath << endl;
     // Create the path to the resources folder
@@ -64,16 +64,19 @@ void nav_to_resources() {
     path.append(BUNDLE_RESOURCES_FOLDER);
     
     // chdir to the resources folder
-    chdir_success = chdir(path.c_str());
+    success = chdir(path.c_str());
+    
     // If failed, try with standalone directory
-    if (!(chdir_success == 0)) {
+    if (!(success == 0)) {
         std::string path((const char*)bundlePath);
         path.append(STANDALONE_RESOURCES_FOLDER);
         
         // chdir to the resources folder
-        chdir_success = chdir(path.c_str());
-        assert(chdir_success == 0);
+        success = chdir(path.c_str());
+        assert(success == 0);
     }
+    
+    CFRelease(url);
 }
 
 #else // Linux?
