@@ -12,9 +12,10 @@
 #include "GUIView.h"
 #include "GUIImageView.h"
 
-struct GUITimer_command;
 
 namespace GUI {
+
+struct GUITimer_command;
 
 class ScrollView : public View  {
 public:

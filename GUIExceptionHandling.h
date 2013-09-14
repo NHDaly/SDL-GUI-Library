@@ -9,7 +9,7 @@
 #ifndef GUI_ErrorHandling_h
 #define GUI_ErrorHandling_h
 
-#include "GUIErrorHandling_Impl.h" // For ErrorCatcher and ErrorCatcher_Impl
+#include "GUIExceptionHandling_Impl.h" // For ErrorCatcher and ErrorCatcher_Impl
 
 namespace GUI {
 

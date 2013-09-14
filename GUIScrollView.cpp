@@ -127,7 +127,7 @@ bool ScrollView::handle_mouse_scroll_start(bool up_down) {
     
     cout << "scroll:  " << scroll_y << endl;
     
-    repeater = GUIApp::get()->repeat_on_timer(bind(&GUIScrollView::update, this), -1);
+    repeater = App::get()->repeat_on_timer(bind(&ScrollView::update, this), -1);
     
     return true;
 }
@@ -137,7 +137,7 @@ bool ScrollView::handle_mouse_scroll_stop(bool up_down) {
     
     scrolling = false;
     
-    GUIApp::get()->cancel_timer_op(repeater);
+    App::get()->cancel_timer_op(repeater);
     repeater = 0;
     
     return true;
