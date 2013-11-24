@@ -47,12 +47,15 @@ protected:
     
     virtual void set_image(const GUIImage& image_) {
         image = image_;
+        if (!is_pressed && !is_hovered) draw_onto_self(image, DispPoint());
     }
     virtual void set_hovered_image(const GUIImage& image_) {
         hovered_image = image_;
+        if (!is_pressed && is_hovered) draw_onto_self(hovered_image, DispPoint());
     }
     virtual void set_clicked_image(const GUIImage& image_) {
         clicked_image = image_;
+        if (is_pressed && is_hovered) draw_onto_self(clicked_image, DispPoint());
     }
                                                         
     // Returns true if the mouse_down is finished being handled.
