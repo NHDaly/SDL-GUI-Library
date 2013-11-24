@@ -11,14 +11,14 @@
 
 #include "GUIExceptionHandling_Impl.h" // For ErrorCatcher and ErrorCatcher_Impl
 
-namespace GUI {
+namespace GUIExceptionHandling {
 
 // Exception_t : The type of the exceptions that will be caught by handler
 // Handler_t : a function or object that overrides operator()(Exception_t);
 // NOTE: handler will be copied.
 template <typename Exception_t, typename Handler_t>
-ExceptionCatcher* create_exception_handler(const Handler_t &handler) {
-    return new ExceptionCatcher_Impl<Exception_t, Handler_t>(handler);
+ExceptionHandler* create_exception_handler(const Handler_t &handler) {
+    return new ExceptionHandler_Impl<Exception_t, Handler_t>(handler);
 }
 
 // REQUIRES: This function MUST be called from within a catch(){} block!
@@ -37,7 +37,7 @@ void call_exception_handlers_helper(InputIterator begin,
         // Create a vector of handlers
         // (Since try_catch is virtual, it cannot be templated,
         //                                              so it requires a vector.)
-        std::vector<ExceptionCatcher*> catchers(begin, end);
+        std::vector<ExceptionHandler*> catchers(begin, end);
         
         catchers.front()->try_catch(++catchers.begin(), catchers.end(), handled);
         
@@ -49,6 +49,6 @@ void call_exception_handlers_helper(InputIterator begin,
     }
 }
 
-} // namespace GUI
+} // namespace GUIExceptionHandling
 
 #endif /* GUI_ErrorHandling_h */

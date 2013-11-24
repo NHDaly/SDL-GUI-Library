@@ -21,6 +21,8 @@ using std::list;
 using std::tr1::bind;
 using namespace std::tr1::placeholders;
 
+using namespace GUIExceptionHandling;
+
 
 namespace GUI {
 

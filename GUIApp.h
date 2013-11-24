@@ -21,7 +21,8 @@
 
 
 namespace GUI {
-
+    using namespace GUIExceptionHandling;
+  
 const int FPS_CAP_DEFAULT = 40;
 
 // Throw an instance of GUI::Quit to safely tell the application to exit.
@@ -93,7 +94,7 @@ private:
 
     
     // vector because it's fast to iterate through!
-    typedef std::vector<ExceptionCatcher*> error_handler_list_t;
+    typedef std::vector<ExceptionHandler*> error_handler_list_t;
     error_handler_list_t handler_list;
     
     
