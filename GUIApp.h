@@ -22,7 +22,7 @@
 
 namespace GUI {
 
-const int FPS_CAP_DEFAULT = 40;
+const int FPS_CAP_DEFAULT = 40; // Frames per second
 
 // Throw an instance of GUI::Quit to safely tell the application to exit.
 // (This is the same as calling GUI::App::quit())
@@ -46,6 +46,7 @@ class App {
 public:
   	static App* get();
     
+    // Frames per second
     void set_framerate_cap(int fps_cap_) { fps_cap = fps_cap_; cap_frame_rate = true;}
     void disable_framerate_cap() { cap_frame_rate = false; }
     
