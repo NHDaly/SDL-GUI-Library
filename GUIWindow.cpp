@@ -135,8 +135,8 @@ void Window::move_subview(View* view, DispPoint pos) {
 void Window::remove_subview(View* view) {
     main_view->remove_subview(view); 
 }
-void Window::remove_last_subview() {
-    main_view->remove_last_subview();
+View* Window::remove_last_subview() {
+    return main_view->remove_last_subview();
 }
 
 } // namespace GUI

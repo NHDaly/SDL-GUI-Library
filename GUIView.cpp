@@ -196,7 +196,7 @@ void View::remove_subview(View* view) {
     
     mark_changed();
 }
-void View::remove_last_subview() {
+View* View::remove_last_subview() {
     
     if (children.empty())
         throw Error("view has not subviews!");
@@ -206,6 +206,8 @@ void View::remove_last_subview() {
     view->parent = 0;
     
     mark_changed();
+    
+    return view;
 }
 bool View::is_subview(View* view) const {
     

@@ -59,7 +59,7 @@ public:
     void attach_subview(View* view, DispPoint pos);
     void move_subview(View* view, DispPoint pos);
     void remove_subview(View* view);
-    void remove_last_subview(); // Remove subview last added
+    View* remove_last_subview(); // Remove subview last added
 
     
     // If main_view has changed at all, re-display it.

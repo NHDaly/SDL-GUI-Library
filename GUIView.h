@@ -48,7 +48,7 @@ public:
     void attach_subview(View* view, DispPoint pos);
     // NOTE: Does not delete the view, only remove it from list!
     void remove_subview(View* view);
-    void remove_last_subview(); // Remove subview last added
+    View* remove_last_subview(); // Remove subview last added
 
     bool is_subview(View* view) const;
 
