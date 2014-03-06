@@ -16,7 +16,7 @@ const char * MY_RESOURCES_FOLDER = "Resources";
 
 void initGUI(){
 
-    initSDL(SDL_INIT_EVERYTHING);
+    GUI::initSDL(SDL_INIT_EVERYTHING);
 
 // Open the stdout as an output file. (By default, SDL on windows supresses stdout)
 	FILE* fileout;

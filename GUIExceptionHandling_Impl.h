@@ -19,7 +19,7 @@ namespace GUIExceptionHandling {
 // Abstract ExceptionHandler Base Class.
 // Derived class will be templated for Error type and Handler type.
 class ExceptionHandler {
-private:
+public:
     
     typedef std::vector<ExceptionHandler*>::iterator ExceptionHandlerIter_t;
     
