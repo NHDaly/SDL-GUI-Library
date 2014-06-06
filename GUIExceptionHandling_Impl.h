@@ -11,16 +11,22 @@
 
 #include <vector>
 
+namespace GUIExceptionHandling {
+
+// Forward Declaration for friending
 template <typename Exception_t, typename Handler_t>
 class ExceptionHandler_Impl;
 
-namespace GUIExceptionHandling {
     
 // Abstract ExceptionHandler Base Class.
 // Derived class will be templated for Error type and Handler type.
 class ExceptionHandler {
-public:
+private:    // Everything is private so that this can only be used as a base
+            //  class for the ExceptionHandler_Impl class.
+
     
+    // A virtual function cannot be templated, so we require that try_catch,
+    //  below, use a vector::iterator.
     typedef std::vector<ExceptionHandler*>::iterator ExceptionHandlerIter_t;
     
     // Recursive function call to iterate through list and try-catch on
@@ -28,10 +34,13 @@ public:
     virtual void try_catch(ExceptionHandlerIter_t begin,
                            ExceptionHandlerIter_t end, bool &handled) = 0;
     
+    
+    // This is the public interface for interacting with ExceptionHandlers
     template <typename InputIterator>
     friend void call_exception_handlers_helper(InputIterator begin,
                                                InputIterator end, bool handled);
 
+    // The only actual derived class that will use this class's functions.
     template <typename Exception_t, typename Handler_t>
     friend class ExceptionHandler_Impl;
 };
@@ -45,15 +54,15 @@ public:
 // Handler_t : a function or object that overrides operator()(Exception_t);
 template <typename Exception_t, typename Handler_t>
 class ExceptionHandler_Impl : public ExceptionHandler {
-// everything is private, so that ExceptionHandler_Impl isn't created anywhere
-// but from create_exception_handler.
-private:
+private:    // Everything is private, so that ExceptionHandler_Impl isn't
+            //  created anywhere but from create_exception_handler().
+
     
-    // handler_ should be able to call handler_(Exception_t)
+    // handler_ should be a callable entity s.t. handler_(Exception_t) is valid.
     // NOTE: handler_ will be copied.
     ExceptionHandler_Impl(const Handler_t &handler_) : handler(handler_) { }
     
-    // for each ExceptionHandler in [begin:end), try to handle the error.
+    // For each ExceptionHandler in [begin:end), try to handle the error.
     // RESULT: handled will be set to true if any ExceptionHandler successfully
     // handled the current exception.
     // REQUIRES: this must be called from inside a catch{} block.
