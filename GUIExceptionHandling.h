@@ -1,15 +1,20 @@
 //
-//  ErrorHandling.h
+//  ExceptionHandling.h
 //  GUI Widget Library
+//
+//  Definitions for the Exception Handling functions:
+//    ExceptionHandler* create_exception_handler(const Handler_t &handler);
+//    void call_exception_handlers(InputIterator begin, InputIterator end);
 //
 //  Created by Nathan Daly on 12/14/12.
 //  Copyright (c) 2012 Lions Entertainment. All rights reserved.
 //
 
-#ifndef GUI_ErrorHandling_h
-#define GUI_ErrorHandling_h
 
-#include "GUIExceptionHandling_Impl.h" // For ErrorCatcher and ErrorCatcher_Impl
+#ifndef GUI_Exception_Handling_h
+#define GUI_Exception_Handling_h
+
+#include "GUIExceptionHandling_Impl.h" // Contains details irrelevant to clients
 
 namespace GUIExceptionHandling {
 
@@ -21,9 +26,9 @@ ExceptionHandler* create_exception_handler(const Handler_t &handler) {
     return new ExceptionHandler_Impl<Exception_t, Handler_t>(handler);
 }
 
-// REQUIRES: This function MUST be called from within a catch(){} block!
 // Loop through error handlers and handle any errors. If no handler matches
 //  the error, it will be rethrown out of the function.
+// REQUIRES: This function MUST be called from within a catch(){} block!
 template <typename InputIterator>
 void call_exception_handlers(InputIterator begin, InputIterator end) {
     call_exception_handlers_helper(begin, end, false);
@@ -35,11 +40,12 @@ void call_exception_handlers_helper(InputIterator begin,
     
     try {
         // Create a vector of handlers
-        // (Since try_catch is virtual, it cannot be templated,
-        //                                              so it requires a vector.)
+        // (Since try_rethrow_catch is virtual, it cannot be templated,
+        //                                             so it requires a vector.)
         std::vector<ExceptionHandler*> catchers(begin, end);
         
-        catchers.front()->try_catch(++catchers.begin(), catchers.end(), handled);
+        catchers.front()->try_rethrow_catch(++catchers.begin(),
+                                            catchers.end(), handled);
         
     }
     catch (...) {
@@ -51,4 +57,4 @@ void call_exception_handlers_helper(InputIterator begin,
 
 } // namespace GUIExceptionHandling
 
-#endif /* GUI_ErrorHandling_h */
+#endif /* GUI_Exception_Handling_h */
