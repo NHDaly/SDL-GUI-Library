@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009 Sam Lantinga
+    Copyright (C) 1997-2012 Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -398,7 +398,7 @@ extern DECLSPEC void SDLCALL SDL_UpdateRects
  * screen.
  */
 extern DECLSPEC void SDLCALL SDL_UpdateRect
-	 	(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h);
+		(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h);
 /*@}*/
 
 /**
