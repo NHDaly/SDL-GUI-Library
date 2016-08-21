@@ -16,20 +16,20 @@ void initGUI();
 
 #elif __APPLE__ // Mac OSX
 
-#include "SDL/SDL.h"
-#include "SDL_ttf/SDL_ttf.h"
-#include "SDL_mixer/SDL_mixer.h"
-#include "SDL_image/SDL_image.h"
+#include "SDL.h"
+#include "SDL_ttf.h"
+#include "SDL_mixer.h"
+#include "SDL_image.h"
 #include <memory>
 #include <functional>
 
 
 #else // Linux?
 
-#include "SDL/SDL.h"
-#include "SDL_ttf/SDL_ttf.h"
-#include "SDL_mixer/SDL_mixer.h"
-#include "SDL_image/SDL_image.h"
+#include "SDL.h"
+#include "SDL_ttf.h"
+#include "SDL_mixer.h"
+#include "SDL_image.h"
 #include <memory>
 #include <functional>
 

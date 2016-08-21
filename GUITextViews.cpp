@@ -249,7 +249,7 @@ bool GUITextField::handle_key_down(SDL_keysym key_in) {
     key_held = key_in.sym;
     time_key_held.reset();
 
-    handle_modifier(key_in.mod);
+    handle_modifier(SDL_Keymod(key_in.mod));
     handle_key();
 
     return true;

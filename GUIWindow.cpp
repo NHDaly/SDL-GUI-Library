@@ -10,7 +10,7 @@
 #include "GameDisplay.h"
 #include "GUIUtility.h"
 #include "GUIView.h"
-#include "SDL/SDL.h"
+#include "SDL.h"
 
 #include <iostream>
 #include <algorithm>

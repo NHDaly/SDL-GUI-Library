@@ -13,8 +13,9 @@
 #include <string>
 
 #include "GUIUtility.h"
-#include "SDL/SDL_video.h"
-#include "SDL/SDL_keyboard.h"
+#include "SDL_video.h"
+#include "SDL_keyboard.h"
+#include "SDL_compat.h"
 
 struct Unhandled_Click {
     

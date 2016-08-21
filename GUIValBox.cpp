@@ -9,7 +9,7 @@
 #include "GUIValBox.h"
 #include "GameDisplay.h"
 
-#include "SDL/SDL.h"
+#include "SDL.h"
 
 #include <iostream>
 #include <cmath>

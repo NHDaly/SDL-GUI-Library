@@ -4,6 +4,7 @@
 #include "GUIAudio.h"
 
 #include "Compatibility.h"
+#include <cstdlib>
 
 
 static void quit_SDL();

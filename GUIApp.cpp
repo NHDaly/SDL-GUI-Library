@@ -12,7 +12,7 @@
 
 #include "GUIUtility.h"
 
-#include "SDL/SDL.h"
+#include <SDL/SDL.h>
 
 #include <iostream>
 #include <functional>

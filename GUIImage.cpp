@@ -83,9 +83,11 @@ GUIImage::GUIImage(const GUIImage& image_){
 	}
 
 
-    Uint32 colorkey = image_.sdl_impl->format->colorkey;
+    Uint32 colorkey;
+    SDL_GetColorKey(image_.sdl_impl, &colorkey);
 
-    Uint8 alpha = image_.sdl_impl->format->alpha;
+    Uint8 alpha;
+    SDL_GetSurfaceAlphaMod(image_.sdl_impl, &alpha);
     
     
     // First fill background with the clear color, then display and re-clear.

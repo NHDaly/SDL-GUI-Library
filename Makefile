@@ -14,7 +14,7 @@ GUI_LIB_H := $(wildcard gui/*.h)
 PROJ_CPPS := $(wildcard *.cpp)
 PROJ_H := $(wildcard *.h)
 
-OBJS = Compatibility.o GUIApp.o GUIAudio.o GUIController.o GUIImage.o GUIImageCache.o GUIImageView.o GUILetter.o GUIMsg.o GUIScrollView.o GUISpreadSheet.o GUITextViews.o GUITimer.o GUIUtility.o GUIValBox.o GUIView.o GUIWindow.o GameDisplay.o Letter.o NewNewGUITextView.o SDLMain.o
+OBJS = Compatibility.o GUIApp.o GUIAudio.o GUIController.o GUIImage.o GUIImageCache.o GUIImageView.o GUILetter.o GUIMsg.o GUIScrollView.o GUISpreadSheet.o GUITextViews.o GUITimer.o GUIUtility.o GUIValBox.o GUIView.o GUIWindow.o GameDisplay.o Letter.o NewNewGUITextView.o
 
 
 default: $(OBJS)
@@ -61,8 +61,10 @@ NewNewGUITextView.o: NewNewGUITextView.cpp
 	$(CC) $(CFLAGS) NewNewGUITextView.cpp
 
 # Objective-C source
-SDLMain.o: SDLMain.m
-	gcc $(OBJ_CFLAGS) SDLMain.m
+SDLMain.o: SDLMain.mm
+	echo "cflags: $(CFLAGS)"
+	echo "obj_cflags: $(OBJ_CFLAGS)"
+	$(CC) $(OBJ_CFLAGS) SDLMain.mm
 
 clean:
 	rm -f *.o

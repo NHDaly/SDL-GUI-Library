@@ -5,7 +5,7 @@
 #ifdef _MSC_VER // other possibilities are WIN32 _WIN32 or _WIN64
 #include "SDL_timer.h"
 #else
-#include "SDL/SDL_timer.h"
+#include "SDL_timer.h"
 #endif
 
 class GUITimer {

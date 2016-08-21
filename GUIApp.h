@@ -17,7 +17,7 @@
 #include <list>
 #include <set>
 
-#include <SDL/SDL.h> // To ensure it is #included by main.
+#include <SDL.h> // To ensure it is #included by main.
 
 
 // Throw an instance of GUIQuit to safely tell the application to exit.

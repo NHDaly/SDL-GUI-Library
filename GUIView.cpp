@@ -10,7 +10,7 @@
 #include "GUIApp.h"
 #include "GUIImage.h"
 
-#include "SDL/SDL_video.h"
+#include "SDL_video.h"
 
 #include "GUIWindow.h" // For Unhandled Click.
 #include "GUIApp.h"  // For capture focus

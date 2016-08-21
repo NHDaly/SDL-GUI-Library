@@ -79,4 +79,12 @@ void nav_to_resources() {
 
 #else // Linux?
 
+void initGUI(){
+	
+    initSDL(SDL_INIT_EVERYTHING);
+    
+    // Move the working directory to resources folder.
+    //nav_to_resources();
+}
+
 #endif
