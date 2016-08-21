@@ -60,12 +60,12 @@ SDL_Surface* createDisplay(SDL_Surface *screen, int width, int height, int bpp,
 SDL_Surface * loadBMP(string file) {    
 	//Temporary storage for the image that's loaded
     SDL_Surface* loadedImage = SDL_LoadBMP( file.c_str() );
-	
+
     //If nothing went wrong in loading the image
     if( !loadedImage ) {
-		string error_msg = "Couldn't load " + file +": "+ SDL_GetError() +"\n";
-		throw GUIError(error_msg);
-	}
+      string error_msg = "Couldn't load " + file +": "+ SDL_GetError() +"\n";
+      throw GUIError(error_msg);
+    }
 
 	//The optimized image that will be used
     SDL_Surface* optimizedImage = SDL_DisplayFormatAlpha( loadedImage );

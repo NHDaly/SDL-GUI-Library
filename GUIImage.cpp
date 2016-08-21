@@ -46,8 +46,6 @@ GUIImage::GUIImage(SDL_Surface* surface)
 
 
 GUIImage::GUIImage(string filename, bool alpha, const SDL_Color& color_key){
-//	cout <<" constructing an image " + filename << endl;
-	
 	sdl_impl = GUIImage_Cache::get_image(filename)->sdl_impl; 
 	
 	sdl_impl = loadBMP(filename);

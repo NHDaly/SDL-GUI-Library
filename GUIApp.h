@@ -74,6 +74,11 @@ public:
 
     DispPoint get_screen_size();    
 private:
+
+    bool running;
+
+    void inner_loop();
+    friend void inner_loop_wrapper();
     
     GUIWindow* window;
     

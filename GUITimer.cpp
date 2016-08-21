@@ -53,7 +53,7 @@ FrameRateCapper::~FrameRateCapper(){
 	if (!capping) return;
 	
 	if (fps.get_time() < (Uint32) (1000 / fps_cap)) {
-		SDL_Delay((1000 / fps_cap) - fps.get_time());
+		//SDL_Delay((1000 / fps_cap) - fps.get_time());
 	}
 }
 

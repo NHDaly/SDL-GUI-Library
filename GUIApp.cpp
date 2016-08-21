@@ -79,6 +79,13 @@ void GUIApp::cancel_timer_op(GUITimer_command* op) {
 
 DispPoint GUIApp::get_screen_size() { return window->get_dim(); }
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+void inner_loop_wrapper() {
+    GUIApp::get()->inner_loop();
+}
 
 void GUIApp::run(GUIWindow* window_) {
     
@@ -86,205 +93,212 @@ void GUIApp::run(GUIWindow* window_) {
     
     register_exception_handler<GUIError>(&print_msg);
 
-    bool running = true;
-
+    running = true;
     register_exception_handler<GUIQuit>(GUIApp_Quitter(running));
     
     window->refresh();
     
-    
     if (timer_commands.size())
         next_timer_cmd = timer_commands.begin();
+
+    emscripten_set_main_loop(&inner_loop_wrapper,
+                             0,
+                             false);
+}
     
-    while(running) {
+void GUIApp::inner_loop() {
+
+    if (running == false) {
+      emscripten_cancel_main_loop();
+      return;
+    }
+
+    try {
         SDL_Event event;
+    
+        FrameRateCapper capper(fps_cap);
         
-        try {
-            FrameRateCapper capper(fps_cap);
-            
-            if (cap_frame_rate)
-            capper.cap_frame_rate();
+        if (cap_frame_rate)
+        capper.cap_frame_rate();
 
-            
-            while (SDL_PollEvent(&event) && running){
+        
+        while (SDL_PollEvent(&event) && running){
 
-                switch (event.type) {
-                        
-                    case SDL_MOUSEBUTTONDOWN: 
-                    case SDL_MOUSEBUTTONUP:
-                    case SDL_MOUSEMOTION: {
-                        
-                        // Send mouse event to correct view.
+            switch (event.type) {
+                    
+                case SDL_MOUSEBUTTONDOWN: 
+                case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEMOTION: {
+                    
+                    // Send mouse event to correct view.
 
-                        DispPoint click_pos(event.button.x, event.button.y);
-                        DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
+                    DispPoint click_pos(event.button.x, event.button.y);
+                    DispPoint rel_pos(event.motion.xrel, event.motion.yrel);
+                    
+                    list<GUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
+                    
+                    for (list<GUIController*>::iterator it = focus_copy.begin();
+                                        it != focus_copy.end(); ++it) {
                         
-                        list<GUIController*> focus_copy(captured_focus.begin(), captured_focus.end());
+                        GUIController *captured = *it;
                         
-                        for (list<GUIController*>::iterator it = focus_copy.begin();
-                                            it != focus_copy.end(); ++it) {
-                            
-                            GUIController *captured = *it;
-                            
-                            DispPoint new_pos(click_pos);
+                        DispPoint new_pos(click_pos);
 
-                            // If the Controller is a view, adjust pos for view.
-                            if (GUIView *view = dynamic_cast<GUIView*>(captured)) {
-                                new_pos.x -= view->get_abs_pos().x; 
-                                new_pos.y -= view->get_abs_pos().y; 
+                        // If the Controller is a view, adjust pos for view.
+                        if (GUIView *view = dynamic_cast<GUIView*>(captured)) {
+                            new_pos.x -= view->get_abs_pos().x; 
+                            new_pos.y -= view->get_abs_pos().y; 
+                        }
+                        
+                        bool handled;
+                        
+                        cout << "event.button.button -- " << (int)event.button.button << endl;
+                        if (event.button.button == SDL_BUTTON_X1) {
+                            cout << "SIDEWAYS SCROLL!" << endl;
+                        }
+                        if (event.button.button == SDL_BUTTON_WHEELUP) {
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                handled = captured->handle_mouse_scroll_start(true);
                             }
-                            
-                            bool handled;
-                            
-                            cout << "event.button.button -- " << (int)event.button.button << endl;
-                            if (event.button.button == SDL_BUTTON_X1) {
-                                cout << "SIDEWAYS SCROLL!" << endl;
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                handled = captured->handle_mouse_scroll_stop(true);
                             }
-                            if (event.button.button == SDL_BUTTON_WHEELUP) {
-                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                    handled = captured->handle_mouse_scroll_start(true);
-                                }
-                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                    handled = captured->handle_mouse_scroll_stop(true);
-                                }
+                        }
+                        else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                handled = captured->handle_mouse_scroll_start(false);
                             }
-                            else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
-                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                    handled = captured->handle_mouse_scroll_start(false);
-                                }
-                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                    handled = captured->handle_mouse_scroll_stop(false);
-                                }
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                handled = captured->handle_mouse_scroll_stop(false);
                             }
-                            else {
-                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                    handled = captured->handle_mouse_down(new_pos);
-                                }
-                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                    handled = captured->handle_mouse_up(new_pos);
-                                }
-                                else if (event.button.type == SDL_MOUSEMOTION) {
-                                    handled = captured->handle_mouse_motion(new_pos, rel_pos);
-                                }
+                        }
+                        else {
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                handled = captured->handle_mouse_down(new_pos);
                             }
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                handled = captured->handle_mouse_up(new_pos);
+                            }
+                            else if (event.button.type == SDL_MOUSEMOTION) {
+                                handled = captured->handle_mouse_motion(new_pos, rel_pos);
+                            }
+                        }
 //                            if (!handled) {
 //                                //...
 //                            }
-                        }
-                        
-                        GUIView* hovered_view =
-                        window->get_main_view()->get_view_from_point(click_pos);
-                        
-
-                        if (hovered_view) {
-                            DispPoint new_pos(click_pos);
-
-                            new_pos.x -= hovered_view->get_abs_pos().x; 
-                            new_pos.y -= hovered_view->get_abs_pos().y; 
-                          
-                            if (event.button.button == SDL_BUTTON_WHEELUP) {
-                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                    hovered_view->mouse_scroll_start(true);
-                                }
-                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                    hovered_view->mouse_scroll_stop(true);
-                                }
-                            }
-                            else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
-                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                    hovered_view->mouse_scroll_start(false);
-                                }
-                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                    hovered_view->mouse_scroll_stop(false);
-                                }
-                            }
-                            else {
-                                
-                                if (event.button.type == SDL_MOUSEBUTTONDOWN) {
-                                    hovered_view->mouse_down(new_pos);
-                                }
-                                else if (event.button.type == SDL_MOUSEBUTTONUP) {
-                                    hovered_view->mouse_up(new_pos);
-                                }  
-                                else if (event.button.type == SDL_MOUSEMOTION) {
-                                    hovered_view->mouse_motion(new_pos, rel_pos);
-                                }
-                            }
-                        } 
-                        
-                        break;
                     }
-                    case SDL_KEYDOWN: {
-                        cout << "KEYDOWN" << endl;
-                        
-                        
-                        for (view_list_t::iterator it = captured_focus.begin();
-                             it != captured_focus.end(); ++it) {
-                            
-                            GUIController *captured = *it;
-                            
-                            bool handled = captured->handle_key_down(event.key.keysym);
-                            if (!handled) {}
-                        }
-
-                        break;
-                    }
-                    case SDL_KEYUP: {
-                        
-                        cout << "KEYUP" << endl;
-
-                        // Quit Key
-                        if (event.key.keysym.sym == SDLK_q){
-                            
-#ifdef _MSC_VER  // Windows
-                            if (event.key.keysym.mod == KMOD_LCTRL
-								|| event.key.keysym.mod == KMOD_RCTRL
-								|| event.key.keysym.mod == KMOD_CTRL){
-                                throw GUIQuit();
-							}
-#else           // Mac
-							if (event.key.keysym.mod == KMOD_LMETA
-								|| event.key.keysym.mod == KMOD_RMETA
-								|| event.key.keysym.mod == KMOD_META){
-                                throw GUIQuit();
-							}
-#endif
-						}
-                        
-                        for (view_list_t::iterator it = captured_focus.begin();
-                             it != captured_focus.end(); ++it) {
-                            
-                            GUIController *captured = *it;
-                        
-                            bool handled = captured->handle_key_up(event.key.keysym);
-                            if (!handled) {}
                     
-                        }
-                        break;
-                    }
-   
-                    case SDL_QUIT:
-						throw GUIQuit();
-						break;
-                        
-					default:
-						break;
-                        
-                }
-            }
+                    GUIView* hovered_view =
+                    window->get_main_view()->get_view_from_point(click_pos);
+                    
 
-            cycle_timer_commands();            
+                    if (hovered_view) {
+                        DispPoint new_pos(click_pos);
+
+                        new_pos.x -= hovered_view->get_abs_pos().x; 
+                        new_pos.y -= hovered_view->get_abs_pos().y; 
+                      
+                        if (event.button.button == SDL_BUTTON_WHEELUP) {
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                hovered_view->mouse_scroll_start(true);
+                            }
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                hovered_view->mouse_scroll_stop(true);
+                            }
+                        }
+                        else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                hovered_view->mouse_scroll_start(false);
+                            }
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                hovered_view->mouse_scroll_stop(false);
+                            }
+                        }
+                        else {
+                            
+                            if (event.button.type == SDL_MOUSEBUTTONDOWN) {
+                                hovered_view->mouse_down(new_pos);
+                            }
+                            else if (event.button.type == SDL_MOUSEBUTTONUP) {
+                                hovered_view->mouse_up(new_pos);
+                            }  
+                            else if (event.button.type == SDL_MOUSEMOTION) {
+                                hovered_view->mouse_motion(new_pos, rel_pos);
+                            }
+                        }
+                    } 
+                    
+                    break;
+                }
+                case SDL_KEYDOWN: {
+                    cout << "KEYDOWN" << endl;
+                    
+                    
+                    for (view_list_t::iterator it = captured_focus.begin();
+                          it != captured_focus.end(); ++it) {
+                        
+                        GUIController *captured = *it;
+                        
+                        bool handled = captured->handle_key_down(event.key.keysym);
+                        if (!handled) {}
+                    }
+
+                    break;
+                }
+                case SDL_KEYUP: {
+                    
+                    cout << "KEYUP" << endl;
+
+                    // Quit Key
+                    if (event.key.keysym.sym == SDLK_q){
+                        
+#ifdef _MSC_VER  // Windows
+                        if (event.key.keysym.mod == KMOD_LCTRL
+                          || event.key.keysym.mod == KMOD_RCTRL
+                          || event.key.keysym.mod == KMOD_CTRL){
+                            throw GUIQuit();
+                        }
+#else           // Mac
+                        if (event.key.keysym.mod == KMOD_LMETA
+                          || event.key.keysym.mod == KMOD_RMETA
+                          || event.key.keysym.mod == KMOD_META){
+                            throw GUIQuit();
+                        }
+#endif
+                    }
+                    
+                    for (view_list_t::iterator it = captured_focus.begin();
+                          it != captured_focus.end(); ++it) {
+                        
+                        GUIController *captured = *it;
+                    
+                        bool handled = captured->handle_key_up(event.key.keysym);
+                        if (!handled) {}
+                
+                    }
+                    break;
+                }
+
+                case SDL_QUIT:
+                  throw GUIQuit();
+                  break;
+                              
+                default:
+                  break;
+                    
+            }
         }
+
+        cycle_timer_commands();            
+    }
+    catch(...) {
         
-        catch(...) {
-            
-            call_error_handlers(handler_list.begin(), handler_list.end());
-            
-        }
-       
-        window->refresh();
+        call_error_handlers(handler_list.begin(), handler_list.end());
         
     }
+    
+    window->refresh();
+    
 }
 
 void GUIApp::cycle_timer_commands() {
