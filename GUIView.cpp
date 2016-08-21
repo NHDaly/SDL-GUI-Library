@@ -54,7 +54,7 @@ SDL_Surface* prepare_SDL_surface(int w, int h) {
     if(temp == NULL) {
 		throw GUIError("CreateRGBSurface failed: \n" + string(SDL_GetError()));
     }
-	SDL_Surface* image = SDL_DisplayFormat(temp);
+	SDL_Surface* image = SDL_DisplayFormatAlpha(temp);
 	if(!image) {
         throw GUIError("updateimage in CreateRGBSurface failed: \n" + string(SDL_GetError()));
     }

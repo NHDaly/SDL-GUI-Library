@@ -20,7 +20,7 @@ GUIImage::GUIImage(int w, int h, bool alpha, const SDL_Color& color_key)
 	if (!temp){
 		throw GUIError("Could not create GUIImage. Not enough memory.");
 	}	
-	sdl_impl = SDL_DisplayFormat(temp);
+	sdl_impl = SDL_DisplayFormatAlpha(temp);
 	SDL_FreeSurface(temp);
 	if (!sdl_impl){
 		throw GUIError("Could not create GUIImage. Not enough memory.");
@@ -77,27 +77,27 @@ GUIImage::GUIImage(const GUIImage& image_){
 	if (!temp){
 		throw GUIError("Could not copy GUIImage. Not enough memory.");
 	}	
-	sdl_impl = SDL_DisplayFormat(temp);
+	sdl_impl = SDL_DisplayFormatAlpha(temp);
 	if (!sdl_impl){
 		throw GUIError("Could not copy GUIImage. Not enough memory.");
 	}
 
 
-    Uint32 colorkey;
-    SDL_GetColorKey(image_.sdl_impl, &colorkey);
+    //Uint32 colorkey;
+    //SDL_GetColorKey(image_.sdl_impl, &colorkey);
 
-    Uint8 alpha;
-    SDL_GetSurfaceAlphaMod(image_.sdl_impl, &alpha);
+    //Uint8 alpha;
+    //SDL_GetSurfaceAlphaMod(image_.sdl_impl, &alpha);
     
     
     // First fill background with the clear color, then display and re-clear.
-    SDL_FillRect(sdl_impl, 0, colorkey);
+    //SDL_FillRect(sdl_impl, 0, colorkey);
     
 	display_image(image_.sdl_impl, sdl_impl, 0, 0, 1);
-    if (image_.is_alpha /*|| alpha != 0*/) {
-        //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
-        SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, colorkey);
-    }
+    //if (image_.is_alpha /*|| alpha != 0*/) {
+    //    //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
+    //    SDL_SetColorKey(sdl_impl, SDL_SRCCOLORKEY, colorkey);
+    //}
 }
 GUIImage& GUIImage::operator= (const GUIImage& image_){
 	

@@ -79,10 +79,20 @@ void nav_to_resources() {
 
 #else // Linux?
 
+#include <stdlib.h>
+
 void initGUI(){
 	
     initSDL(SDL_INIT_EVERYTHING);
-    
+
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("Current working dir: %s\n", cwd);
+
+    chdir("/Resources");
+    getcwd(cwd, sizeof(cwd));
+    printf("Current working dir: %s\n", cwd);
+
     // Move the working directory to resources folder.
     //nav_to_resources();
 }

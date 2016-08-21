@@ -68,7 +68,7 @@ SDL_Surface * loadBMP(string file) {
 	}
 
 	//The optimized image that will be used
-    SDL_Surface* optimizedImage = SDL_DisplayFormat( loadedImage );
+    SDL_Surface* optimizedImage = SDL_DisplayFormatAlpha( loadedImage );
 	
 	//Free the old image
 	SDL_FreeSurface( loadedImage );
@@ -245,7 +245,7 @@ SDL_Surface* create_SDL_Surface(int w, int h){
         cout << "CreateRGBSurface failed: \n" + string(SDL_GetError()) << endl;
 		return 0;
     }
-	SDL_Surface* updatedimage = SDL_DisplayFormat(surface);
+	SDL_Surface* updatedimage = SDL_DisplayFormatAlpha(surface);
 	if(!updatedimage) {
         cout << "updateimage in CreateRGBSurface failed: \n" + string(SDL_GetError());
 		return 0;
