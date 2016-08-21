@@ -81,7 +81,10 @@ void GUIView::draw_onto_self(const GUIImage &image_, DispPoint pos) {
     mark_changed();
     
     // Using SDL, perform a blit from view to self.
-	SDL_Rect dest_rect = {pos.x, pos.y, image_->w, image_->h};
+	auto dest_rect = SDL_Rect{static_cast<Sint16>(pos.x),
+                            static_cast<Sint16>(pos.y),
+                            static_cast<Uint16>(image_->w),
+                            static_cast<Uint16>(image_->h)};
 	SDL_BlitSurface(image_, 0, image, &dest_rect);
 
 }
@@ -95,7 +98,10 @@ void GUIView::fill_with_color(SDL_Color color) {
 void GUIView::render_image(SDL_Surface* source, int w, int h, DispPoint pos) {
     
     // Using SDL, perform a blit from view to self.
-	SDL_Rect dest_rect = {pos.x, pos.y, w, h};
+	auto dest_rect = SDL_Rect{static_cast<Sint16>(pos.x),
+                            static_cast<Sint16>(pos.y),
+                            static_cast<Uint16>(w),
+                            static_cast<Uint16>(h)};
 	SDL_BlitSurface(source, 0, display, &dest_rect);
 }
 
@@ -352,8 +358,10 @@ void GUIView::resize(int w_, int h_) {
         set_clear_color(clear_color);
     }
     
-    SDL_Rect dest_rect = {0, 0, w, h};
-	SDL_BlitSurface(temp.image, 0, image, &dest_rect);
+    auto dest_rect = SDL_Rect{0, 0,
+                              static_cast<Uint16>(w),
+                              static_cast<Uint16>(h)};
+    SDL_BlitSurface(temp.image, 0, image, &dest_rect);
 
     mark_changed();
     did_resize(w_,h_);

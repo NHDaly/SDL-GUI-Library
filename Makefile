@@ -1,7 +1,7 @@
 CC = g++
 LD = g++
 
-CFLAGS = -c -Wall -fno-elide-constructors -Iincludes
+CFLAGS = -c -Wall -fno-elide-constructors -Iincludes -std=c++11
 LFLAGS = -Wall -F/SDL.framework -framework SDL
 OBJ_CFLAGS = -c -Wall -Iincludes
 

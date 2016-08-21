@@ -15,14 +15,15 @@
 #include <vector>
 #include <cctype>
 #include <algorithm>
-#include <tr1/functional>
+#include <functional>
 using std::cout; using std::endl;
 using std::string;
 using std::clock;
 using std::vector;
 using std::for_each;
-using std::tr1::bind;
-using namespace std::tr1::placeholders;
+using std::min;
+using std::bind;
+using namespace std::placeholders;
 
 
 static char SDL_to_a(SDLKey key);

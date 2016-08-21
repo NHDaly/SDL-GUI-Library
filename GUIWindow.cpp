@@ -77,7 +77,10 @@ void GUIWindow::refresh() {
         main_view->refresh();
 
         // Using SDL, perform a blit from main_view to self.
-        SDL_Rect dest_rect = {0,0, main_view->w, main_view->h};
+        auto dest_rect = SDL_Rect{0,
+                                  0,
+                                  static_cast<Uint16>(main_view->w),
+                                  static_cast<Uint16>(main_view->h)};
         SDL_BlitSurface(main_view->display, 0, window, &dest_rect);
 
         updateScreen(window);

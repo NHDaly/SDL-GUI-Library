@@ -119,7 +119,10 @@ void display_image (const SDL_Surface *src, SDL_Surface *dest, DispPoint pos, bo
 }
 void display_image (const SDL_Surface *src, SDL_Surface *dest, int x, int y, bool update, SDL_Rect rect){
 	
-	SDL_Rect dest_rect = {x, y, rect.w, rect.h};
+	auto dest_rect = SDL_Rect{static_cast<Sint16>(x),
+                            static_cast<Sint16>(y),
+                            static_cast<Uint16>(rect.w),
+                            static_cast<Uint16>(rect.h)};
 
 //	if (rect.w != def_rect_c.w && rect.h != def_rect_c.h){
 //		SDL_BlitSurface(src, &rect, dest, &dest_rect);		
@@ -189,9 +192,10 @@ SDL_Surface* createText (const string &a){
 	x = 0;
 	for (size_t i = 0; i < letters.size(); i++) {
 		
-		
-        
-		SDL_Rect rect = {x, 0, letters[i]->w, letters[i]->h};
+    auto rect = SDL_Rect{static_cast<Sint16>(x),
+                              0,
+                              static_cast<Uint16>(letters[i]->w),
+                              static_cast<Uint16>(letters[i]->h)};
 		SDL_BlitSurface(letters[i], NULL, surface, &rect);
 		
 		x += letters[i]->w;

@@ -34,6 +34,7 @@ void nav_to_resources() {
 # include <string>
 
 # include <iostream>
+#include <unistd.h>
 using namespace std;
 
 // For App bundle created in Xcode

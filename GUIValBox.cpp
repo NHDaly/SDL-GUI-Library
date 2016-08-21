@@ -12,10 +12,13 @@
 #include "SDL/SDL.h"
 
 #include <iostream>
+#include <cmath>
+#include <functional>
 
 using std::string;
 using std::stringstream;
 using std::cout; using std::endl;
+using std::bind;
 
 const int MIN_TEXT_BOX_WIDTH = 10;
 const int MIN_TEXT_BOX_HEIGHT = 10;
@@ -171,8 +174,6 @@ bool GUIValue_Vert_Slider::handle_mouse_motion(DispPoint coord, DispPoint rel_mo
 }
 
 #include "GUIApp.h"
-#include <tr1/functional>
-using std::tr1::bind;
 
 GUIValue_Display::GUIValue_Display(int w_, int h_, const GUIValue_Box* linked_box)
 : GUIView(w_,h_), value_box(linked_box)

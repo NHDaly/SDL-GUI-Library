@@ -10,10 +10,9 @@
 #include "GUIApp.h"
 
 #include <iostream>
-#include <tr1/functional>
+#include <functional>
 
 using namespace std;
-using namespace std::tr1;
 
 const int SCROLL_BAR_W = 15;
 const int scroll_amount_c = 5;

@@ -191,7 +191,10 @@ GUIImage GUIImage::create_copy(const SDL_Surface* surface){
 void GUIImage::display(SDL_Surface* dest, int x, int y){
 	
 	//	SDL_Rect dest_rect = {x, dest->h - y, sdl_impl->w, sdl_impl->h};
-	SDL_Rect dest_rect = {x, y, sdl_impl->w, sdl_impl->h};
+	auto dest_rect = SDL_Rect{static_cast<Sint16>(x),
+                            static_cast<Sint16>(y),
+                            static_cast<Uint16>(sdl_impl->w),
+                            static_cast<Uint16>(sdl_impl->h)};
 	
 	SDL_BlitSurface(sdl_impl, 0, dest, &dest_rect);
 	//	if (update) SDL_UpdateRects(dest, 1, &dest_rect);
